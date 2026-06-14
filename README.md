@@ -23,6 +23,36 @@ Three deliberately separated layers (see [`PLAN.md`](PLAN.md)):
 Chemical constants live in [`chemical_data.json`](chemical_data.json) — the app
 is entirely data-driven, so adding a species is a JSON edit, not a code change.
 
+## Adding species
+
+You don't have to hand-edit JSON. In the app's sidebar, open **➕ Add / manage
+species**:
+
+- **Catalog** — search a bundled reference catalog of a few hundred validated
+  compounds ([`antoine_catalog.json`](antoine_catalog.json)) and add one with a
+  click.
+- **Manual** — enter Antoine constants for *any* species; the app validates them
+  and flags values that don't reproduce a boiling point you provide.
+- **Remove** — drop species you no longer want.
+
+Additions are **saved to `chemical_data.json`**, so they persist across restarts
+and can be committed.
+
+### Where the catalog comes from (and why it's trustworthy)
+
+The catalog is generated from the BSD-licensed
+[`chemicals`](https://github.com/CalebBell/chemicals) library (Antoine data from
+Poling et al., *The Properties of Gases and Liquids*) by
+[`tools/build_catalog.py`](tools/build_catalog.py). Every entry is **validated**:
+its constants must reproduce the compound's known normal boiling point within
+5 K, or it's dropped. The library is a *build-time* dependency only — the app
+itself just reads the bundled JSON and stays offline. To regenerate:
+
+```powershell
+.\.venv\Scripts\python -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python tools\build_catalog.py
+```
+
 ## Setup
 
 Python 3.13 is used here via the `py` launcher (on this machine the bare

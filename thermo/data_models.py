@@ -9,6 +9,7 @@ and unit-tested in isolation.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Union
@@ -165,3 +166,83 @@ def load_species(path: Union[str, Path]) -> dict[str, ChemicalSpecies]:
     return {
         key: _parse_species(key, raw) for key, raw in species_block.items()
     }
+
+
+# --------------------------------------------------------------------------- #
+# Writing / persistence
+# --------------------------------------------------------------------------- #
+def slugify_key(name: str) -> str:
+    """Turn a display name into a JSON-friendly species key."""
+    slug = re.sub(r"[^a-z0-9]+", "_", name.strip().lower()).strip("_")
+    return slug or "species"
+
+
+def species_to_dict(species: ChemicalSpecies) -> dict:
+    """Serialise a :class:`ChemicalSpecies` back to the on-disk JSON shape."""
+    antoine: dict = {
+        "A": species.antoine.A,
+        "B": species.antoine.B,
+        "C": species.antoine.C,
+        "units": {
+            "P": species.antoine.pressure_unit,
+            "T": species.antoine.temperature_unit,
+        },
+    }
+    if species.antoine.t_min is not None:
+        antoine["T_min"] = species.antoine.t_min
+    if species.antoine.t_max is not None:
+        antoine["T_max"] = species.antoine.t_max
+    return {
+        "name": species.name,
+        "formula": species.formula,
+        "molar_mass": species.molar_mass,
+        "antoine_constants": antoine,
+    }
+
+
+def _read_payload(path: Path) -> dict:
+    if path.exists():
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            raise SpeciesDataError(f"{path} is not valid JSON: {exc}") from exc
+        if not isinstance(payload, dict) or not isinstance(payload.get("species"), dict):
+            raise SpeciesDataError(f"{path} is not a valid species data file.")
+        return payload
+    return {"species": {}}
+
+
+def _write_payload(path: Path, payload: dict) -> None:
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def add_species(
+    path: Union[str, Path], species: ChemicalSpecies, overwrite: bool = False
+) -> None:
+    """Add ``species`` to the JSON file at ``path``, persisting it to disk.
+
+    Creates the file if it does not exist. Raises :class:`SpeciesDataError` if
+    the key is already present and ``overwrite`` is ``False``.
+    """
+    path = Path(path)
+    payload = _read_payload(path)
+    block = payload["species"]
+    if species.key in block and not overwrite:
+        raise SpeciesDataError(
+            f"A species with key {species.key!r} already exists; "
+            f"choose a different name or enable overwrite."
+        )
+    block[species.key] = species_to_dict(species)
+    _write_payload(path, payload)
+
+
+def remove_species(path: Union[str, Path], key: str) -> bool:
+    """Remove the species ``key`` from the file. Returns ``True`` if removed."""
+    path = Path(path)
+    payload = _read_payload(path)
+    block = payload["species"]
+    if key in block:
+        del block[key]
+        _write_payload(path, payload)
+        return True
+    return False

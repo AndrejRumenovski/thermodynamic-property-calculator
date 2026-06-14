@@ -1,0 +1,4 @@
+# Build-time only — not needed to run the app.
+# Used by tools/build_catalog.py to (re)generate antoine_catalog.json.
+-r requirements.txt
+chemicals>=1.1

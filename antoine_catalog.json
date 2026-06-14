@@ -1,0 +1,5330 @@
+{
+  "_meta": {
+    "source": "chemicals library (Poling Antoine table); validated vs known Tb",
+    "validation": "|predicted normal BP - Tb| <= 5.0 K",
+    "count": 313
+  },
+  "species": {
+    "1_1_1_trifluoroethane": {
+      "name": "1,1,1-Trifluoroethane",
+      "formula": "C2H3F3",
+      "molar_mass": 84.0404,
+      "cas": "420-46-2",
+      "antoine_constants": {
+        "A": 9.068,
+        "B": 801.34,
+        "C": -28.6,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 167.55,
+        "T_max": 241.33
+      }
+    },
+    "1_1_2_2_tetrafluoroethane": {
+      "name": "1,1,2,2-Tetrafluoroethane",
+      "formula": "C2H2F4",
+      "molar_mass": 102.0309,
+      "cas": "359-35-3",
+      "antoine_constants": {
+        "A": 9.12013,
+        "B": 885.597,
+        "C": -37.25,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 190.05,
+        "T_max": 269.75
+      }
+    },
+    "1_1_2_trichlorotrifluoroethane": {
+      "name": "1,1,2-trichlorotrifluoroethane",
+      "formula": "C2Cl3F3",
+      "molar_mass": 187.3756,
+      "cas": "76-13-1",
+      "antoine_constants": {
+        "A": 9.00134,
+        "B": 1107.71,
+        "C": -43.51,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 237.83,
+        "T_max": 342.87
+      }
+    },
+    "1_1_2_trifluoroethane": {
+      "name": "1,1,2-Trifluoroethane",
+      "formula": "C2H3F3",
+      "molar_mass": 84.0404,
+      "cas": "430-66-0",
+      "antoine_constants": {
+        "A": 9.13152,
+        "B": 928.177,
+        "C": -51.88,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 211.07,
+        "T_max": 294.19
+      }
+    },
+    "1_1_dichloro_1_fluoroethane": {
+      "name": "1,1-dichloro-1-fluoroethane",
+      "formula": "C2H3Cl2F",
+      "molar_mass": 116.9496,
+      "cas": "1717-00-6",
+      "antoine_constants": {
+        "A": 9.03117,
+        "B": 1062.074,
+        "C": -41.351,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 226.71,
+        "T_max": 326.09
+      }
+    },
+    "1_1_dichloroethane": {
+      "name": "1,1-dichloroethane",
+      "formula": "C2H4Cl2",
+      "molar_mass": 98.9592,
+      "cas": "75-34-3",
+      "antoine_constants": {
+        "A": 9.1678,
+        "B": 1201.05,
+        "C": -41.88,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 246.6,
+        "T_max": 352.49
+      }
+    },
+    "1_1_difluoroethane": {
+      "name": "1,1-difluoroethane",
+      "formula": "C2H4F2",
+      "molar_mass": 66.05,
+      "cas": "75-37-6",
+      "antoine_constants": {
+        "A": 8.75231,
+        "B": 735.16,
+        "C": -52.88,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 187.74,
+        "T_max": 265.89
+      }
+    },
+    "1_2_3_trimethylbenzene": {
+      "name": "1,2,3-trimethylbenzene",
+      "formula": "C9H12",
+      "molar_mass": 120.1916,
+      "cas": "526-73-8",
+      "antoine_constants": {
+        "A": 9.1711,
+        "B": 1598.241,
+        "C": -65.53,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 337.8,
+        "T_max": 478.5
+      }
+    },
+    "1_2_4_5_tetramethylbenzene": {
+      "name": "1,2,4,5-tetramethylbenzene",
+      "formula": "C10H14",
+      "molar_mass": 134.2182,
+      "cas": "95-93-2",
+      "antoine_constants": {
+        "A": 9.18329,
+        "B": 1660.56,
+        "C": -72.51,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 354.8,
+        "T_max": 500.2
+      }
+    },
+    "1_2_4_trimethylbenzene": {
+      "name": "1,2,4-trimethylbenzene",
+      "formula": "C9H12",
+      "molar_mass": 120.1916,
+      "cas": "95-63-6",
+      "antoine_constants": {
+        "A": 9.17692,
+        "B": 1579.353,
+        "C": -63.86,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 332.64,
+        "T_max": 471.34
+      }
+    },
+    "1_2_dibromo_1_chloro_1_2_2_trifluoroethane": {
+      "name": "1,2-dibromo-1-chloro-1,2,2-trifluoroethane",
+      "formula": "C2Br2ClF3",
+      "molar_mass": 276.2776,
+      "cas": "354-51-8",
+      "antoine_constants": {
+        "A": 8.84523,
+        "B": 1166.348,
+        "C": -63.28,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 272.65,
+        "T_max": 392.37
+      }
+    },
+    "1_2_dichloroethane": {
+      "name": "1,2-dichloroethane",
+      "formula": "C2H4Cl2",
+      "molar_mass": 98.9592,
+      "cas": "107-06-2",
+      "antoine_constants": {
+        "A": 9.28356,
+        "B": 1341.37,
+        "C": -43.1,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 267.4,
+        "T_max": 379.91
+      }
+    },
+    "1_3_butadiene": {
+      "name": "1,3-butadiene",
+      "formula": "C4H6",
+      "molar_mass": 54.0904,
+      "cas": "106-99-0",
+      "antoine_constants": {
+        "A": 8.9664,
+        "B": 927.21,
+        "C": -34.52,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 198.0,
+        "T_max": 287.49
+      }
+    },
+    "1_4_diethylbenzene": {
+      "name": "1,4-diethylbenzene",
+      "formula": "C10H14",
+      "molar_mass": 134.2182,
+      "cas": "105-05-5",
+      "antoine_constants": {
+        "A": 9.12958,
+        "B": 1592.59,
+        "C": -70.71,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 343.95,
+        "T_max": 486.6
+      }
+    },
+    "1_trans_3_dimethylcyclopentane": {
+      "name": "1,trans-3-dimethylcyclopentane",
+      "formula": "C7H14",
+      "molar_mass": 98.1861,
+      "cas": "1759-58-6",
+      "antoine_constants": {
+        "A": 8.95279,
+        "B": 1232.161,
+        "C": -51.73,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 269.74,
+        "T_max": 389.15
+      }
+    },
+    "1_bromo_2_chloro_1_1_2_trifluoroethane": {
+      "name": "1-bromo-2-chloro-1,1,2-trifluoroethane",
+      "formula": "C2HBrClF3",
+      "molar_mass": 197.3816,
+      "cas": "354-06-3",
+      "antoine_constants": {
+        "A": 8.48366,
+        "B": 841.141,
+        "C": -83.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 246.15,
+        "T_max": 348.14
+      }
+    },
+    "1_butanol": {
+      "name": "1-butanol",
+      "formula": "C4H10O",
+      "molar_mass": 74.1216,
+      "cas": "71-36-3",
+      "antoine_constants": {
+        "A": 9.6493,
+        "B": 1395.14,
+        "C": -90.411,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 310.18,
+        "T_max": 411.26
+      }
+    },
+    "1_butene": {
+      "name": "1-butene",
+      "formula": "C4H8",
+      "molar_mass": 56.1063,
+      "cas": "106-98-9",
+      "antoine_constants": {
+        "A": 8.9178,
+        "B": 908.8,
+        "C": -34.61,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 196.41,
+        "T_max": 285.88
+      }
+    },
+    "1_butyne": {
+      "name": "1-butyne",
+      "formula": "C4H6",
+      "molar_mass": 54.0904,
+      "cas": "107-00-6",
+      "antoine_constants": {
+        "A": 9.16676,
+        "B": 1014.45,
+        "C": -37.41,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 210.35,
+        "T_max": 299.83
+      }
+    },
+    "1_chloro_1_1_2_2_tetrafluoroethane": {
+      "name": "1-chloro-1,1,2,2-tetrafluoroethane",
+      "formula": "C2HClF4",
+      "molar_mass": 136.476,
+      "cas": "354-25-6",
+      "antoine_constants": {
+        "A": 9.2571,
+        "B": 1006.84,
+        "C": -24.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 193.6,
+        "T_max": 279.06
+      }
+    },
+    "1_chloro_1_1_difluoroethane": {
+      "name": "1-chloro-1,1-difluoroethane",
+      "formula": "C2H3ClF2",
+      "molar_mass": 100.495,
+      "cas": "75-68-3",
+      "antoine_constants": {
+        "A": 9.05053,
+        "B": 928.645,
+        "C": -34.46,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 195.98,
+        "T_max": 282.13
+      }
+    },
+    "1_chloropentane": {
+      "name": "1-chloropentane",
+      "formula": "C5H11Cl",
+      "molar_mass": 106.5938,
+      "cas": "543-59-9",
+      "antoine_constants": {
+        "A": 8.93641,
+        "B": 1271.16,
+        "C": -58.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 283.72,
+        "T_max": 407.81
+      }
+    },
+    "1_chloropropane": {
+      "name": "1-chloropropane",
+      "formula": "C3H7Cl",
+      "molar_mass": 78.5407,
+      "cas": "540-54-5",
+      "antoine_constants": {
+        "A": 9.07655,
+        "B": 1125.009,
+        "C": -43.29,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 238.09,
+        "T_max": 341.29
+      }
+    },
+    "1_decanol": {
+      "name": "1-decanol",
+      "formula": "C10H22O",
+      "molar_mass": 158.2811,
+      "cas": "112-30-1",
+      "antoine_constants": {
+        "A": 8.84905,
+        "B": 1369.0,
+        "C": -148.072,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 394.8,
+        "T_max": 533.92
+      }
+    },
+    "1_heptanol": {
+      "name": "1-heptanol",
+      "formula": "C7H16O",
+      "molar_mass": 116.2013,
+      "cas": "111-70-6",
+      "antoine_constants": {
+        "A": 9.01991,
+        "B": 1274.89,
+        "C": -132.21,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 355.1,
+        "T_max": 475.03
+      }
+    },
+    "1_heptene": {
+      "name": "1-heptene",
+      "formula": "C7H14",
+      "molar_mass": 98.1861,
+      "cas": "592-76-7",
+      "antoine_constants": {
+        "A": 9.02677,
+        "B": 1258.34,
+        "C": -53.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 273.62,
+        "T_max": 391.59
+      }
+    },
+    "1_hexanol": {
+      "name": "1-hexanol",
+      "formula": "C6H14O",
+      "molar_mass": 102.1748,
+      "cas": "111-27-3",
+      "antoine_constants": {
+        "A": 9.18948,
+        "B": 1295.59,
+        "C": -120.64,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 340.8,
+        "T_max": 453.83
+      }
+    },
+    "1_hexene": {
+      "name": "1-hexene",
+      "formula": "C6H12",
+      "molar_mass": 84.1595,
+      "cas": "592-41-6",
+      "antoine_constants": {
+        "A": 8.9826,
+        "B": 1148.62,
+        "C": -47.81,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 249.98,
+        "T_max": 359.8
+      }
+    },
+    "1_methylnaphthalene": {
+      "name": "1-methylnaphthalene",
+      "formula": "C11H10",
+      "molar_mass": 142.1971,
+      "cas": "90-12-0",
+      "antoine_constants": {
+        "A": 9.16082,
+        "B": 1826.948,
+        "C": -78.148,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 389.93,
+        "T_max": 551.4
+      }
+    },
+    "1_nonanol": {
+      "name": "1-nonanol",
+      "formula": "C9H20O",
+      "molar_mass": 144.2545,
+      "cas": "143-08-8",
+      "antoine_constants": {
+        "A": 8.83303,
+        "B": 1297.75,
+        "C": -148.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 382.1,
+        "T_max": 515.58
+      }
+    },
+    "1_nonene": {
+      "name": "1-nonene",
+      "formula": "C9H18",
+      "molar_mass": 126.2392,
+      "cas": "124-11-8",
+      "antoine_constants": {
+        "A": 9.0792,
+        "B": 1436.2,
+        "C": -67.46,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 316.02,
+        "T_max": 447.59
+      }
+    },
+    "1_octanol": {
+      "name": "1-octanol",
+      "formula": "C8H18O",
+      "molar_mass": 130.2279,
+      "cas": "111-87-5",
+      "antoine_constants": {
+        "A": 8.90225,
+        "B": 1274.8,
+        "C": -141.16,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 368.8,
+        "T_max": 495.15
+      }
+    },
+    "1_octene": {
+      "name": "1-octene",
+      "formula": "C8H16",
+      "molar_mass": 112.2126,
+      "cas": "111-66-0",
+      "antoine_constants": {
+        "A": 9.05985,
+        "B": 1355.46,
+        "C": -60.1,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 295.47,
+        "T_max": 420.71
+      }
+    },
+    "1_pentanol": {
+      "name": "1-pentanol",
+      "formula": "C5H12O",
+      "molar_mass": 88.1482,
+      "cas": "71-41-0",
+      "antoine_constants": {
+        "A": 9.39646,
+        "B": 1336.01,
+        "C": -106.83,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 326.01,
+        "T_max": 433.05
+      }
+    },
+    "1_pentene": {
+      "name": "1-pentene",
+      "formula": "C5H10",
+      "molar_mass": 70.1329,
+      "cas": "109-67-1",
+      "antoine_constants": {
+        "A": 8.96914,
+        "B": 1044.01,
+        "C": -39.7,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 223.89,
+        "T_max": 324.32
+      }
+    },
+    "1_pentyne": {
+      "name": "1-pentyne",
+      "formula": "C5H8",
+      "molar_mass": 68.117,
+      "cas": "627-19-0",
+      "antoine_constants": {
+        "A": 9.0026,
+        "B": 1068.1,
+        "C": -46.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 233.0,
+        "T_max": 334.0
+      }
+    },
+    "1_propanol": {
+      "name": "1-propanol",
+      "formula": "C3H8O",
+      "molar_mass": 60.095,
+      "cas": "71-23-8",
+      "antoine_constants": {
+        "A": 9.99991,
+        "B": 1512.94,
+        "C": -67.343,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 293.19,
+        "T_max": 389.32
+      }
+    },
+    "2_2_3_3_tetramethylhexane": {
+      "name": "2,2,3,3-tetramethylhexane",
+      "formula": "C10H22",
+      "molar_mass": 142.2817,
+      "cas": "13475-81-5",
+      "antoine_constants": {
+        "A": 8.96928,
+        "B": 1464.03,
+        "C": -64.09,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 322.38,
+        "T_max": 463.2
+      }
+    },
+    "2_2_3_3_tetramethylpentane": {
+      "name": "2,2,3,3-tetramethylpentane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "7154-79-2",
+      "antoine_constants": {
+        "A": 8.95319,
+        "B": 1397.69,
+        "C": -59.37,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 306.6,
+        "T_max": 442.0
+      }
+    },
+    "2_2_3_4_tetramethylpentane": {
+      "name": "2,2,3,4-tetramethylpentane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "1186-53-4",
+      "antoine_constants": {
+        "A": 8.95552,
+        "B": 1373.79,
+        "C": -58.37,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 301.4,
+        "T_max": 434.2
+      }
+    },
+    "2_2_3_trimethylbutane": {
+      "name": "2,2,3-trimethylbutane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "464-06-2",
+      "antoine_constants": {
+        "A": 8.91555,
+        "B": 1199.397,
+        "C": -47.242,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 260.9,
+        "T_max": 379.04
+      }
+    },
+    "2_2_3_trimethylpentane": {
+      "name": "2,2,3-trimethylpentane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "564-02-3",
+      "antoine_constants": {
+        "A": 8.94826,
+        "B": 1293.94,
+        "C": -54.795,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 283.9,
+        "T_max": 409.56
+      }
+    },
+    "2_2_4_4_tetramethylpentane": {
+      "name": "2,2,4,4-tetramethylpentane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "1070-87-7",
+      "antoine_constants": {
+        "A": 8.92055,
+        "B": 1324.65,
+        "C": -57.07,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 292.79,
+        "T_max": 423.04
+      }
+    },
+    "2_2_4_trimethylpentane": {
+      "name": "2,2,4-trimethylpentane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "540-84-1",
+      "antoine_constants": {
+        "A": 8.93646,
+        "B": 1257.85,
+        "C": -52.383,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 275.5,
+        "T_max": 398.38
+      }
+    },
+    "2_2_5_trimethylhexane": {
+      "name": "2,2,5-trimethylhexane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "3522-94-9",
+      "antoine_constants": {
+        "A": 8.97372,
+        "B": 1332.86,
+        "C": -61.34,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 296.3,
+        "T_max": 424.25
+      }
+    },
+    "2_2_dichloro_1_1_1_trifluoroethane": {
+      "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+      "formula": "C2HCl2F3",
+      "molar_mass": 152.9306,
+      "cas": "306-83-2",
+      "antoine_constants": {
+        "A": 9.21161,
+        "B": 1132.447,
+        "C": -31.56,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 223.16,
+        "T_max": 321.15
+      }
+    },
+    "2_2_dimethylbutane": {
+      "name": "2,2-dimethylbutane",
+      "formula": "C6H14",
+      "molar_mass": 86.1754,
+      "cas": "75-83-2",
+      "antoine_constants": {
+        "A": 8.8959,
+        "B": 1090.16,
+        "C": -42.633,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 237.4,
+        "T_max": 345.89
+      }
+    },
+    "2_2_dimethylheptane": {
+      "name": "2,2-dimethylheptane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "1071-26-7",
+      "antoine_constants": {
+        "A": 8.9553,
+        "B": 1346.1,
+        "C": -65.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 303.0,
+        "T_max": 433.0
+      }
+    },
+    "2_2_dimethylhexane": {
+      "name": "2,2-dimethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "590-73-8",
+      "antoine_constants": {
+        "A": 8.95748,
+        "B": 1271.18,
+        "C": -58.32,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 283.0,
+        "T_max": 405.96
+      }
+    },
+    "2_2_dimethylpentane": {
+      "name": "2,2-dimethylpentane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "590-35-2",
+      "antoine_constants": {
+        "A": 8.94392,
+        "B": 1191.959,
+        "C": -49.652,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 260.9,
+        "T_max": 376.84
+      }
+    },
+    "2_3_3_4_tetramethylpentane": {
+      "name": "2,3,3,4-tetramethylpentane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "16747-38-9",
+      "antoine_constants": {
+        "A": 8.99105,
+        "B": 1422.03,
+        "C": -57.894,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 307.81,
+        "T_max": 443.27
+      }
+    },
+    "2_3_3_trimethylpentane": {
+      "name": "2,3,3-trimethylpentane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "560-21-4",
+      "antoine_constants": {
+        "A": 8.96421,
+        "B": 1325.81,
+        "C": -52.989,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 287.0,
+        "T_max": 414.91
+      }
+    },
+    "2_3_4_trimethylpentane": {
+      "name": "2,3,4-trimethylpentane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "565-75-3",
+      "antoine_constants": {
+        "A": 8.977,
+        "B": 1314.31,
+        "C": -55.669,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 300.19,
+        "T_max": 413.19
+      }
+    },
+    "2_3_dimethylbutane": {
+      "name": "2,3-dimethylbutane",
+      "formula": "C6H14",
+      "molar_mass": 86.1754,
+      "cas": "79-29-8",
+      "antoine_constants": {
+        "A": 8.93486,
+        "B": 1127.4,
+        "C": -44.184,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 244.2,
+        "T_max": 354.43
+      }
+    },
+    "2_3_dimethylhexane": {
+      "name": "2,3-dimethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "584-94-1",
+      "antoine_constants": {
+        "A": 8.99236,
+        "B": 1314.29,
+        "C": -59.091,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 290.0,
+        "T_max": 415.13
+      }
+    },
+    "2_3_dimethylpentane": {
+      "name": "2,3-dimethylpentane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "565-59-3",
+      "antoine_constants": {
+        "A": 8.98066,
+        "B": 1238.986,
+        "C": -51.208,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 281.56,
+        "T_max": 387.89
+      }
+    },
+    "2_3_dimethylphenol": {
+      "name": "2,3-Dimethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "526-75-0",
+      "antoine_constants": {
+        "A": 9.12202,
+        "B": 1576.78,
+        "C": -106.977,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 377.86,
+        "T_max": 519.64
+      }
+    },
+    "2_4_dimethylhexane": {
+      "name": "2,4-dimethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "589-43-5",
+      "antoine_constants": {
+        "A": 8.97399,
+        "B": 1285.85,
+        "C": -58.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 285.2,
+        "T_max": 408.63
+      }
+    },
+    "2_4_dimethylpentane": {
+      "name": "2,4-dimethylpentane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "108-08-7",
+      "antoine_constants": {
+        "A": 8.95442,
+        "B": 1193.612,
+        "C": -51.343,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 262.4,
+        "T_max": 378.01
+      }
+    },
+    "2_4_dimethylphenol": {
+      "name": "2,4-Dimethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "105-67-9",
+      "antoine_constants": {
+        "A": 9.18688,
+        "B": 1592.78,
+        "C": -103.146,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 373.76,
+        "T_max": 513.04
+      }
+    },
+    "2_4_dimethylpyridine": {
+      "name": "2,4-Dimethylpyridine",
+      "formula": "C7H9N",
+      "molar_mass": 107.1531,
+      "cas": "108-47-4",
+      "antoine_constants": {
+        "A": 9.20962,
+        "B": 1542.94,
+        "C": -64.52,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 325.65,
+        "T_max": 459.28
+      }
+    },
+    "2_5_dimethylhexane": {
+      "name": "2,5-dimethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "592-13-2",
+      "antoine_constants": {
+        "A": 8.98112,
+        "B": 1285.47,
+        "C": -58.902,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 285.2,
+        "T_max": 408.2
+      }
+    },
+    "2_5_dimethylphenol": {
+      "name": "2,5-Dimethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "95-87-4",
+      "antoine_constants": {
+        "A": 9.13449,
+        "B": 1563.14,
+        "C": -105.697,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 373.66,
+        "T_max": 513.46
+      }
+    },
+    "2_5_dimethylpyridine": {
+      "name": "2,5-Dimethylpyridine",
+      "formula": "C7H9N",
+      "molar_mass": 107.1531,
+      "cas": "589-93-5",
+      "antoine_constants": {
+        "A": 9.20857,
+        "B": 1541.78,
+        "C": -63.3,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 324.2,
+        "T_max": 457.87
+      }
+    },
+    "2_6_dimethylphenol": {
+      "name": "2,6-Dimethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "576-26-1",
+      "antoine_constants": {
+        "A": 9.19336,
+        "B": 1627.23,
+        "C": -85.603,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 361.76,
+        "T_max": 503.66
+      }
+    },
+    "2_6_lutidine": {
+      "name": "2,6-Lutidine",
+      "formula": "C7H9N",
+      "molar_mass": 107.1531,
+      "cas": "108-48-5",
+      "antoine_constants": {
+        "A": 9.08748,
+        "B": 1407.25,
+        "C": -72.149,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 315.34,
+        "T_max": 443.79
+      }
+    },
+    "2_butanone": {
+      "name": "2-butanone",
+      "formula": "C4H8O",
+      "molar_mass": 72.1057,
+      "cas": "78-93-3",
+      "antoine_constants": {
+        "A": 9.1386,
+        "B": 1232.63,
+        "C": -54.46,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 265.62,
+        "T_max": 375.66
+      }
+    },
+    "2_chlorobutane": {
+      "name": "2-chlorobutane",
+      "formula": "C4H9Cl",
+      "molar_mass": 92.5673,
+      "cas": "78-86-4",
+      "antoine_constants": {
+        "A": 9.1222,
+        "B": 1245.2,
+        "C": -38.75,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 252.6,
+        "T_max": 364.62
+      }
+    },
+    "2_ethylphenol": {
+      "name": "2-ethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "90-00-6",
+      "antoine_constants": {
+        "A": 9.13365,
+        "B": 1550.44,
+        "C": -102.076,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 367.9,
+        "T_max": 506.61
+      }
+    },
+    "2_hexanol": {
+      "name": "2-hexanol",
+      "formula": "C6H14O",
+      "molar_mass": 102.1748,
+      "cas": "626-93-7",
+      "antoine_constants": {
+        "A": 9.93223,
+        "B": 1696.19,
+        "C": -68.72,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 324.5,
+        "T_max": 434.97
+      }
+    },
+    "2_hexanone": {
+      "name": "2-hexanone",
+      "formula": "C6H12O",
+      "molar_mass": 100.1589,
+      "cas": "591-78-6",
+      "antoine_constants": {
+        "A": 9.1533,
+        "B": 1395.8,
+        "C": -64.17,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 302.68,
+        "T_max": 426.5
+      }
+    },
+    "2_methyl_1_butanol": {
+      "name": "2-methyl-1-butanol",
+      "formula": "C5H12O",
+      "molar_mass": 88.1482,
+      "cas": "137-32-6",
+      "antoine_constants": {
+        "A": 9.48266,
+        "B": 1360.367,
+        "C": -99.93,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 298.12,
+        "T_max": 393.7
+      }
+    },
+    "2_methyl_1_propanol": {
+      "name": "2-methyl-1-propanol",
+      "formula": "C4H10O",
+      "molar_mass": 74.1216,
+      "cas": "78-83-1",
+      "antoine_constants": {
+        "A": 9.34504,
+        "B": 1190.38,
+        "C": -106.48,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 303.4,
+        "T_max": 400.84
+      }
+    },
+    "2_methyl_2_butanol": {
+      "name": "2-methyl-2-butanol",
+      "formula": "C5H12O",
+      "molar_mass": 88.1482,
+      "cas": "75-85-4",
+      "antoine_constants": {
+        "A": 8.6442,
+        "B": 863.4,
+        "C": -137.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 299.0,
+        "T_max": 396.11
+      }
+    },
+    "2_methyl_2_butene": {
+      "name": "2-methyl-2-butene",
+      "formula": "C5H10",
+      "molar_mass": 70.1329,
+      "cas": "513-35-9",
+      "antoine_constants": {
+        "A": 9.09149,
+        "B": 1124.33,
+        "C": -36.52,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 230.69,
+        "T_max": 333.14
+      }
+    },
+    "2_methyl_2_pentanol": {
+      "name": "2-methyl-2-pentanol",
+      "formula": "C6H14O",
+      "molar_mass": 102.1748,
+      "cas": "590-36-3",
+      "antoine_constants": {
+        "A": 8.27663,
+        "B": 811.05,
+        "C": -146.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 309.5,
+        "T_max": 419.12
+      }
+    },
+    "2_methylfuran": {
+      "name": "2-methylfuran",
+      "formula": "C5H6O",
+      "molar_mass": 82.1005,
+      "cas": "534-22-5",
+      "antoine_constants": {
+        "A": 8.7041,
+        "B": 991.2,
+        "C": -69.86,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 253.3,
+        "T_max": 361.13
+      }
+    },
+    "2_methylheptane": {
+      "name": "2-methylheptane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "592-27-8",
+      "antoine_constants": {
+        "A": 9.03877,
+        "B": 1335.22,
+        "C": -59.735,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 299.81,
+        "T_max": 416.95
+      }
+    },
+    "2_methylhexane": {
+      "name": "2-methylhexane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "591-76-4",
+      "antoine_constants": {
+        "A": 8.99739,
+        "B": 1235.52,
+        "C": -53.653,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 270.55,
+        "T_max": 387.88
+      }
+    },
+    "2_methylnaphthalene": {
+      "name": "2-methylnaphthalene",
+      "formula": "C11H10",
+      "molar_mass": 142.1971,
+      "cas": "91-57-6",
+      "antoine_constants": {
+        "A": 9.1934,
+        "B": 1840.268,
+        "C": -74.755,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 387.07,
+        "T_max": 547.5
+      }
+    },
+    "2_methyloctane": {
+      "name": "2-methyloctane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "3221-61-2",
+      "antoine_constants": {
+        "A": 9.0366,
+        "B": 1399.9,
+        "C": -69.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 313.0,
+        "T_max": 444.0
+      }
+    },
+    "2_methylpentane": {
+      "name": "2-Methylpentane",
+      "formula": "C6H14",
+      "molar_mass": 86.1754,
+      "cas": "107-83-5",
+      "antoine_constants": {
+        "A": 8.98332,
+        "B": 1145.8,
+        "C": -45.335,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 246.9,
+        "T_max": 356.5
+      }
+    },
+    "2_methylpyridine": {
+      "name": "2-methylpyridine",
+      "formula": "C6H7N",
+      "molar_mass": 93.1265,
+      "cas": "109-06-8",
+      "antoine_constants": {
+        "A": 9.1555,
+        "B": 1415.41,
+        "C": -61.42,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 303.19,
+        "T_max": 428.63
+      }
+    },
+    "2_methyltetrahydrofuran": {
+      "name": "2-methyltetrahydrofuran",
+      "formula": "C5H10O",
+      "molar_mass": 86.1323,
+      "cas": "96-47-9",
+      "antoine_constants": {
+        "A": 8.95009,
+        "B": 1175.51,
+        "C": -55.348,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 263.44,
+        "T_max": 377.49
+      }
+    },
+    "2_octanol": {
+      "name": "2-octanol",
+      "formula": "C8H18O",
+      "molar_mass": 130.2279,
+      "cas": "123-96-6",
+      "antoine_constants": {
+        "A": 8.5137,
+        "B": 1060.4,
+        "C": -150.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 354.0,
+        "T_max": 480.72
+      }
+    },
+    "2_pentanol": {
+      "name": "2-pentanol",
+      "formula": "C5H12O",
+      "molar_mass": 88.1482,
+      "cas": "6032-29-7",
+      "antoine_constants": {
+        "A": 9.42349,
+        "B": 1291.212,
+        "C": -100.02,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 298.12,
+        "T_max": 383.34
+      }
+    },
+    "2_pentanone": {
+      "name": "2-pentanone",
+      "formula": "C5H10O",
+      "molar_mass": 86.1323,
+      "cas": "107-87-9",
+      "antoine_constants": {
+        "A": 9.1514,
+        "B": 1316.73,
+        "C": -57.77,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 282.84,
+        "T_max": 399.74
+      }
+    },
+    "3_3_5_trimethylheptane": {
+      "name": "3,3,5-trimethylheptane",
+      "formula": "C10H22",
+      "molar_mass": 142.2817,
+      "cas": "7154-80-5",
+      "antoine_constants": {
+        "A": 8.98014,
+        "B": 1435.43,
+        "C": -67.66,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 320.0,
+        "T_max": 458.0
+      }
+    },
+    "3_3_dimethylhexane": {
+      "name": "3,3-dimethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "563-16-6",
+      "antoine_constants": {
+        "A": 8.97403,
+        "B": 1306.96,
+        "C": -55.774,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 286.1,
+        "T_max": 411.59
+      }
+    },
+    "3_3_dimethylpentane": {
+      "name": "3,3-dimethylpentane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "562-49-2",
+      "antoine_constants": {
+        "A": 8.94912,
+        "B": 1227.02,
+        "C": -48.029,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 265.2,
+        "T_max": 384.36
+      }
+    },
+    "3_4_dimethylhexane": {
+      "name": "3,4-dimethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "583-48-2",
+      "antoine_constants": {
+        "A": 9.0031,
+        "B": 1329.4,
+        "C": -58.314,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 291.4,
+        "T_max": 417.4
+      }
+    },
+    "3_4_dimethylphenol": {
+      "name": "3,4-Dimethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "95-65-8",
+      "antoine_constants": {
+        "A": 9.21183,
+        "B": 1627.78,
+        "C": -113.109,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 388.5,
+        "T_max": 529.34
+      }
+    },
+    "3_4_dimethylpyridine": {
+      "name": "3,4-Dimethylpyridine",
+      "formula": "C7H9N",
+      "molar_mass": 107.1531,
+      "cas": "583-58-4",
+      "antoine_constants": {
+        "A": 9.1892,
+        "B": 1605.14,
+        "C": -68.6,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 341.1,
+        "T_max": 481.43
+      }
+    },
+    "3_5_dimethylphenol": {
+      "name": "3,5-Dimethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "108-68-9",
+      "antoine_constants": {
+        "A": 9.26229,
+        "B": 1645.27,
+        "C": -108.329,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 384.32,
+        "T_max": 523.67
+      }
+    },
+    "3_5_dimethylpyridine": {
+      "name": "3,5-Dimethylpyridine",
+      "formula": "C7H9N",
+      "molar_mass": 107.1531,
+      "cas": "591-22-0",
+      "antoine_constants": {
+        "A": 9.2129,
+        "B": 1595.15,
+        "C": -65.91,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 335.73,
+        "T_max": 473.68
+      }
+    },
+    "3_ethyl_2_methylpentane": {
+      "name": "3-ethyl-2-methylpentane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "609-26-7",
+      "antoine_constants": {
+        "A": 8.9861,
+        "B": 1317.05,
+        "C": -57.921,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 289.5,
+        "T_max": 415.31
+      }
+    },
+    "3_ethyl_3_methylpentane": {
+      "name": "3-ethyl-3-methylpentane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "1067-08-9",
+      "antoine_constants": {
+        "A": 8.9895,
+        "B": 1345.92,
+        "C": -53.566,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 290.1,
+        "T_max": 418.46
+      }
+    },
+    "3_ethylhexane": {
+      "name": "3-ethylhexane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "619-99-8",
+      "antoine_constants": {
+        "A": 9.01533,
+        "B": 1327.93,
+        "C": -60.505,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 292.9,
+        "T_max": 418.01
+      }
+    },
+    "3_ethylpentane": {
+      "name": "3-ethylpentane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "617-78-7",
+      "antoine_constants": {
+        "A": 9.00449,
+        "B": 1254.055,
+        "C": -53.014,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 272.9,
+        "T_max": 391.62
+      }
+    },
+    "3_ethylphenol": {
+      "name": "3-ethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "620-17-7",
+      "antoine_constants": {
+        "A": 9.16568,
+        "B": 1572.26,
+        "C": -113.62601,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 381.72,
+        "T_max": 520.46
+      }
+    },
+    "3_hexanol": {
+      "name": "3-hexanol",
+      "formula": "C6H14O",
+      "molar_mass": 102.1748,
+      "cas": "623-37-0",
+      "antoine_constants": {
+        "A": 11.1625,
+        "B": 2662.265,
+        "C": 23.47,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 298.0,
+        "T_max": 411.0
+      }
+    },
+    "3_hexanone": {
+      "name": "3-hexanone",
+      "formula": "C6H12O",
+      "molar_mass": 100.1589,
+      "cas": "589-38-8",
+      "antoine_constants": {
+        "A": 9.11658,
+        "B": 1359.88,
+        "C": -65.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 299.6,
+        "T_max": 422.25
+      }
+    },
+    "3_methyl_1_butanethiol": {
+      "name": "3-Methyl-1-butanethiol",
+      "formula": "C5H12S",
+      "molar_mass": 104.2138,
+      "cas": "541-31-1",
+      "antoine_constants": {
+        "A": 9.03981,
+        "B": 1342.509,
+        "C": -58.704,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 292.6,
+        "T_max": 417.78
+      }
+    },
+    "3_methyl_1_butanol": {
+      "name": "3-methyl-1-butanol",
+      "formula": "C5H12O",
+      "molar_mass": 88.1482,
+      "cas": "123-51-3",
+      "antoine_constants": {
+        "A": 9.07851,
+        "B": 1128.19,
+        "C": -126.68,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 321.9,
+        "T_max": 425.34
+      }
+    },
+    "3_methyl_1_butene": {
+      "name": "3-methyl-1-butene",
+      "formula": "C5H10",
+      "molar_mass": 70.1329,
+      "cas": "563-45-1",
+      "antoine_constants": {
+        "A": 8.94945,
+        "B": 1012.37,
+        "C": -36.503,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 215.73,
+        "T_max": 221.5
+      }
+    },
+    "3_methyl_2_butanone": {
+      "name": "3-methyl-2-butanone",
+      "formula": "C5H10O",
+      "molar_mass": 86.1323,
+      "cas": "563-80-4",
+      "antoine_constants": {
+        "A": 8.46583,
+        "B": 955.43,
+        "C": -91.42,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 276.4,
+        "T_max": 393.31
+      }
+    },
+    "3_methylheptane": {
+      "name": "3-methylheptane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "589-81-1",
+      "antoine_constants": {
+        "A": 9.01533,
+        "B": 1326.14,
+        "C": -61.337,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 306.32,
+        "T_max": 418.36
+      }
+    },
+    "3_methylhexane": {
+      "name": "3-methylhexane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "589-34-4",
+      "antoine_constants": {
+        "A": 8.99571,
+        "B": 1242.018,
+        "C": -53.715,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 271.9,
+        "T_max": 389.82
+      }
+    },
+    "3_methylpentane": {
+      "name": "3-methylpentane",
+      "formula": "C6H14",
+      "molar_mass": 86.1754,
+      "cas": "96-14-0",
+      "antoine_constants": {
+        "A": 8.99283,
+        "B": 1162.37,
+        "C": -44.864,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 249.0,
+        "T_max": 359.72
+      }
+    },
+    "3_methylpyridine": {
+      "name": "3-methylpyridine",
+      "formula": "C6H7N",
+      "molar_mass": 93.1265,
+      "cas": "108-99-6",
+      "antoine_constants": {
+        "A": 9.1893,
+        "B": 1492.13,
+        "C": -60.62,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 314.03,
+        "T_max": 444.37
+      }
+    },
+    "3_pentanone": {
+      "name": "3-pentanone",
+      "formula": "C5H10O",
+      "molar_mass": 86.1323,
+      "cas": "96-22-0",
+      "antoine_constants": {
+        "A": 9.42708,
+        "B": 1481.17,
+        "C": -40.14,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 281.9,
+        "T_max": 399.12
+      }
+    },
+    "4_ethylphenol": {
+      "name": "4-ethylphenol",
+      "formula": "C8H10O",
+      "molar_mass": 122.1644,
+      "cas": "123-07-9",
+      "antoine_constants": {
+        "A": 9.13227,
+        "B": 1545.23999,
+        "C": -116.682,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 381.67,
+        "T_max": 520.01
+      }
+    },
+    "4_ethyltoluene": {
+      "name": "4-ethyltoluene",
+      "formula": "C9H12",
+      "molar_mass": 120.1916,
+      "cas": "622-96-8",
+      "antoine_constants": {
+        "A": 9.10862,
+        "B": 1517.577,
+        "C": -65.25,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 326.56,
+        "T_max": 463.82
+      }
+    },
+    "4_methyl_1_pentanol": {
+      "name": "4-methyl-1-pentanol",
+      "formula": "C6H14O",
+      "molar_mass": 102.1748,
+      "cas": "626-89-1",
+      "antoine_constants": {
+        "A": 9.17605,
+        "B": 1273.35,
+        "C": -119.59,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 336.4,
+        "T_max": 448.19
+      }
+    },
+    "4_methyl_1_pentene": {
+      "name": "4-methyl-1-pentene",
+      "formula": "C6H12",
+      "molar_mass": 84.1595,
+      "cas": "691-37-2",
+      "antoine_constants": {
+        "A": 8.96019,
+        "B": 1121.302,
+        "C": -43.463,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 241.6,
+        "T_max": 349.9
+      }
+    },
+    "4_methyl_2_pentanol": {
+      "name": "4-methyl-2-pentanol",
+      "formula": "C6H14O",
+      "molar_mass": 102.1748,
+      "cas": "108-11-2",
+      "antoine_constants": {
+        "A": 9.6618,
+        "B": 1566.76,
+        "C": -68.36,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 315.0,
+        "T_max": 427.65
+      }
+    },
+    "4_methyl_2_pentanone": {
+      "name": "4-methyl-2-pentanone",
+      "formula": "C6H12O",
+      "molar_mass": 100.1589,
+      "cas": "108-10-1",
+      "antoine_constants": {
+        "A": 8.8222,
+        "B": 1190.6904,
+        "C": -77.7,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 293.4,
+        "T_max": 415.85
+      }
+    },
+    "4_methylheptane": {
+      "name": "4-methylheptane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "589-53-7",
+      "antoine_constants": {
+        "A": 9.02214,
+        "B": 1325.704,
+        "C": -60.783,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 292.5,
+        "T_max": 417.05
+      }
+    },
+    "4_methylpyridine": {
+      "name": "4-methylpyridine",
+      "formula": "C6H7N",
+      "molar_mass": 93.1265,
+      "cas": "108-89-4",
+      "antoine_constants": {
+        "A": 9.1675,
+        "B": 1481.571,
+        "C": -62.5,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 315.05,
+        "T_max": 445.68
+      }
+    },
+    "acetic_acid": {
+      "name": "acetic acid",
+      "formula": "C2H4O2",
+      "molar_mass": 60.052,
+      "cas": "64-19-7",
+      "antoine_constants": {
+        "A": 9.54456,
+        "B": 1555.12,
+        "C": -48.5,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 297.58,
+        "T_max": 414.97
+      }
+    },
+    "acetone": {
+      "name": "acetone",
+      "formula": "C3H6O",
+      "molar_mass": 58.0791,
+      "cas": "67-64-1",
+      "antoine_constants": {
+        "A": 9.2184,
+        "B": 1197.01,
+        "C": -45.09,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 247.38,
+        "T_max": 350.65
+      }
+    },
+    "acetylene": {
+      "name": "acetylene",
+      "formula": "C2H2",
+      "molar_mass": 26.0373,
+      "cas": "74-86-2",
+      "antoine_constants": {
+        "A": 8.67374,
+        "B": 528.67,
+        "C": -44.36,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 191.44,
+        "T_max": 201.11
+      }
+    },
+    "allene": {
+      "name": "allene",
+      "formula": "C3H4",
+      "molar_mass": 40.0639,
+      "cas": "463-49-0",
+      "antoine_constants": {
+        "A": 7.8386,
+        "B": 458.06,
+        "C": -77.08,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 178.0,
+        "T_max": 257.0
+      }
+    },
+    "allyl_alcohol": {
+      "name": "allyl alcohol",
+      "formula": "C3H6O",
+      "molar_mass": 58.0791,
+      "cas": "107-18-6",
+      "antoine_constants": {
+        "A": 13.78252,
+        "B": 4510.213,
+        "C": 143.647,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 294.0,
+        "T_max": 370.23
+      }
+    },
+    "ammonia": {
+      "name": "ammonia",
+      "formula": "H3N",
+      "molar_mass": 17.0305,
+      "cas": "7664-41-7",
+      "antoine_constants": {
+        "A": 9.4854,
+        "B": 926.132,
+        "C": -32.98,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 193.03,
+        "T_max": 254.31
+      }
+    },
+    "ammonia_d3": {
+      "name": "ammonia-d3",
+      "formula": "D3N",
+      "molar_mass": 20.049,
+      "cas": "13550-49-7",
+      "antoine_constants": {
+        "A": 9.61234,
+        "B": 966.226,
+        "C": -32.35,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 195.75,
+        "T_max": 256.46
+      }
+    },
+    "aniline": {
+      "name": "aniline",
+      "formula": "C6H7N",
+      "molar_mass": 93.1265,
+      "cas": "62-53-3",
+      "antoine_constants": {
+        "A": 9.4087,
+        "B": 1692.77,
+        "C": -72.71,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 349.86,
+        "T_max": 484.81
+      }
+    },
+    "anthracene": {
+      "name": "anthracene",
+      "formula": "C14H10",
+      "molar_mass": 178.2292,
+      "cas": "120-12-7",
+      "antoine_constants": {
+        "A": 9.79891,
+        "B": 2819.63,
+        "C": -26.13,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 460.0,
+        "T_max": 653.0
+      }
+    },
+    "argon": {
+      "name": "argon",
+      "formula": "Ar",
+      "molar_mass": 39.948,
+      "cas": "7440-37-1",
+      "antoine_constants": {
+        "A": 8.74141,
+        "B": 304.227,
+        "C": -5.83,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 82.59,
+        "T_max": 94.26
+      }
+    },
+    "benzene": {
+      "name": "benzene",
+      "formula": "C6H6",
+      "molar_mass": 78.1118,
+      "cas": "71-43-2",
+      "antoine_constants": {
+        "A": 8.98523,
+        "B": 1184.24,
+        "C": -55.578,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 279.64,
+        "T_max": 377.06
+      }
+    },
+    "bineopentyl": {
+      "name": "bineopentyl",
+      "formula": "C10H22",
+      "molar_mass": 142.2817,
+      "cas": "1071-81-4",
+      "antoine_constants": {
+        "A": 9.00614,
+        "B": 1377.98,
+        "C": -66.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 307.68,
+        "T_max": 438.06
+      }
+    },
+    "biphenyl": {
+      "name": "biphenyl",
+      "formula": "C12H10",
+      "molar_mass": 154.2078,
+      "cas": "92-52-4",
+      "antoine_constants": {
+        "A": 9.1887,
+        "B": 1841.48,
+        "C": -88.0,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 400.77,
+        "T_max": 561.6
+      }
+    },
+    "bromine": {
+      "name": "bromine",
+      "formula": "Br2",
+      "molar_mass": 159.808,
+      "cas": "7726-95-6",
+      "antoine_constants": {
+        "A": 9.0027,
+        "B": 1119.68,
+        "C": -51.77,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 266.0,
+        "T_max": 354.25
+      }
+    },
+    "bromine_pentafluoride": {
+      "name": "bromine pentafluoride",
+      "formula": "BrF5",
+      "molar_mass": 174.896,
+      "cas": "7789-30-2",
+      "antoine_constants": {
+        "A": 9.39858,
+        "B": 1219.28,
+        "C": -36.75,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 236.8,
+        "T_max": 334.31
+      }
+    },
+    "bromine_trifluoride": {
+      "name": "bromine trifluoride",
+      "formula": "BrF3",
+      "molar_mass": 136.8992,
+      "cas": "7787-71-5",
+      "antoine_constants": {
+        "A": 9.85464,
+        "B": 1673.95,
+        "C": -53.67,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 309.09,
+        "T_max": 421.28
+      }
+    },
+    "bromodifluoromethane": {
+      "name": "bromodifluoromethane",
+      "formula": "CHBrF2",
+      "molar_mass": 130.9194,
+      "cas": "1511-62-2",
+      "antoine_constants": {
+        "A": 8.4003,
+        "B": 640.32,
+        "C": -69.05,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 194.5,
+        "T_max": 275.65
+      }
+    },
+    "bromoethane": {
+      "name": "bromoethane",
+      "formula": "C2H5Br",
+      "molar_mass": 108.9651,
+      "cas": "74-96-4",
+      "antoine_constants": {
+        "A": 9.04485,
+        "B": 1090.811,
+        "C": -41.44,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 231.35,
+        "T_max": 332.8
+      }
+    },
+    "bromofluoroform": {
+      "name": "bromofluoroform",
+      "formula": "CBrF3",
+      "molar_mass": 148.9099,
+      "cas": "75-63-8",
+      "antoine_constants": {
+        "A": 8.8964,
+        "B": 731.31,
+        "C": -27.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 158.1,
+        "T_max": 230.85
+      }
+    },
+    "butane": {
+      "name": "butane",
+      "formula": "C4H10",
+      "molar_mass": 58.1222,
+      "cas": "106-97-8",
+      "antoine_constants": {
+        "A": 8.93266,
+        "B": 935.773,
+        "C": -34.361,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 200.5,
+        "T_max": 292.03
+      }
+    },
+    "butyl_acetate": {
+      "name": "butyl acetate",
+      "formula": "C6H12O2",
+      "molar_mass": 116.1583,
+      "cas": "123-86-4",
+      "antoine_constants": {
+        "A": 9.5,
+        "B": 1596.7,
+        "C": -43.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 301.0,
+        "T_max": 424.11
+      }
+    },
+    "butylamine": {
+      "name": "butylamine",
+      "formula": "C4H11N",
+      "molar_mass": 73.1368,
+      "cas": "109-73-9",
+      "antoine_constants": {
+        "A": 9.3077,
+        "B": 1276.87,
+        "C": -52.63,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 265.2,
+        "T_max": 371.32
+      }
+    },
+    "butylbenzene": {
+      "name": "butylbenzene",
+      "formula": "C10H14",
+      "molar_mass": 134.2182,
+      "cas": "104-51-8",
+      "antoine_constants": {
+        "A": 9.10345,
+        "B": 1575.47,
+        "C": -71.95,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 343.5,
+        "T_max": 486.2
+      }
+    },
+    "butyric_acid": {
+      "name": "butyric acid",
+      "formula": "C4H8O2",
+      "molar_mass": 88.1051,
+      "cas": "107-92-6",
+      "antoine_constants": {
+        "A": 9.8234,
+        "B": 1731.708,
+        "C": -77.195,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 342.7,
+        "T_max": 460.12
+      }
+    },
+    "carbon_monoxide": {
+      "name": "carbon monoxide",
+      "formula": "CO",
+      "molar_mass": 28.0101,
+      "cas": "630-08-0",
+      "antoine_constants": {
+        "A": 8.81912,
+        "B": 291.743,
+        "C": -5.154,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 69.73,
+        "T_max": 88.08
+      }
+    },
+    "carbon_tetrachloride": {
+      "name": "carbon tetrachloride",
+      "formula": "CCl4",
+      "molar_mass": 153.8227,
+      "cas": "56-23-5",
+      "antoine_constants": {
+        "A": 9.10445,
+        "B": 1265.632,
+        "C": -41.002,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 259.0,
+        "T_max": 373.76
+      }
+    },
+    "carbon_tetrafluoride": {
+      "name": "carbon tetrafluoride",
+      "formula": "CF4",
+      "molar_mass": 88.0043,
+      "cas": "75-73-0",
+      "antoine_constants": {
+        "A": 8.95894,
+        "B": 510.595,
+        "C": -15.95,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 106.2,
+        "T_max": 155.54
+      }
+    },
+    "chlorine": {
+      "name": "chlorine",
+      "formula": "Cl2",
+      "molar_mass": 70.906,
+      "cas": "7782-50-5",
+      "antoine_constants": {
+        "A": 9.0628,
+        "B": 861.34,
+        "C": -26.82,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 176.31,
+        "T_max": 255.79
+      }
+    },
+    "chlorine_pentafluoride": {
+      "name": "chlorine pentafluoride",
+      "formula": "ClF5",
+      "molar_mass": 130.445,
+      "cas": "13637-63-3",
+      "antoine_constants": {
+        "A": 8.39423,
+        "B": 653.06,
+        "C": -66.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 194.8,
+        "T_max": 277.68
+      }
+    },
+    "chlorobenzene": {
+      "name": "chlorobenzene",
+      "formula": "C6H5Cl",
+      "molar_mass": 112.5569,
+      "cas": "108-90-7",
+      "antoine_constants": {
+        "A": 9.02012,
+        "B": 1378.79,
+        "C": -61.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 302.5,
+        "T_max": 432.18
+      }
+    },
+    "chloroethane": {
+      "name": "chloroethane",
+      "formula": "C2H5Cl",
+      "molar_mass": 64.5141,
+      "cas": "75-00-3",
+      "antoine_constants": {
+        "A": 9.09088,
+        "B": 1020.63,
+        "C": -35.58,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 211.86,
+        "T_max": 304.89
+      }
+    },
+    "chloroform": {
+      "name": "chloroform",
+      "formula": "CHCl3",
+      "molar_mass": 119.3776,
+      "cas": "67-66-3",
+      "antoine_constants": {
+        "A": 8.96288,
+        "B": 1106.904,
+        "C": -54.598,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 250.1,
+        "T_max": 356.89
+      }
+    },
+    "chloromethane": {
+      "name": "chloromethane",
+      "formula": "CH3Cl",
+      "molar_mass": 50.4875,
+      "cas": "74-87-3",
+      "antoine_constants": {
+        "A": 9.16533,
+        "B": 920.86,
+        "C": -27.57,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 184.6,
+        "T_max": 265.87
+      }
+    },
+    "chloropentafluoroethane": {
+      "name": "chloropentafluoroethane",
+      "formula": "C2ClF5",
+      "molar_mass": 154.4664,
+      "cas": "76-15-3",
+      "antoine_constants": {
+        "A": 8.93652,
+        "B": 795.212,
+        "C": -31.78,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 172.89,
+        "T_max": 250.52
+      }
+    },
+    "cis_1_3_dimethylcyclopentane": {
+      "name": "cis-1,3-Dimethylcyclopentane",
+      "formula": "C7H14",
+      "molar_mass": 98.1861,
+      "cas": "2532-58-3",
+      "antoine_constants": {
+        "A": 9.00405,
+        "B": 1259.821,
+        "C": -49.62,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 270.52,
+        "T_max": 389.83
+      }
+    },
+    "cis_2_butene": {
+      "name": "cis-2-butene",
+      "formula": "C4H8",
+      "molar_mass": 56.1063,
+      "cas": "590-18-1",
+      "antoine_constants": {
+        "A": 9.00958,
+        "B": 967.32,
+        "C": -35.277,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 204.73,
+        "T_max": 296.11
+      }
+    },
+    "cis_2_pentene": {
+      "name": "cis-2-pentene",
+      "formula": "C5H10",
+      "molar_mass": 70.1329,
+      "cas": "627-20-3",
+      "antoine_constants": {
+        "A": 8.96798,
+        "B": 1052.44,
+        "C": -44.457,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 229.4,
+        "T_max": 331.46
+      }
+    },
+    "cumene": {
+      "name": "cumene",
+      "formula": "C9H12",
+      "molar_mass": 120.1916,
+      "cas": "98-82-8",
+      "antoine_constants": {
+        "A": 9.06112,
+        "B": 1460.766,
+        "C": -65.32,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 318.92,
+        "T_max": 453.81
+      }
+    },
+    "cyclobutane": {
+      "name": "cyclobutane",
+      "formula": "C4H8",
+      "molar_mass": 56.1063,
+      "cas": "287-23-0",
+      "antoine_constants": {
+        "A": 9.04436,
+        "B": 1025.5,
+        "C": -31.72,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 210.2,
+        "T_max": 305.67
+      }
+    },
+    "cycloheptane": {
+      "name": "cycloheptane",
+      "formula": "C7H14",
+      "molar_mass": 98.1861,
+      "cas": "291-64-5",
+      "antoine_constants": {
+        "A": 8.9633,
+        "B": 1322.21997,
+        "C": -57.853,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 291.4,
+        "T_max": 418.89
+      }
+    },
+    "cyclohexane": {
+      "name": "cyclohexane",
+      "formula": "C6H12",
+      "molar_mass": 84.1595,
+      "cas": "110-82-7",
+      "antoine_constants": {
+        "A": 8.93002,
+        "B": 1182.774,
+        "C": -52.532,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 282.11,
+        "T_max": 378.46
+      }
+    },
+    "cyclooctane": {
+      "name": "cyclooctane",
+      "formula": "C8H16",
+      "molar_mass": 112.2126,
+      "cas": "292-64-8",
+      "antoine_constants": {
+        "A": 8.98125,
+        "B": 1434.67,
+        "C": -63.438,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 316.0,
+        "T_max": 453.27
+      }
+    },
+    "cyclopentane": {
+      "name": "cyclopentane",
+      "formula": "C5H10",
+      "molar_mass": 70.1329,
+      "cas": "287-92-3",
+      "antoine_constants": {
+        "A": 9.06783,
+        "B": 1152.574,
+        "C": -38.64,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 238.5,
+        "T_max": 344.62
+      }
+    },
+    "cyclopropane": {
+      "name": "cyclopropane",
+      "formula": "C3H6",
+      "molar_mass": 42.0797,
+      "cas": "75-19-4",
+      "antoine_constants": {
+        "A": 9.03084,
+        "B": 866.15,
+        "C": -25.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 176.3,
+        "T_max": 257.37
+      }
+    },
+    "decalin": {
+      "name": "decalin",
+      "formula": "C10H18",
+      "molar_mass": 138.2499,
+      "cas": "493-01-6",
+      "antoine_constants": {
+        "A": 9.00019,
+        "B": 1594.46,
+        "C": -69.758,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 349.53,
+        "T_max": 500.79
+      }
+    },
+    "decane": {
+      "name": "decane",
+      "formula": "C10H22",
+      "molar_mass": 142.2817,
+      "cas": "124-18-5",
+      "antoine_constants": {
+        "A": 9.06853,
+        "B": 1495.17,
+        "C": -79.292,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 338.53,
+        "T_max": 476.15
+      }
+    },
+    "deuterium": {
+      "name": "deuterium",
+      "formula": "D2",
+      "molar_mass": 4.0282,
+      "cas": "7782-39-0",
+      "antoine_constants": {
+        "A": 8.14102,
+        "B": 77.1349,
+        "C": 2.47,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 15.2,
+        "T_max": 18.97
+      }
+    },
+    "deuterium_chloride": {
+      "name": "deuterium chloride",
+      "formula": "ClD",
+      "molar_mass": 37.4671,
+      "cas": "7698-05-7",
+      "antoine_constants": {
+        "A": 9.06086,
+        "B": 668.2,
+        "C": -23.651,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 160.44,
+        "T_max": 201.37
+      }
+    },
+    "deuterium_hydride": {
+      "name": "deuterium hydride",
+      "formula": "HD",
+      "molar_mass": 3.022,
+      "cas": "13983-20-5",
+      "antoine_constants": {
+        "A": 8.14102,
+        "B": 77.1349,
+        "C": 2.47,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 15.73,
+        "T_max": 24.69
+      }
+    },
+    "deuterium_oxide": {
+      "name": "deuterium oxide",
+      "formula": "D2O",
+      "molar_mass": 20.0276,
+      "cas": "7789-20-0",
+      "antoine_constants": {
+        "A": 10.04327,
+        "B": 1616.76,
+        "C": -53.61,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 335.17,
+        "T_max": 394.54
+      }
+    },
+    "dibromodifluoromethane": {
+      "name": "dibromodifluoromethane",
+      "formula": "CBr2F2",
+      "molar_mass": 209.8155,
+      "cas": "75-61-6",
+      "antoine_constants": {
+        "A": 9.1878,
+        "B": 1127.43,
+        "C": -26.35,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 217.8,
+        "T_max": 316.42
+      }
+    },
+    "dichlorodifluoromethane": {
+      "name": "dichlorodifluoromethane",
+      "formula": "CCl2F2",
+      "molar_mass": 120.9135,
+      "cas": "75-71-8",
+      "antoine_constants": {
+        "A": 9.01171,
+        "B": 868.076,
+        "C": -26.76,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 178.77,
+        "T_max": 260.7
+      }
+    },
+    "dichlorofluoromethane": {
+      "name": "dichlorofluoromethane",
+      "formula": "CHCl2F",
+      "molar_mass": 102.923,
+      "cas": "75-43-4",
+      "antoine_constants": {
+        "A": 9.02473,
+        "B": 959.934,
+        "C": -43.12,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 210.83,
+        "T_max": 300.91
+      }
+    },
+    "dichloromethane": {
+      "name": "dichloromethane",
+      "formula": "CH2Cl2",
+      "molar_mass": 84.9326,
+      "cas": "75-09-2",
+      "antoine_constants": {
+        "A": 9.07622,
+        "B": 1070.07,
+        "C": -49.91,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 235.2,
+        "T_max": 333.36
+      }
+    },
+    "dichlorotetrafluoroethane": {
+      "name": "dichlorotetrafluoroethane",
+      "formula": "C2Cl2F4",
+      "molar_mass": 170.921,
+      "cas": "76-14-2",
+      "antoine_constants": {
+        "A": 8.93549,
+        "B": 930.734,
+        "C": -39.74,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 204.93,
+        "T_max": 295.83
+      }
+    },
+    "diethyl_ether": {
+      "name": "diethyl ether",
+      "formula": "C4H10O",
+      "molar_mass": 74.1216,
+      "cas": "60-29-7",
+      "antoine_constants": {
+        "A": 9.10962,
+        "B": 1090.64,
+        "C": -41.95,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 229.71,
+        "T_max": 328.31
+      }
+    },
+    "diethyl_sulfide": {
+      "name": "diethyl sulfide",
+      "formula": "C4H10S",
+      "molar_mass": 90.1872,
+      "cas": "352-93-2",
+      "antoine_constants": {
+        "A": 9.05326,
+        "B": 1257.833,
+        "C": -54.488,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 273.1,
+        "T_max": 389.71
+      }
+    },
+    "difluorochloromethane": {
+      "name": "difluorochloromethane",
+      "formula": "CHClF2",
+      "molar_mass": 86.4684,
+      "cas": "75-45-6",
+      "antoine_constants": {
+        "A": 9.13253,
+        "B": 835.462,
+        "C": -29.69,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 173.13,
+        "T_max": 247.74
+      }
+    },
+    "difluoromethane": {
+      "name": "difluoromethane",
+      "formula": "CH2F2",
+      "molar_mass": 52.0234,
+      "cas": "75-10-5",
+      "antoine_constants": {
+        "A": 9.29712,
+        "B": 833.137,
+        "C": -27.29,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 166.23,
+        "T_max": 235.78
+      }
+    },
+    "dimethyl_ether": {
+      "name": "dimethyl ether",
+      "formula": "C2H6O",
+      "molar_mass": 46.0684,
+      "cas": "115-10-6",
+      "antoine_constants": {
+        "A": 9.44136,
+        "B": 1025.56,
+        "C": -17.1,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 184.1,
+        "T_max": 264.8
+      }
+    },
+    "dimethyl_sulfide": {
+      "name": "dimethyl sulfide",
+      "formula": "C2H6S",
+      "molar_mass": 62.134,
+      "cas": "75-18-3",
+      "antoine_constants": {
+        "A": 9.07369,
+        "B": 1090.755,
+        "C": -42.351,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 231.3,
+        "T_max": 331.47
+      }
+    },
+    "diphenylmethane": {
+      "name": "diphenylmethane",
+      "formula": "C13H12",
+      "molar_mass": 168.2344,
+      "cas": "101-81-5",
+      "antoine_constants": {
+        "A": 9.1806,
+        "B": 1862.64,
+        "C": -91.5,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 408.2,
+        "T_max": 571.7
+      }
+    },
+    "disulfides": {
+      "name": "disulfides",
+      "formula": "H2S2",
+      "molar_mass": 66.1459,
+      "cas": "13465-07-1",
+      "antoine_constants": {
+        "A": 9.055,
+        "B": 1199.0,
+        "C": -48.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 256.0,
+        "T_max": 367.55
+      }
+    },
+    "dodecane": {
+      "name": "dodecane",
+      "formula": "C12H26",
+      "molar_mass": 170.3348,
+      "cas": "112-40-3",
+      "antoine_constants": {
+        "A": 9.12285,
+        "B": 1639.27,
+        "C": -91.31,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 372.89,
+        "T_max": 520.24
+      }
+    },
+    "eicosane": {
+      "name": "eicosane",
+      "formula": "C20H42",
+      "molar_mass": 282.5475,
+      "cas": "112-95-8",
+      "antoine_constants": {
+        "A": 9.2771,
+        "B": 2032.7,
+        "C": -141.05,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 481.1,
+        "T_max": 652.0
+      }
+    },
+    "ethanamine": {
+      "name": "ethanamine",
+      "formula": "C2H7N",
+      "molar_mass": 45.0837,
+      "cas": "75-04-7",
+      "antoine_constants": {
+        "A": 9.434,
+        "B": 1102.88,
+        "C": -40.7,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 220.53,
+        "T_max": 307.55
+      }
+    },
+    "ethane": {
+      "name": "ethane",
+      "formula": "C2H6",
+      "molar_mass": 30.069,
+      "cas": "74-84-0",
+      "antoine_constants": {
+        "A": 8.95405,
+        "B": 663.72,
+        "C": -16.469,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 133.8,
+        "T_max": 198.16
+      }
+    },
+    "ethane_1_1_dichloro_1_2_2_2_tetrafluoro": {
+      "name": "ethane, 1,1-dichloro-1,2,2,2-tetrafluoro-",
+      "formula": "C2Cl2F4",
+      "molar_mass": 170.921,
+      "cas": "374-07-2",
+      "antoine_constants": {
+        "A": 8.83243,
+        "B": 875.938,
+        "C": -47.69,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 206.04,
+        "T_max": 295.73
+      }
+    },
+    "ethane_fluoro": {
+      "name": "ethane, fluoro-",
+      "formula": "C2H5F",
+      "molar_mass": 48.0595,
+      "cas": "353-36-6",
+      "antoine_constants": {
+        "A": 9.21998,
+        "B": 897.368,
+        "C": -22.49,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 174.1,
+        "T_max": 251.47
+      }
+    },
+    "ethanethiol": {
+      "name": "ethanethiol",
+      "formula": "C2H6S",
+      "molar_mass": 62.134,
+      "cas": "75-08-1",
+      "antoine_constants": {
+        "A": 9.07696,
+        "B": 1084.531,
+        "C": -41.765,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 229.5,
+        "T_max": 328.99
+      }
+    },
+    "ethanol": {
+      "name": "ethanol",
+      "formula": "C2H6O",
+      "molar_mass": 46.0684,
+      "cas": "64-17-5",
+      "antoine_constants": {
+        "A": 10.33675,
+        "B": 1648.22,
+        "C": -42.232,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 276.5,
+        "T_max": 369.54
+      }
+    },
+    "ethene": {
+      "name": "ethene",
+      "formula": "C2H4",
+      "molar_mass": 28.0532,
+      "cas": "74-85-1",
+      "antoine_constants": {
+        "A": 8.91382,
+        "B": 596.526,
+        "C": -16.78,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 123.06,
+        "T_max": 181.9
+      }
+    },
+    "ethyl_acetate": {
+      "name": "ethyl acetate",
+      "formula": "C4H8O2",
+      "molar_mass": 88.1051,
+      "cas": "141-78-6",
+      "antoine_constants": {
+        "A": 9.13361,
+        "B": 1195.13,
+        "C": -60.68,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 265.5,
+        "T_max": 372.51
+      }
+    },
+    "ethyl_butyrate": {
+      "name": "ethyl butyrate",
+      "formula": "C6H12O2",
+      "molar_mass": 116.1583,
+      "cas": "105-54-4",
+      "antoine_constants": {
+        "A": 8.27456,
+        "B": 921.56,
+        "C": -112.77,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 298.0,
+        "T_max": 422.69
+      }
+    },
+    "ethyl_formate": {
+      "name": "ethyl formate",
+      "formula": "C3H6O2",
+      "molar_mass": 74.0785,
+      "cas": "109-94-4",
+      "antoine_constants": {
+        "A": 9.07899,
+        "B": 1101.0,
+        "C": -57.17,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 247.8,
+        "T_max": 348.6
+      }
+    },
+    "ethyl_methyl_sulfide": {
+      "name": "ethyl methyl sulfide",
+      "formula": "C3H8S",
+      "molar_mass": 76.1606,
+      "cas": "624-89-5",
+      "antoine_constants": {
+        "A": 9.06339,
+        "B": 1182.562,
+        "C": -48.366,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 253.5,
+        "T_max": 362.68
+      }
+    },
+    "ethyl_propionate": {
+      "name": "ethyl propionate",
+      "formula": "C5H10O2",
+      "molar_mass": 102.1317,
+      "cas": "105-37-3",
+      "antoine_constants": {
+        "A": 9.144,
+        "B": 1274.7,
+        "C": -64.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 282.4,
+        "T_max": 395.85
+      }
+    },
+    "ethylbenzene": {
+      "name": "ethylbenzene",
+      "formula": "C8H10",
+      "molar_mass": 106.165,
+      "cas": "100-41-4",
+      "antoine_constants": {
+        "A": 9.06861,
+        "B": 1415.77,
+        "C": -60.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 306.32,
+        "T_max": 436.63
+      }
+    },
+    "ethylcyclopentane": {
+      "name": "ethylcyclopentane",
+      "formula": "C7H14",
+      "molar_mass": 98.1861,
+      "cas": "1640-89-7",
+      "antoine_constants": {
+        "A": 9.00408,
+        "B": 1293.712,
+        "C": -53.03,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 279.88,
+        "T_max": 402.39
+      }
+    },
+    "fluorine": {
+      "name": "fluorine",
+      "formula": "F2",
+      "molar_mass": 37.9968,
+      "cas": "7782-41-4",
+      "antoine_constants": {
+        "A": 8.89078,
+        "B": 304.35,
+        "C": -6.61,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 61.0,
+        "T_max": 91.39
+      }
+    },
+    "fluoroform": {
+      "name": "fluoroform",
+      "formula": "CHF3",
+      "molar_mass": 70.0139,
+      "cas": "75-46-7",
+      "antoine_constants": {
+        "A": 9.2214,
+        "B": 707.396,
+        "C": -23.31,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 142.79,
+        "T_max": 203.75
+      }
+    },
+    "fluoromethane": {
+      "name": "fluoromethane",
+      "formula": "CH3F",
+      "molar_mass": 34.0329,
+      "cas": "593-53-3",
+      "antoine_constants": {
+        "A": 9.19421,
+        "B": 734.222,
+        "C": -19.58,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 144.17,
+        "T_max": 208.17
+      }
+    },
+    "halothane": {
+      "name": "halothane",
+      "formula": "C2HBrClF3",
+      "molar_mass": 197.3816,
+      "cas": "151-67-7",
+      "antoine_constants": {
+        "A": 9.20682,
+        "B": 1199.262,
+        "C": -37.86,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 240.92,
+        "T_max": 344.91
+      }
+    },
+    "hcfc_124": {
+      "name": "HCFC 124",
+      "formula": "C2HClF4",
+      "molar_mass": 136.476,
+      "cas": "2837-89-0",
+      "antoine_constants": {
+        "A": 9.0536,
+        "B": 900.49,
+        "C": -38.761,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 222.0,
+        "T_max": 286.0
+      }
+    },
+    "helium": {
+      "name": "helium",
+      "formula": "He",
+      "molar_mass": 4.0026,
+      "cas": "7440-59-7",
+      "antoine_constants": {
+        "A": 6.6836,
+        "B": 8.1548,
+        "C": 0.56,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 1.85,
+        "T_max": 5.34
+      }
+    },
+    "helium_3": {
+      "name": "helium-3",
+      "formula": "[3He]",
+      "molar_mass": 3.016,
+      "cas": "14762-55-1",
+      "antoine_constants": {
+        "A": 6.3975,
+        "B": 5.594,
+        "C": 0.69,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 1.12,
+        "T_max": 4.41
+      }
+    },
+    "heptadecane": {
+      "name": "heptadecane",
+      "formula": "C17H36",
+      "molar_mass": 240.4677,
+      "cas": "629-78-7",
+      "antoine_constants": {
+        "A": 9.1392,
+        "B": 1865.1,
+        "C": -123.95,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 443.5,
+        "T_max": 610.0
+      }
+    },
+    "heptane": {
+      "name": "heptane",
+      "formula": "C7H16",
+      "molar_mass": 100.2019,
+      "cas": "142-82-5",
+      "antoine_constants": {
+        "A": 9.02023,
+        "B": 1263.909,
+        "C": -56.718,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 277.71,
+        "T_max": 396.53
+      }
+    },
+    "heptane_2_2_5_trimethyl": {
+      "name": "heptane, 2,2,5-trimethyl-",
+      "formula": "C10H22",
+      "molar_mass": 142.2817,
+      "cas": "20291-95-6",
+      "antoine_constants": {
+        "A": 9.00345,
+        "B": 1417.4,
+        "C": -69.35,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 318.0,
+        "T_max": 452.0
+      }
+    },
+    "hexadecane": {
+      "name": "hexadecane",
+      "formula": "C16H34",
+      "molar_mass": 226.4412,
+      "cas": "544-76-3",
+      "antoine_constants": {
+        "A": 9.15357,
+        "B": 1830.51,
+        "C": -118.7,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 431.47,
+        "T_max": 593.8
+      }
+    },
+    "hexamethylethane": {
+      "name": "hexamethylethane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "594-82-1",
+      "antoine_constants": {
+        "A": 8.9042,
+        "B": 1270.1,
+        "C": -53.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 375.2,
+        "T_max": 406.0
+      }
+    },
+    "hexane": {
+      "name": "hexane",
+      "formula": "C6H14",
+      "molar_mass": 86.1754,
+      "cas": "110-54-3",
+      "antoine_constants": {
+        "A": 9.00139,
+        "B": 1170.875,
+        "C": -48.833,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 254.24,
+        "T_max": 365.25
+      }
+    },
+    "hydrazine": {
+      "name": "hydrazine",
+      "formula": "H4N2",
+      "molar_mass": 32.0452,
+      "cas": "302-01-2",
+      "antoine_constants": {
+        "A": 9.9268,
+        "B": 1679.07,
+        "C": -45.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 298.9,
+        "T_max": 408.43
+      }
+    },
+    "hydriodic_acid_d": {
+      "name": "hydriodic acid-d",
+      "formula": "DI",
+      "molar_mass": 128.9186,
+      "cas": "14104-45-1",
+      "antoine_constants": {
+        "A": 7.72964,
+        "B": 414.68,
+        "C": -85.28,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 217.8,
+        "T_max": 256.03
+      }
+    },
+    "hydrobromic_acid_d": {
+      "name": "hydrobromic acid-d",
+      "formula": "BrD",
+      "molar_mass": 81.9181,
+      "cas": "13536-59-9",
+      "antoine_constants": {
+        "A": 8.28728,
+        "B": 505.68,
+        "C": -52.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 185.2,
+        "T_max": 221.89
+      }
+    },
+    "hydrochloric_acid": {
+      "name": "hydrochloric acid",
+      "formula": "ClH",
+      "molar_mass": 36.4609,
+      "cas": "7647-01-0",
+      "antoine_constants": {
+        "A": 9.2949,
+        "B": 745.78,
+        "C": -14.27,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 159.97,
+        "T_max": 201.0
+      }
+    },
+    "hydrofluoric_acid": {
+      "name": "hydrofluoric acid",
+      "formula": "FH",
+      "molar_mass": 20.0063,
+      "cas": "7664-39-3",
+      "antoine_constants": {
+        "A": 9.80588,
+        "B": 1475.6,
+        "C": 14.73,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 212.1,
+        "T_max": 312.83
+      }
+    },
+    "hydrogen": {
+      "name": "hydrogen",
+      "formula": "H2",
+      "molar_mass": 2.0159,
+      "cas": "1333-74-0",
+      "antoine_constants": {
+        "A": 7.93954,
+        "B": 66.7954,
+        "C": 2.5,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 10.25,
+        "T_max": 22.82
+      }
+    },
+    "hydrogen_bromide": {
+      "name": "hydrogen bromide",
+      "formula": "BrH",
+      "molar_mass": 80.9119,
+      "cas": "10035-10-6",
+      "antoine_constants": {
+        "A": 8.41243,
+        "B": 540.82,
+        "C": -47.71,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 185.1,
+        "T_max": 221.53
+      }
+    },
+    "hydrogen_iodide": {
+      "name": "hydrogen iodide",
+      "formula": "HI",
+      "molar_mass": 127.9124,
+      "cas": "10034-85-2",
+      "antoine_constants": {
+        "A": 7.69803,
+        "B": 405.33,
+        "C": -87.02,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 217.9,
+        "T_max": 256.12
+      }
+    },
+    "hydrogen_selenide": {
+      "name": "hydrogen selenide",
+      "formula": "H2Se",
+      "molar_mass": 80.9759,
+      "cas": "7783-07-5",
+      "antoine_constants": {
+        "A": 9.7603,
+        "B": 927.6,
+        "C": -33.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 177.0,
+        "T_max": 213.0
+      }
+    },
+    "hydrogen_sulfide": {
+      "name": "hydrogen sulfide",
+      "formula": "H2S",
+      "molar_mass": 34.0809,
+      "cas": "7783-06-4",
+      "antoine_constants": {
+        "A": 9.22882,
+        "B": 806.933,
+        "C": -21.76,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 185.51,
+        "T_max": 227.2
+      }
+    },
+    "iodine": {
+      "name": "iodine",
+      "formula": "I2",
+      "molar_mass": 253.8089,
+      "cas": "7553-56-2",
+      "antoine_constants": {
+        "A": 9.1431,
+        "B": 1611.9,
+        "C": -67.97,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 392.49,
+        "T_max": 487.51
+      }
+    },
+    "isobutane": {
+      "name": "isobutane",
+      "formula": "C4H10",
+      "molar_mass": 58.1222,
+      "cas": "75-28-5",
+      "antoine_constants": {
+        "A": 9.00272,
+        "B": 947.54,
+        "C": -24.28,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 190.4,
+        "T_max": 280.25
+      }
+    },
+    "isobutene": {
+      "name": "isobutene",
+      "formula": "C4H8",
+      "molar_mass": 56.1063,
+      "cas": "115-11-7",
+      "antoine_constants": {
+        "A": 8.80956,
+        "B": 866.25,
+        "C": -38.51,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 195.77,
+        "T_max": 285.41
+      }
+    },
+    "isobutyl_acetate": {
+      "name": "isobutyl acetate",
+      "formula": "C6H12O2",
+      "molar_mass": 116.1583,
+      "cas": "110-19-0",
+      "antoine_constants": {
+        "A": 9.3546,
+        "B": 1462.4,
+        "C": -53.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 295.0,
+        "T_max": 414.22
+      }
+    },
+    "isobutyl_formate": {
+      "name": "isobutyl formate",
+      "formula": "C5H10O2",
+      "molar_mass": 102.1317,
+      "cas": "542-55-2",
+      "antoine_constants": {
+        "A": 8.9845,
+        "B": 1195.9,
+        "C": -70.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 288.0,
+        "T_max": 395.32
+      }
+    },
+    "isobutyl_propionate": {
+      "name": "isobutyl propionate",
+      "formula": "C7H14O2",
+      "molar_mass": 130.1849,
+      "cas": "540-42-1",
+      "antoine_constants": {
+        "A": 8.5618,
+        "B": 1042.3,
+        "C": -116.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 321.6,
+        "T_max": 436.3
+      }
+    },
+    "isobutylamine": {
+      "name": "isobutylamine",
+      "formula": "C4H11N",
+      "molar_mass": 73.1368,
+      "cas": "78-81-9",
+      "antoine_constants": {
+        "A": 8.9007,
+        "B": 1055.56,
+        "C": -69.8,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 258.31,
+        "T_max": 363.04
+      }
+    },
+    "isobutylbenzene": {
+      "name": "isobutylbenzene",
+      "formula": "C10H14",
+      "molar_mass": 134.2182,
+      "cas": "538-93-2",
+      "antoine_constants": {
+        "A": 9.05978,
+        "B": 1529.96,
+        "C": -68.51,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 334.19,
+        "T_max": 475.5
+      }
+    },
+    "isobutyric_acid": {
+      "name": "isobutyric acid",
+      "formula": "C4H8O2",
+      "molar_mass": 88.1051,
+      "cas": "79-31-2",
+      "antoine_constants": {
+        "A": 8.71153,
+        "B": 1097.83,
+        "C": -131.41,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 334.0,
+        "T_max": 453.31
+      }
+    },
+    "isopentane": {
+      "name": "isopentane",
+      "formula": "C5H12",
+      "molar_mass": 72.1488,
+      "cas": "78-78-4",
+      "antoine_constants": {
+        "A": 8.92023,
+        "B": 1022.88,
+        "C": -39.69,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 221.72,
+        "T_max": 322.32
+      }
+    },
+    "isopentyl_formate": {
+      "name": "isopentyl formate",
+      "formula": "C6H12O2",
+      "molar_mass": 116.1583,
+      "cas": "110-45-2",
+      "antoine_constants": {
+        "A": 9.2488,
+        "B": 1439.4,
+        "C": -58.05,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 300.0,
+        "T_max": 422.66
+      }
+    },
+    "isopropanol": {
+      "name": "isopropanol",
+      "formula": "C3H8O",
+      "molar_mass": 60.095,
+      "cas": "67-63-0",
+      "antoine_constants": {
+        "A": 10.24268,
+        "B": 1580.92,
+        "C": -53.54,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 281.28,
+        "T_max": 373.46
+      }
+    },
+    "isopropylamine": {
+      "name": "isopropylamine",
+      "formula": "C3H9N",
+      "molar_mass": 59.1103,
+      "cas": "75-31-0",
+      "antoine_constants": {
+        "A": 9.0553,
+        "B": 1005.49,
+        "C": -56.64,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 231.38,
+        "T_max": 324.47
+      }
+    },
+    "isovaleric_acid": {
+      "name": "isovaleric acid",
+      "formula": "C5H10O2",
+      "molar_mass": 102.1317,
+      "cas": "503-74-2",
+      "antoine_constants": {
+        "A": 9.5847,
+        "B": 1676.3,
+        "C": -83.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 350.0,
+        "T_max": 474.97
+      }
+    },
+    "krypton": {
+      "name": "krypton",
+      "formula": "Kr",
+      "molar_mass": 83.798,
+      "cas": "7439-90-9",
+      "antoine_constants": {
+        "A": 8.7556,
+        "B": 416.38,
+        "C": -8.7,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 111.34,
+        "T_max": 129.23
+      }
+    },
+    "m_cresol": {
+      "name": "m-cresol",
+      "formula": "C7H8O",
+      "molar_mass": 108.1378,
+      "cas": "108-39-4",
+      "antoine_constants": {
+        "A": 9.2153,
+        "B": 1556.83,
+        "C": -105.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 368.8,
+        "T_max": 503.28
+      }
+    },
+    "m_xylene": {
+      "name": "m-xylene",
+      "formula": "C8H10",
+      "molar_mass": 106.165,
+      "cas": "108-38-3",
+      "antoine_constants": {
+        "A": 9.14051,
+        "B": 1468.703,
+        "C": -57.03,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 308.54,
+        "T_max": 439.56
+      }
+    },
+    "mesitylene": {
+      "name": "mesitylene",
+      "formula": "C9H12",
+      "molar_mass": 120.1916,
+      "cas": "108-67-8",
+      "antoine_constants": {
+        "A": 9.22541,
+        "B": 1581.36,
+        "C": -63.14,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 330.06,
+        "T_max": 466.1
+      }
+    },
+    "methane": {
+      "name": "methane",
+      "formula": "CH4",
+      "molar_mass": 16.0425,
+      "cas": "74-82-8",
+      "antoine_constants": {
+        "A": 8.7687,
+        "B": 395.744,
+        "C": -6.469,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 92.64,
+        "T_max": 120.59
+      }
+    },
+    "methane_bromochlorodifluoro": {
+      "name": "methane, bromochlorodifluoro-",
+      "formula": "CBrClF2",
+      "molar_mass": 165.3645,
+      "cas": "353-59-3",
+      "antoine_constants": {
+        "A": 8.9585,
+        "B": 933.04,
+        "C": -33.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 198.0,
+        "T_max": 288.26
+      }
+    },
+    "methane_chlorotrifluoro": {
+      "name": "methane, chlorotrifluoro-",
+      "formula": "CClF3",
+      "molar_mass": 104.4589,
+      "cas": "75-72-9",
+      "antoine_constants": {
+        "A": 8.90353,
+        "B": 654.656,
+        "C": -23.76,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 140.61,
+        "T_max": 205.48
+      }
+    },
+    "methanethiol": {
+      "name": "methanethiol",
+      "formula": "CH4S",
+      "molar_mass": 48.1075,
+      "cas": "74-93-1",
+      "antoine_constants": {
+        "A": 9.15653,
+        "B": 1015.547,
+        "C": -34.444,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 207.8,
+        "T_max": 297.85
+      }
+    },
+    "methanol": {
+      "name": "methanol",
+      "formula": "CH4O",
+      "molar_mass": 32.0419,
+      "cas": "67-56-1",
+      "antoine_constants": {
+        "A": 10.20277,
+        "B": 1580.08,
+        "C": -33.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 262.59,
+        "T_max": 356.0
+      }
+    },
+    "methoxyethane": {
+      "name": "methoxyethane",
+      "formula": "C3H8O",
+      "molar_mass": 60.095,
+      "cas": "540-67-0",
+      "antoine_constants": {
+        "A": 8.00683,
+        "B": 504.49,
+        "C": -112.4,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 232.0,
+        "T_max": 298.85
+      }
+    },
+    "methyl_acetate": {
+      "name": "methyl acetate",
+      "formula": "C3H6O2",
+      "molar_mass": 74.0785,
+      "cas": "79-20-9",
+      "antoine_constants": {
+        "A": 9.18621,
+        "B": 1156.43,
+        "C": -53.46,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 249.9,
+        "T_max": 351.11
+      }
+    },
+    "methyl_butyrate": {
+      "name": "methyl butyrate",
+      "formula": "C5H10O2",
+      "molar_mass": 102.1317,
+      "cas": "623-42-7",
+      "antoine_constants": {
+        "A": 9.10641,
+        "B": 1271.06,
+        "C": -65.94,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 284.9,
+        "T_max": 399.96
+      }
+    },
+    "methyl_formate": {
+      "name": "methyl formate",
+      "formula": "C2H4O2",
+      "molar_mass": 60.052,
+      "cas": "107-31-3",
+      "antoine_constants": {
+        "A": 9.29529,
+        "B": 1125.2,
+        "C": -42.59,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 230.3,
+        "T_max": 324.29
+      }
+    },
+    "methyl_propionate": {
+      "name": "methyl propionate",
+      "formula": "C4H8O2",
+      "molar_mass": 88.1051,
+      "cas": "554-12-1",
+      "antoine_constants": {
+        "A": 8.98745,
+        "B": 1129.57,
+        "C": -68.91,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 267.5,
+        "T_max": 375.32
+      }
+    },
+    "methylamine": {
+      "name": "methylamine",
+      "formula": "CH5N",
+      "molar_mass": 31.0571,
+      "cas": "74-89-5",
+      "antoine_constants": {
+        "A": 9.5442,
+        "B": 1050.66,
+        "C": -35.32,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 203.61,
+        "T_max": 282.93
+      }
+    },
+    "methylcyclohexane": {
+      "name": "methylcyclohexane",
+      "formula": "C7H14",
+      "molar_mass": 98.1861,
+      "cas": "108-87-2",
+      "antoine_constants": {
+        "A": 8.98232,
+        "B": 1290.968,
+        "C": -49.449,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 276.68,
+        "T_max": 400.13
+      }
+    },
+    "methylcyclopentane": {
+      "name": "methylcyclopentane",
+      "formula": "C6H12",
+      "molar_mass": 84.1595,
+      "cas": "96-37-7",
+      "antoine_constants": {
+        "A": 9.18199,
+        "B": 1295.543,
+        "C": -34.76,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 255.06,
+        "T_max": 368.58
+      }
+    },
+    "naphthalene": {
+      "name": "naphthalene",
+      "formula": "C10H8",
+      "molar_mass": 128.1705,
+      "cas": "91-20-3",
+      "antoine_constants": {
+        "A": 9.13555,
+        "B": 1733.71,
+        "C": -71.291,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 368.44,
+        "T_max": 523.4
+      }
+    },
+    "neon": {
+      "name": "neon",
+      "formula": "Ne",
+      "molar_mass": 20.1797,
+      "cas": "7440-01-9",
+      "antoine_constants": {
+        "A": 8.20934,
+        "B": 78.38,
+        "C": -2.6,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 24.33,
+        "T_max": 29.55
+      }
+    },
+    "neopentane": {
+      "name": "neopentane",
+      "formula": "C5H12",
+      "molar_mass": 72.1488,
+      "cas": "463-82-1",
+      "antoine_constants": {
+        "A": 8.83916,
+        "B": 938.234,
+        "C": -37.901,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 259.33,
+        "T_max": 303.08
+      }
+    },
+    "nitric_oxide": {
+      "name": "nitric oxide",
+      "formula": "NO",
+      "molar_mass": 30.0061,
+      "cas": "10102-43-9",
+      "antoine_constants": {
+        "A": 10.8679,
+        "B": 682.9386,
+        "C": -4.88,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 106.94,
+        "T_max": 127.56
+      }
+    },
+    "nitrogen": {
+      "name": "nitrogen",
+      "formula": "N2",
+      "molar_mass": 28.0134,
+      "cas": "7727-37-9",
+      "antoine_constants": {
+        "A": 8.61947,
+        "B": 255.68,
+        "C": -6.6,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 60.81,
+        "T_max": 83.65
+      }
+    },
+    "nitrosyl_chloride": {
+      "name": "nitrosyl chloride",
+      "formula": "ClNO",
+      "molar_mass": 65.4591,
+      "cas": "2696-92-6",
+      "antoine_constants": {
+        "A": 9.48644,
+        "B": 1094.73,
+        "C": -23.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 209.4,
+        "T_max": 285.01
+      }
+    },
+    "nitrous_oxide": {
+      "name": "nitrous oxide",
+      "formula": "N2O",
+      "molar_mass": 44.0128,
+      "cas": "10024-97-2",
+      "antoine_constants": {
+        "A": 9.12884,
+        "B": 654.26,
+        "C": -25.99,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 180.82,
+        "T_max": 196.91
+      }
+    },
+    "nitryl_fluoride": {
+      "name": "nitryl fluoride",
+      "formula": "FNO2",
+      "molar_mass": 65.0039,
+      "cas": "10022-50-1",
+      "antoine_constants": {
+        "A": 8.9583,
+        "B": 654.55,
+        "C": -35.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 151.0,
+        "T_max": 214.12
+      }
+    },
+    "nonadecane": {
+      "name": "nonadecane",
+      "formula": "C19H40",
+      "molar_mass": 268.5209,
+      "cas": "629-92-5",
+      "antoine_constants": {
+        "A": 9.1402,
+        "B": 1932.8,
+        "C": -135.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 466.5,
+        "T_max": 639.0
+      }
+    },
+    "nonane": {
+      "name": "nonane",
+      "formula": "C9H20",
+      "molar_mass": 128.2551,
+      "cas": "111-84-2",
+      "antoine_constants": {
+        "A": 9.07356,
+        "B": 1438.03,
+        "C": -70.456,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 319.57,
+        "T_max": 451.64
+      }
+    },
+    "norflurane": {
+      "name": "norflurane",
+      "formula": "C2H2F4",
+      "molar_mass": 102.0309,
+      "cas": "811-97-2",
+      "antoine_constants": {
+        "A": 9.11874,
+        "B": 850.881,
+        "C": -40.16,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 186.41,
+        "T_max": 263.04
+      }
+    },
+    "o_cresol": {
+      "name": "o-cresol",
+      "formula": "C7H8O",
+      "molar_mass": 108.1378,
+      "cas": "95-48-7",
+      "antoine_constants": {
+        "A": 9.1834,
+        "B": 1534.54,
+        "C": -96.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 357.8,
+        "T_max": 492.11
+      }
+    },
+    "o_xylene": {
+      "name": "o-xylene",
+      "formula": "C8H10",
+      "molar_mass": 106.165,
+      "cas": "95-47-6",
+      "antoine_constants": {
+        "A": 9.09789,
+        "B": 1458.706,
+        "C": -61.109,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 312.75,
+        "T_max": 445.3
+      }
+    },
+    "octadecane": {
+      "name": "octadecane",
+      "formula": "C18H38",
+      "molar_mass": 254.4943,
+      "cas": "593-45-3",
+      "antoine_constants": {
+        "A": 9.1271,
+        "B": 1894.3,
+        "C": -129.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 455.0,
+        "T_max": 625.0
+      }
+    },
+    "octane": {
+      "name": "octane",
+      "formula": "C8H18",
+      "molar_mass": 114.2285,
+      "cas": "111-65-9",
+      "antoine_constants": {
+        "A": 9.05075,
+        "B": 1356.36,
+        "C": -63.515,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 299.42,
+        "T_max": 425.23
+      }
+    },
+    "oxygen": {
+      "name": "oxygen",
+      "formula": "O2",
+      "molar_mass": 31.9988,
+      "cas": "7782-44-7",
+      "antoine_constants": {
+        "A": 8.81634,
+        "B": 319.013,
+        "C": -6.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 64.29,
+        "T_max": 97.2
+      }
+    },
+    "oxygen_difluoride": {
+      "name": "oxygen difluoride",
+      "formula": "F2O",
+      "molar_mass": 53.9962,
+      "cas": "7783-41-7",
+      "antoine_constants": {
+        "A": 9.36109,
+        "B": 545.05,
+        "C": -3.24,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 93.1,
+        "T_max": 137.4
+      }
+    },
+    "ozone": {
+      "name": "ozone",
+      "formula": "O3",
+      "molar_mass": 47.9982,
+      "cas": "10028-15-6",
+      "antoine_constants": {
+        "A": 8.962,
+        "B": 552.5,
+        "C": -22.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 120.0,
+        "T_max": 173.07
+      }
+    },
+    "p_cymene": {
+      "name": "p-Cymene",
+      "formula": "C10H14",
+      "molar_mass": 134.2182,
+      "cas": "99-87-6",
+      "antoine_constants": {
+        "A": 9.17215,
+        "B": 1606.89,
+        "C": -64.58,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 338.28,
+        "T_max": 479.6
+      }
+    },
+    "p_xylene": {
+      "name": "p-xylene",
+      "formula": "C8H10",
+      "molar_mass": 106.165,
+      "cas": "106-42-3",
+      "antoine_constants": {
+        "A": 9.10494,
+        "B": 1446.832,
+        "C": -58.523,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 307.81,
+        "T_max": 438.88
+      }
+    },
+    "pentadecane": {
+      "name": "pentadecane",
+      "formula": "C15H32",
+      "molar_mass": 212.4146,
+      "cas": "629-62-9",
+      "antoine_constants": {
+        "A": 9.14849,
+        "B": 1789.95,
+        "C": -111.77,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 417.8,
+        "T_max": 576.9
+      }
+    },
+    "pentafluoroethane": {
+      "name": "pentafluoroethane",
+      "formula": "C2HF5",
+      "molar_mass": 120.0214,
+      "cas": "354-33-6",
+      "antoine_constants": {
+        "A": 9.13392,
+        "B": 800.869,
+        "C": -31.06,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 168.36,
+        "T_max": 240.01
+      }
+    },
+    "pentane": {
+      "name": "pentane",
+      "formula": "C5H12",
+      "molar_mass": 72.1488,
+      "cas": "109-66-0",
+      "antoine_constants": {
+        "A": 8.97786,
+        "B": 1064.84,
+        "C": -41.136,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 228.71,
+        "T_max": 330.75
+      }
+    },
+    "perchloryl_fluoride": {
+      "name": "perchloryl fluoride",
+      "formula": "ClFO3",
+      "molar_mass": 102.4496,
+      "cas": "7616-94-6",
+      "antoine_constants": {
+        "A": 9.02009,
+        "B": 791.727,
+        "C": -29.27,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 167.8,
+        "T_max": 242.15
+      }
+    },
+    "perfluoroethane": {
+      "name": "perfluoroethane",
+      "formula": "C2F6",
+      "molar_mass": 138.0118,
+      "cas": "76-16-4",
+      "antoine_constants": {
+        "A": 8.68388,
+        "B": 572.733,
+        "C": -39.5,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 175.65,
+        "T_max": 208.8
+      }
+    },
+    "phenanthrene": {
+      "name": "phenanthrene",
+      "formula": "C14H10",
+      "molar_mass": 178.2292,
+      "cas": "85-01-8",
+      "antoine_constants": {
+        "A": 9.37081,
+        "B": 2329.54,
+        "C": -77.87,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 461.6,
+        "T_max": 650.0
+      }
+    },
+    "phenol": {
+      "name": "phenol",
+      "formula": "C6H6O",
+      "molar_mass": 94.1112,
+      "cas": "108-95-2",
+      "antoine_constants": {
+        "A": 9.2696,
+        "B": 1523.42,
+        "C": -97.75,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 353.0,
+        "T_max": 481.62
+      }
+    },
+    "phosphine_ph3": {
+      "name": "phosphine (PH3)",
+      "formula": "H3P",
+      "molar_mass": 33.9976,
+      "cas": "7803-51-2",
+      "antoine_constants": {
+        "A": 8.84049,
+        "B": 645.512,
+        "C": -17.08,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 137.44,
+        "T_max": 199.46
+      }
+    },
+    "propane": {
+      "name": "propane",
+      "formula": "C3H8",
+      "molar_mass": 44.0956,
+      "cas": "74-98-6",
+      "antoine_constants": {
+        "A": 8.92828,
+        "B": 803.997,
+        "C": -26.11,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 168.9,
+        "T_max": 247.76
+      }
+    },
+    "propane_1_ethoxy": {
+      "name": "propane, 1-ethoxy-",
+      "formula": "C5H12O",
+      "molar_mass": 88.1482,
+      "cas": "628-32-0",
+      "antoine_constants": {
+        "A": 8.83648,
+        "B": 1052.47,
+        "C": -62.27,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 252.4,
+        "T_max": 359.96
+      }
+    },
+    "propene": {
+      "name": "propene",
+      "formula": "C3H6",
+      "molar_mass": 42.0797,
+      "cas": "115-07-1",
+      "antoine_constants": {
+        "A": 8.95606,
+        "B": 789.624,
+        "C": -25.57,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 165.2,
+        "T_max": 241.61
+      }
+    },
+    "propionic_acid": {
+      "name": "propionic acid",
+      "formula": "C3H6O2",
+      "molar_mass": 74.0785,
+      "cas": "79-09-4",
+      "antoine_constants": {
+        "A": 9.75466,
+        "B": 1662.582,
+        "C": -64.104,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 321.72,
+        "T_max": 437.41
+      }
+    },
+    "propyl_acetate": {
+      "name": "propyl acetate",
+      "formula": "C5H10O2",
+      "molar_mass": 102.1317,
+      "cas": "109-60-4",
+      "antoine_constants": {
+        "A": 9.05548,
+        "B": 1233.46,
+        "C": -70.07,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 284.4,
+        "T_max": 398.6
+      }
+    },
+    "propyl_butyrate": {
+      "name": "propyl butyrate",
+      "formula": "C7H14O2",
+      "molar_mass": 130.1849,
+      "cas": "105-66-8",
+      "antoine_constants": {
+        "A": 8.40455,
+        "B": 1019.49,
+        "C": -116.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 316.0,
+        "T_max": 445.04
+      }
+    },
+    "propyl_formate": {
+      "name": "propyl formate",
+      "formula": "C4H8O2",
+      "molar_mass": 88.1051,
+      "cas": "110-74-7",
+      "antoine_constants": {
+        "A": 8.97008,
+        "B": 1132.3,
+        "C": -69.07,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 268.9,
+        "T_max": 377.68
+      }
+    },
+    "propyl_propionate": {
+      "name": "propyl propionate",
+      "formula": "C6H12O2",
+      "molar_mass": 116.1583,
+      "cas": "106-36-5",
+      "antoine_constants": {
+        "A": 9.4489,
+        "B": 1545.3,
+        "C": -47.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 299.2,
+        "T_max": 420.4
+      }
+    },
+    "propylamine": {
+      "name": "propylamine",
+      "formula": "C3H9N",
+      "molar_mass": 59.1103,
+      "cas": "107-10-8",
+      "antoine_constants": {
+        "A": 9.3444,
+        "B": 1186.39,
+        "C": -46.94,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 258.31,
+        "T_max": 340.36
+      }
+    },
+    "propylbenzene": {
+      "name": "propylbenzene",
+      "formula": "C9H12",
+      "molar_mass": 120.1916,
+      "cas": "103-65-1",
+      "antoine_constants": {
+        "A": 9.07664,
+        "B": 1491.8,
+        "C": -65.9,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 324.19,
+        "T_max": 461.01
+      }
+    },
+    "propyne": {
+      "name": "propyne",
+      "formula": "C3H4",
+      "molar_mass": 40.0639,
+      "cas": "74-99-7",
+      "antoine_constants": {
+        "A": 9.24555,
+        "B": 935.09,
+        "C": -29.57,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 186.87,
+        "T_max": 266.63
+      }
+    },
+    "pyridine": {
+      "name": "pyridine",
+      "formula": "C5H5N",
+      "molar_mass": 79.0999,
+      "cas": "110-86-1",
+      "antoine_constants": {
+        "A": 9.16749,
+        "B": 1373.026,
+        "C": -58.46,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 292.51,
+        "T_max": 413.57
+      }
+    },
+    "quinoline": {
+      "name": "quinoline",
+      "formula": "C9H7N",
+      "molar_mass": 129.1586,
+      "cas": "91-22-5",
+      "antoine_constants": {
+        "A": 9.1949,
+        "B": 1812.25,
+        "C": -77.7,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 385.18,
+        "T_max": 543.11
+      }
+    },
+    "radon": {
+      "name": "radon",
+      "formula": "Rn",
+      "molar_mass": 222.0,
+      "cas": "10043-92-2",
+      "antoine_constants": {
+        "A": 9.6204,
+        "B": 884.41,
+        "C": -18.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 158.0,
+        "T_max": 222.9
+      }
+    },
+    "selenium": {
+      "name": "selenium",
+      "formula": "Se",
+      "molar_mass": 78.96,
+      "cas": "7782-49-2",
+      "antoine_constants": {
+        "A": 9.7565,
+        "B": 4213.0,
+        "C": -71.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 724.0,
+        "T_max": 1017.0
+      }
+    },
+    "sulfur": {
+      "name": "sulfur",
+      "formula": "S",
+      "molar_mass": 32.065,
+      "cas": "7704-34-9",
+      "antoine_constants": {
+        "A": 8.96853,
+        "B": 2500.12,
+        "C": -86.85,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 527.98,
+        "T_max": 768.55
+      }
+    },
+    "sulfur_dioxide": {
+      "name": "sulfur dioxide",
+      "formula": "O2S",
+      "molar_mass": 64.0638,
+      "cas": "7446-09-5",
+      "antoine_constants": {
+        "A": 9.4072,
+        "B": 999.9,
+        "C": -35.96,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 199.71,
+        "T_max": 279.47
+      }
+    },
+    "sulfur_hexafluoride": {
+      "name": "sulfur hexafluoride",
+      "formula": "F6S",
+      "molar_mass": 146.0554,
+      "cas": "2551-62-4",
+      "antoine_constants": {
+        "A": 10.5409,
+        "B": 1096.5,
+        "C": -11.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 162.0,
+        "T_max": 220.4
+      }
+    },
+    "sulfur_tetrafluoride": {
+      "name": "sulfur tetrafluoride",
+      "formula": "F4S",
+      "molar_mass": 108.0586,
+      "cas": "7783-60-0",
+      "antoine_constants": {
+        "A": 8.9644,
+        "B": 823.4,
+        "C": -25.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 170.0,
+        "T_max": 249.92
+      }
+    },
+    "sulfur_trioxide": {
+      "name": "sulfur trioxide",
+      "formula": "O3S",
+      "molar_mass": 80.0632,
+      "cas": "7446-11-9",
+      "antoine_constants": {
+        "A": 11.17575,
+        "B": 1735.31,
+        "C": -36.65,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 284.5,
+        "T_max": 332.04
+      }
+    },
+    "tert_butanol": {
+      "name": "tert-butanol",
+      "formula": "C4H10O",
+      "molar_mass": 74.1216,
+      "cas": "75-65-0",
+      "antoine_constants": {
+        "A": 9.44484,
+        "B": 1154.48,
+        "C": -95.5,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 283.0,
+        "T_max": 374.1
+      }
+    },
+    "tetradecane": {
+      "name": "tetradecane",
+      "formula": "C14H30",
+      "molar_mass": 198.388,
+      "cas": "629-59-4",
+      "antoine_constants": {
+        "A": 9.1379,
+        "B": 1740.88,
+        "C": -105.43,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 403.69,
+        "T_max": 559.15
+      }
+    },
+    "tetrahydrofuran": {
+      "name": "tetrahydrofuran",
+      "formula": "C4H8O",
+      "molar_mass": 72.1057,
+      "cas": "109-99-9",
+      "antoine_constants": {
+        "A": 9.12142,
+        "B": 1203.11,
+        "C": -46.795,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 253.5,
+        "T_max": 361.71
+      }
+    },
+    "thiophene": {
+      "name": "thiophene",
+      "formula": "C4H4S",
+      "molar_mass": 84.1396,
+      "cas": "110-02-1",
+      "antoine_constants": {
+        "A": 9.08416,
+        "B": 1246.02,
+        "C": -51.8,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 267.2,
+        "T_max": 381.16
+      }
+    },
+    "toluene": {
+      "name": "toluene",
+      "formula": "C7H8",
+      "molar_mass": 92.1384,
+      "cas": "108-88-3",
+      "antoine_constants": {
+        "A": 9.05043,
+        "B": 1327.62,
+        "C": -55.525,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 286.44,
+        "T_max": 409.61
+      }
+    },
+    "trans_2_butene": {
+      "name": "trans-2-butene",
+      "formula": "C4H8",
+      "molar_mass": 56.1063,
+      "cas": "624-64-6",
+      "antoine_constants": {
+        "A": 9.00827,
+        "B": 967.5,
+        "C": -32.31,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 201.83,
+        "T_max": 293.29
+      }
+    },
+    "trans_decalin": {
+      "name": "trans-Decalin",
+      "formula": "C10H18",
+      "molar_mass": 138.2499,
+      "cas": "493-02-7",
+      "antoine_constants": {
+        "A": 8.98171,
+        "B": 1564.683,
+        "C": -66.891,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 342.33,
+        "T_max": 492.0
+      }
+    },
+    "trichlorofluoromethane": {
+      "name": "trichlorofluoromethane",
+      "formula": "CCl3F",
+      "molar_mass": 137.3681,
+      "cas": "75-69-4",
+      "antoine_constants": {
+        "A": 9.00905,
+        "B": 1043.313,
+        "C": -36.2,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 218.98,
+        "T_max": 317.57
+      }
+    },
+    "tridecane": {
+      "name": "tridecane",
+      "formula": "C13H28",
+      "molar_mass": 184.3614,
+      "cas": "629-50-5",
+      "antoine_constants": {
+        "A": 9.13246,
+        "B": 1690.67,
+        "C": -98.93,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 388.85,
+        "T_max": 540.19
+      }
+    },
+    "undecane": {
+      "name": "undecane",
+      "formula": "C11H24",
+      "molar_mass": 156.3083,
+      "cas": "1120-21-4",
+      "antoine_constants": {
+        "A": 9.0971,
+        "B": 1569.57,
+        "C": -85.45,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 356.25,
+        "T_max": 499.0
+      }
+    },
+    "valeric_acid": {
+      "name": "valeric acid",
+      "formula": "C5H10O2",
+      "molar_mass": 102.1317,
+      "cas": "109-52-4",
+      "antoine_constants": {
+        "A": 9.1692,
+        "B": 1405.8,
+        "C": -121.35,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 361.0,
+        "T_max": 484.78
+      }
+    },
+    "water": {
+      "name": "water",
+      "formula": "H2O",
+      "molar_mass": 18.0153,
+      "cas": "7732-18-5",
+      "antoine_constants": {
+        "A": 10.11564,
+        "B": 1687.537,
+        "C": -42.98,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 273.2,
+        "T_max": 473.2
+      }
+    },
+    "xenon": {
+      "name": "xenon",
+      "formula": "Xe",
+      "molar_mass": 131.293,
+      "cas": "7440-63-3",
+      "antoine_constants": {
+        "A": 8.76779,
+        "B": 566.282,
+        "C": -14.49,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 156.43,
+        "T_max": 177.84
+      }
+    }
+  }
+}

@@ -11,12 +11,20 @@ from .data_models import (
     AntoineConstants,
     ChemicalSpecies,
     SpeciesDataError,
+    add_species,
     load_species,
+    remove_species,
+    slugify_key,
+    species_to_dict,
 )
 
 __all__ = [
     "AntoineConstants",
     "ChemicalSpecies",
     "SpeciesDataError",
+    "add_species",
     "load_species",
+    "remove_species",
+    "slugify_key",
+    "species_to_dict",
 ]
