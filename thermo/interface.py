@@ -37,11 +37,114 @@ MODE_T_FROM_P = "Boiling temperature from pressure  (P → T)"
 APP_MODE_LOOKUP = "Property Lookup"
 APP_MODE_FLASH = "VLE Flash Calculation"
 
-_REGIME_ICON = {
-    flash.REGIME_SUBCOOLED: "🔵",
-    flash.REGIME_TWO_PHASE: "🟢",
-    flash.REGIME_SUPERHEATED: "🔴",
+# The phase triad — colours encode physical state, reused everywhere.
+_LIQUID = "#38BDF8"
+_TWO_PHASE = "#34D399"
+_VAPOR = "#F6A93B"
+_PHASE_COLOR = {
+    flash.REGIME_SUBCOOLED: _LIQUID,
+    flash.REGIME_TWO_PHASE: _TWO_PHASE,
+    flash.REGIME_SUPERHEATED: _VAPOR,
 }
+
+_THEME_CSS = """
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+:root{
+  --bg:#0E1726; --panel:#15203A; --border:#273656;
+  --text:#E7EDF7; --muted:#93A4C2;
+  --liquid:#38BDF8; --two:#34D399; --vapor:#F6A93B;
+}
+/* Type */
+html, body, .stApp, [data-testid="stAppViewContainer"]{
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  color:var(--text);
+}
+h1,h2,h3,h4,[data-testid="stHeading"]{
+  font-family:'Space Grotesk','IBM Plex Sans',sans-serif !important;
+  letter-spacing:-0.015em;
+}
+[data-testid="stCaptionContainer"], .stCaption, small{
+  color:var(--muted) !important;
+  font-family:'IBM Plex Mono', monospace;
+  letter-spacing:0.02em;
+}
+/* Phase-diagram ground: cool (liquid) glow top-left, warm (vapor) top-right, fine grid */
+.stApp{
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(1100px 560px at 8% -12%, rgba(56,189,248,0.10), transparent 60%),
+    radial-gradient(1000px 620px at 104% -4%, rgba(246,169,59,0.07), transparent 56%),
+    linear-gradient(rgba(39,54,86,0.30) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39,54,86,0.30) 1px, transparent 1px);
+  background-size:100% 100%, 100% 100%, 46px 46px, 46px 46px;
+  background-attachment:fixed;
+}
+[data-testid="stHeader"]{ background:transparent; }
+.block-container{ padding-top:2.2rem; max-width:1180px; }
+/* Hero */
+.tpc-hero{ margin:0.2rem 0 1.6rem; animation:tpcRise .5s ease-out both; }
+.tpc-eyebrow{
+  font-family:'IBM Plex Mono', monospace; text-transform:uppercase;
+  letter-spacing:0.34em; font-size:0.72rem; color:var(--liquid); margin-bottom:0.5rem;
+}
+.tpc-title{
+  font-family:'Space Grotesk',sans-serif; font-weight:600;
+  font-size:2.5rem; line-height:1.04; margin:0; color:#F3F7FE;
+}
+.tpc-sub{ color:var(--muted); font-size:1.02rem; margin:0.55rem 0 0.9rem; max-width:60ch; }
+.tpc-sub b{ color:var(--text); font-weight:600; }
+.tpc-spine{
+  height:3px; width:100%; border-radius:3px;
+  background:linear-gradient(90deg,var(--liquid),var(--two) 52%,var(--vapor));
+  box-shadow:0 0 22px rgba(56,189,248,0.25);
+}
+.tpc-legend{ display:flex; gap:1.4rem; margin-top:0.7rem;
+  font-family:'IBM Plex Mono',monospace; font-size:0.76rem; color:var(--muted); }
+.tpc-legend span{ display:inline-flex; align-items:center; gap:0.42rem; }
+.tpc-legend i{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+.tpc-legend .ph-liq{ background:var(--liquid); }
+.tpc-legend .ph-two{ background:var(--two); }
+.tpc-legend .ph-vap{ background:var(--vapor); }
+/* Regime card */
+.tpc-regime{
+  display:flex; gap:0.95rem; align-items:center; margin:0.3rem 0 1.1rem;
+  padding:1rem 1.15rem; border-radius:0.85rem;
+  border:1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  background:linear-gradient(90deg, color-mix(in srgb, var(--accent) 15%, var(--panel)), var(--panel) 62%);
+  position:relative; overflow:hidden;
+}
+.tpc-regime::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--accent); }
+.tpc-regime-dot{ width:13px; height:13px; border-radius:50%; background:var(--accent);
+  box-shadow:0 0 0 5px color-mix(in srgb, var(--accent) 24%, transparent); flex:0 0 auto; }
+.tpc-regime-label{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1.18rem; color:#F3F7FE; }
+.tpc-regime-meta{ font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--muted); margin-top:0.12rem; }
+/* Metric cards -> instrument readouts */
+[data-testid="stMetric"]{
+  background:linear-gradient(180deg, var(--panel), #111B30);
+  border:1px solid var(--border); border-radius:0.75rem;
+  padding:0.85rem 1rem 0.95rem; position:relative; overflow:hidden;
+}
+[data-testid="stMetric"]::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--liquid); opacity:0.75; }
+[data-testid="stMetricValue"]{ font-family:'IBM Plex Mono',monospace !important; font-weight:600;
+  font-size:1.65rem !important; line-height:1.15; }
+[data-testid="stMetricLabel"]{ color:var(--muted) !important; }
+[data-testid="stAppDeployButton"]{ display:none; }
+/* Sidebar */
+[data-testid="stSidebar"]{ background:#0F182B; border-right:1px solid var(--border); }
+[data-testid="stSidebar"] h2,[data-testid="stSidebar"] h3{ font-size:0.78rem; text-transform:uppercase;
+  letter-spacing:0.18em; color:var(--muted); }
+/* Buttons */
+.stButton>button{ border-radius:0.6rem; border:1px solid var(--border); font-weight:600; transition:all .15s ease; }
+.stButton>button:hover{ border-color:var(--liquid); color:var(--liquid); transform:translateY(-1px); }
+/* Tables, tabs, dividers */
+[data-testid="stDataFrame"]{ border:1px solid var(--border); border-radius:0.6rem; }
+[data-baseweb="tab-list"]{ gap:0.25rem; }
+hr{ border-color:var(--border); }
+:focus-visible{ outline:2px solid var(--liquid); outline-offset:2px; }
+@keyframes tpcRise{ from{ opacity:0; transform:translateY(9px);} to{ opacity:1; transform:none;} }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+"""
 
 
 @st.cache_data(show_spinner=False)
@@ -310,6 +413,47 @@ def _manage_ui(registry: dict[str, ChemicalSpecies]) -> None:
         st.rerun()
 
 
+def _inject_theme() -> None:
+    """Inject the console theme (fonts + phase-coded styling) once per render."""
+    st.markdown(f"<style>{_THEME_CSS}</style>", unsafe_allow_html=True)
+
+
+def _hero(registry: dict[str, ChemicalSpecies]) -> None:
+    st.markdown(
+        f"""
+<div class="tpc-hero">
+  <div class="tpc-eyebrow">Vapor–Liquid Equilibrium Toolkit</div>
+  <h1 class="tpc-title">Thermodynamic Property Calculator</h1>
+  <p class="tpc-sub">Look up Antoine vapor pressures and boiling points, or run an
+  isothermal Rachford–Rice flash — across <b>{len(registry)}</b> validated species.</p>
+  <div class="tpc-spine"></div>
+  <div class="tpc-legend">
+    <span><i class="ph-liq"></i>liquid</span>
+    <span><i class="ph-two"></i>two-phase</span>
+    <span><i class="ph-vap"></i>vapor</span>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
+def _regime_card(result: "flash.FlashResult") -> None:
+    color = _PHASE_COLOR[result.regime]
+    st.markdown(
+        f"""
+<div class="tpc-regime" style="--accent:{color}">
+  <span class="tpc-regime-dot"></span>
+  <div>
+    <div class="tpc-regime-label">{result.regime_label}</div>
+    <div class="tpc-regime-meta">β = {result.vapor_fraction:.4f} · vapor / feed</div>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
 def _property_lookup_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 1 — single-species property lookup (vapor pressure ⇄ boiling T)."""
     keys = list(registry.keys())
@@ -453,7 +597,7 @@ def _render_flash_result(
         f"Flash at {result.temperature:g} {result.temp_unit} "
         f"and {result.pressure:g} {result.pressure_unit}"
     )
-    st.markdown(f"### {_REGIME_ICON[result.regime]} {result.regime_label}")
+    _regime_card(result)
 
     m1, m2, m3 = st.columns(3)
     m1.metric("Vapor fraction  β = V/F", f"{result.vapor_fraction:.4f}")
@@ -496,11 +640,16 @@ def _render_flash_result(
     )
     st.dataframe(table, hide_index=True, width="stretch")
 
+    phase_colors = {"zᵢ feed": "#93A4C2", "xᵢ liquid": _LIQUID, "yᵢ vapor": _VAPOR}
     chart_df = pd.DataFrame(
         {"zᵢ feed": result.z, "xᵢ liquid": result.x, "yᵢ vapor": result.y}, index=names
     ).dropna(axis=1, how="all")
-    st.caption("Phase compositions")
-    st.bar_chart(chart_df)
+    st.caption("Phase compositions — feed vs. equilibrium liquid and vapor")
+    st.bar_chart(
+        chart_df,
+        color=[phase_colors[c] for c in chart_df.columns],
+        stack=False,
+    )
 
     with st.expander("About the VLE flash"):
         st.markdown(
@@ -519,20 +668,21 @@ def _render_flash_result(
 
 def render() -> None:
     """Render the full Streamlit page."""
-    st.set_page_config(page_title="Thermodynamic Property Calculator", page_icon="🧪")
-    st.title("🧪 Thermodynamic Property Calculator")
-    st.write(
-        "Antoine-equation property lookup **and** isothermal VLE flash "
-        "(Rachford-Rice). Pure-Python engine (NumPy + SciPy). Add species from "
-        "the **validated reference catalog** or enter your own — additions are "
-        "saved to `chemical_data.json`."
+    st.set_page_config(
+        page_title="Thermodynamic Property Calculator",
+        page_icon="🧪",
+        layout="wide",
+        initial_sidebar_state="expanded",
     )
+    _inject_theme()
 
     try:
         registry = _load(str(DATA_PATH))
     except SpeciesDataError as exc:
         st.error(f"Failed to load chemical data: {exc}")
         st.stop()
+
+    _hero(registry)
 
     with st.sidebar:
         st.header("Mode")

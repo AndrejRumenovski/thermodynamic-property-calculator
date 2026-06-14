@@ -31,6 +31,9 @@ htmlcov/
 .idea/
 *.swp
 
+# Local dev-server launch config (contains a machine-specific absolute path)
+.claude/launch.json
+
 # OS
 .DS_Store
 Thumbs.db
