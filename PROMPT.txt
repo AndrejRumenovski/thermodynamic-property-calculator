@@ -1,0 +1,52 @@
+Thermodynamic Calculator Project
+Package
+
+1. The Prompt
+Use the following prompt with your coding assistant to initiate the project:
+
+Role: You are a senior software engineer specializing in chemical engineering informatics. Your goal is to build a robust, modular thermodynamic property calculator.
+Task: Develop a Python-based application that calculates key thermophysical properties (e.g., vapor pressure) for a given list of chemical species.
+Project Requirements & Architecture:
+1. Tech Stack: Use Python with Streamlit for the UI. Use NumPy and SciPy for all numerical computations.
+2. Data Structure: Create a data-driven design where chemical constants (like Antoine equation coefficients) are stored in a structured JSON file.
+3. Modularity: Separate the project into three layers:
+- data_models: Classes/schemas for chemical species.
+- thermo_engine: Pure calculation logic using the Antoine Equation.
+- interface: The user interaction layer using Streamlit.
+4. Immediate Next Step: Before writing any code, output a PLAN.md file outlining the file structure and the proposed data schema. Do not proceed until I approve the plan.
+
+2. Initial Data File (chemical_data.json)
+Include this file in your project directory so the engine has data to work with immediately:
+
+{
+"species": {
+"water": {
+"name": "Water",
+"formula": "H2O",
+"molar_mass": 18.015,
+"antoine_constants": {
+"A": 8.07131, "B": 1730.63, "C": 233.426,
+
+"units": {"P": "mmHg", "T": "Celsius"}
+}
+},
+"benzene": {
+"name": "Benzene",
+"formula": "C6H6",
+"molar_mass": 78.11,
+"antoine_constants": {
+"A": 6.90565, "B": 1211.033, "C": 220.79,
+"units": {"P": "mmHg", "T": "Celsius"}
+}
+}
+}
+}
+
+3. Implementation Guidance
+The core logic you are building is the Antoine Equation:
+log10(P) = A − (B / (T + C))
+
+Instruct the AI to handle the inverse logic for these variables and to ensure the units are
+explicitly converted or validated against the constants provided.
+
+Chemical Engineering & Informatics Foundation
