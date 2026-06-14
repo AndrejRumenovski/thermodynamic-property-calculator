@@ -8,7 +8,10 @@
         "A": 8.07131,
         "B": 1730.63,
         "C": 233.426,
-        "units": { "P": "mmHg", "T": "Celsius" },
+        "units": {
+          "P": "mmHg",
+          "T": "Celsius"
+        },
         "T_min": 1.0,
         "T_max": 100.0
       }
@@ -21,7 +24,10 @@
         "A": 6.90565,
         "B": 1211.033,
         "C": 220.79,
-        "units": { "P": "mmHg", "T": "Celsius" },
+        "units": {
+          "P": "mmHg",
+          "T": "Celsius"
+        },
         "T_min": 8.0,
         "T_max": 103.0
       }
@@ -34,7 +40,10 @@
         "A": 6.95464,
         "B": 1344.8,
         "C": 219.48,
-        "units": { "P": "mmHg", "T": "Celsius" },
+        "units": {
+          "P": "mmHg",
+          "T": "Celsius"
+        },
         "T_min": 6.0,
         "T_max": 137.0
       }
@@ -47,7 +56,10 @@
         "A": 8.20417,
         "B": 1642.89,
         "C": 230.3,
-        "units": { "P": "mmHg", "T": "Celsius" },
+        "units": {
+          "P": "mmHg",
+          "T": "Celsius"
+        },
         "T_min": -2.0,
         "T_max": 100.0
       }
@@ -60,7 +72,10 @@
         "A": 8.07246,
         "B": 1574.99,
         "C": 238.86,
-        "units": { "P": "mmHg", "T": "Celsius" },
+        "units": {
+          "P": "mmHg",
+          "T": "Celsius"
+        },
         "T_min": -16.0,
         "T_max": 91.0
       }
@@ -73,9 +88,28 @@
         "A": 7.02447,
         "B": 1161.0,
         "C": 224.0,
-        "units": { "P": "mmHg", "T": "Celsius" },
+        "units": {
+          "P": "mmHg",
+          "T": "Celsius"
+        },
         "T_min": -13.0,
         "T_max": 55.0
+      }
+    },
+    "cyclopropane": {
+      "name": "cyclopropane",
+      "formula": "C3H6",
+      "molar_mass": 42.0797,
+      "antoine_constants": {
+        "A": 9.03084,
+        "B": 866.15,
+        "C": -25.15,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 176.3,
+        "T_max": 257.37
       }
     }
   }

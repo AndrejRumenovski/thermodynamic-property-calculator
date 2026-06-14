@@ -1,24 +1,37 @@
 # Thermodynamic Property Calculator
 
-A modular, data-driven Python application that calculates thermophysical
-properties of chemical species from the **Antoine equation** — converting
-between **vapor pressure** and **boiling temperature**, with unit handling — and
-presents them through a **Streamlit** UI. Numerics use **NumPy** and **SciPy**.
+A modular, data-driven Python application for chemical-engineering VLE work. Two
+modes, selectable from the sidebar:
+
+1. **Property Lookup** — vapor pressure ⇄ boiling temperature from the
+   **Antoine equation**, with unit handling.
+2. **VLE Flash Calculation** — isothermal multicomponent flash via the
+   **Rachford-Rice** equation (ideal/Raoult), classifying the feed as subcooled
+   liquid, two-phase, or superheated vapor.
+
+Built on a **Streamlit** UI with **NumPy** and **SciPy** numerics.
 
 ```
-log10(P) = A − B / (T + C)          forward   (T → P)
-T        = B / (A − log10(P)) − C   inverse   (P → T, boiling temperature)
+log10(P) = A − B / (T + C)                          Antoine   (T ⇄ P)
+K_i = P_i^sat(T) / P                                Raoult K-values
+Σ_i z_i (K_i − 1) / (1 + β(K_i − 1)) = 0            Rachford-Rice  (solve for β = V/F)
 ```
 
 ## Architecture
 
-Three deliberately separated layers (see [`PLAN.md`](PLAN.md)):
+Deliberately separated layers (see [`PLAN.md`](PLAN.md)):
 
 | Layer | Module | Responsibility |
 | --- | --- | --- |
 | Data models | [`thermo/data_models.py`](thermo/data_models.py) | Dataclasses + JSON loader/validator. No math, no UI. |
-| Engine | [`thermo/thermo_engine.py`](thermo/thermo_engine.py) | Pure Antoine math + unit conversion (NumPy/SciPy). No I/O, no UI. |
-| Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering, called by [`app.py`](app.py). |
+| Property engine | [`thermo/thermo_engine.py`](thermo/thermo_engine.py) | Pure Antoine math + unit conversion (NumPy/SciPy). No I/O, no UI. |
+| Flash engine | [`thermo/flash_engine.py`](thermo/flash_engine.py) | Rachford-Rice VLE flash (SciPy `brentq`). Gets `P^sat` from the property engine — no duplicated logic. No I/O, no UI. |
+| Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering (both modes), called by [`app.py`](app.py). |
+
+The flash engine consumes the **same `ChemicalSpecies` objects** loaded from
+`chemical_data.json` and calls `thermo_engine.vapor_pressure(...)` for every
+`P^sat`, so the two engines stay consistent and components may even mix native
+units (e.g. mmHg/°C with Pa/K).
 
 Chemical constants live in [`chemical_data.json`](chemical_data.json) — the app
 is entirely data-driven, so adding a species is a JSON edit, not a code change.

@@ -17,6 +17,7 @@ from .data_models import (
     slugify_key,
     species_to_dict,
 )
+from .flash_engine import FlashError, FlashResult, flash
 
 __all__ = [
     "AntoineConstants",
@@ -27,4 +28,7 @@ __all__ = [
     "remove_species",
     "slugify_key",
     "species_to_dict",
+    "FlashError",
+    "FlashResult",
+    "flash",
 ]

@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from . import flash_engine as flash
 from . import thermo_engine as engine
 from .data_models import (
     SUPPORTED_PRESSURE_UNITS,
@@ -32,6 +33,15 @@ CATALOG_PATH = Path(__file__).resolve().parent.parent / "antoine_catalog.json"
 
 MODE_P_FROM_T = "Vapor pressure from temperature  (T → P)"
 MODE_T_FROM_P = "Boiling temperature from pressure  (P → T)"
+
+APP_MODE_LOOKUP = "Property Lookup"
+APP_MODE_FLASH = "VLE Flash Calculation"
+
+_REGIME_ICON = {
+    flash.REGIME_SUBCOOLED: "🔵",
+    flash.REGIME_TWO_PHASE: "🟢",
+    flash.REGIME_SUPERHEATED: "🔴",
+}
 
 
 @st.cache_data(show_spinner=False)
@@ -300,56 +310,42 @@ def _manage_ui(registry: dict[str, ChemicalSpecies]) -> None:
         st.rerun()
 
 
-def render() -> None:
-    """Render the full Streamlit page."""
-    st.set_page_config(page_title="Thermodynamic Property Calculator", page_icon="🧪")
-    st.title("🧪 Thermodynamic Property Calculator")
-    st.write(
-        "Vapor pressure ⇄ boiling temperature via the **Antoine equation**, "
-        "with unit conversion. Pure-Python engine (NumPy + SciPy). Add species "
-        "from the **validated reference catalog** (a few hundred compounds) or "
-        "enter your own — additions are saved to `chemical_data.json`."
-    )
-
-    try:
-        registry = _load(str(DATA_PATH))
-    except SpeciesDataError as exc:
-        st.error(f"Failed to load chemical data: {exc}")
-        st.stop()
-
+def _property_lookup_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 1 — single-species property lookup (vapor pressure ⇄ boiling T)."""
     keys = list(registry.keys())
     defaults = [k for k in ("water", "benzene") if k in registry] or keys[:1]
 
     with st.sidebar:
-        st.header("Inputs")
+        st.subheader("Property inputs")
         chosen = st.multiselect(
             "Species",
             options=keys,
             default=defaults,
             format_func=lambda k: registry[k].name,
+            key="lookup_species",
         )
-        mode = st.radio("Calculation", [MODE_P_FROM_T, MODE_T_FROM_P])
+        mode = st.radio("Calculation", [MODE_P_FROM_T, MODE_T_FROM_P], key="lookup_calc")
 
         if mode == MODE_P_FROM_T:
-            temperature = st.number_input("Temperature", value=100.0, step=1.0)
-            temp_unit = st.selectbox("Temperature unit", SUPPORTED_TEMPERATURE_UNITS, index=0)
-            pressure_unit = st.selectbox("Pressure unit (output)", SUPPORTED_PRESSURE_UNITS, index=0)
+            temperature = st.number_input("Temperature", value=100.0, step=1.0, key="lookup_T")
+            temp_unit = st.selectbox(
+                "Temperature unit", SUPPORTED_TEMPERATURE_UNITS, index=0, key="lookup_Tunit"
+            )
+            pressure_unit = st.selectbox(
+                "Pressure unit (output)", SUPPORTED_PRESSURE_UNITS, index=0, key="lookup_Pout"
+            )
         else:
-            pressure = st.number_input("Pressure", value=760.0, step=1.0, min_value=0.0)
-            pressure_unit = st.selectbox("Pressure unit", SUPPORTED_PRESSURE_UNITS, index=0)
-            temp_unit = st.selectbox("Temperature unit (output)", SUPPORTED_TEMPERATURE_UNITS, index=0)
+            pressure = st.number_input(
+                "Pressure", value=760.0, step=1.0, min_value=0.0, key="lookup_P"
+            )
+            pressure_unit = st.selectbox(
+                "Pressure unit", SUPPORTED_PRESSURE_UNITS, index=0, key="lookup_Punit"
+            )
+            temp_unit = st.selectbox(
+                "Temperature unit (output)", SUPPORTED_TEMPERATURE_UNITS, index=0, key="lookup_Tout"
+            )
 
-        log_scale = st.checkbox("Log scale on chart", value=True)
-
-        st.divider()
-        with st.expander("➕ Add / manage species"):
-            tab_cat, tab_manual, tab_manage = st.tabs(["Catalog", "Manual", "Remove"])
-            with tab_cat:
-                _add_from_catalog_ui(registry)
-            with tab_manual:
-                _manual_add_ui(registry)
-            with tab_manage:
-                _manage_ui(registry)
+        log_scale = st.checkbox("Log scale on chart", value=True, key="lookup_log")
 
     if not chosen:
         st.info("Pick one or more species in the sidebar to begin.")
@@ -377,3 +373,187 @@ def render() -> None:
             "inputs and outputs to the units selected above. Results outside a "
             "species' validated temperature range are extrapolations."
         )
+
+
+def _flash_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 2 — isothermal VLE flash (Rachford-Rice, ideal/Raoult)."""
+    keys = list(registry.keys())
+    default_pair = [k for k in ("benzene", "toluene") if k in registry]
+    if len(default_pair) < 2:
+        default_pair = keys[:2]
+
+    with st.sidebar:
+        st.subheader("Flash inputs")
+        chosen = st.multiselect(
+            "Components (≥ 2)",
+            options=keys,
+            default=default_pair,
+            format_func=lambda k: registry[k].name,
+            key="flash_components",
+        )
+        c1, c2 = st.columns(2)
+        temperature = c1.number_input("Temperature", value=95.0, step=1.0, key="flash_T")
+        temp_unit = c2.selectbox(
+            "T unit", SUPPORTED_TEMPERATURE_UNITS, index=0, key="flash_Tunit"
+        )
+        c3, c4 = st.columns(2)
+        pressure = c3.number_input(
+            "Pressure", value=760.0, step=1.0, min_value=0.0, key="flash_P"
+        )
+        pressure_unit = c4.selectbox(
+            "P unit", SUPPORTED_PRESSURE_UNITS, index=0, key="flash_Punit"
+        )
+
+        st.caption("Feed mole fractions zᵢ (normalised automatically):")
+        default_z = round(1.0 / len(chosen), 4) if chosen else 0.0
+        z_inputs = [
+            st.number_input(
+                f"z — {registry[k].name}",
+                min_value=0.0,
+                max_value=1.0,
+                value=default_z,
+                step=0.05,
+                key=f"flash_z_{k}",
+            )
+            for k in chosen
+        ]
+
+    if len(chosen) < 2:
+        st.info("Select at least two components in the sidebar to run a flash.")
+        return
+    if sum(z_inputs) <= 0:
+        st.error("Mole fractions must sum to a positive value.")
+        return
+
+    species_list = _selected_species(registry, chosen)
+    try:
+        result = flash.flash(
+            species_list,
+            z_inputs,
+            temperature,
+            pressure,
+            temp_unit=temp_unit,
+            pressure_unit=pressure_unit,
+        )
+    except (flash.FlashError, ValueError) as exc:
+        st.error(f"Flash failed: {exc}")
+        return
+
+    _render_flash_result(registry, chosen, z_inputs, result)
+
+
+def _render_flash_result(
+    registry: dict[str, ChemicalSpecies],
+    chosen: list[str],
+    z_inputs: list[float],
+    result: "flash.FlashResult",
+) -> None:
+    names = [registry[k].name for k in chosen]
+    st.subheader(
+        f"Flash at {result.temperature:g} {result.temp_unit} "
+        f"and {result.pressure:g} {result.pressure_unit}"
+    )
+    st.markdown(f"### {_REGIME_ICON[result.regime]} {result.regime_label}")
+
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Vapor fraction  β = V/F", f"{result.vapor_fraction:.4f}")
+    m2.metric("Liquid fraction  L/F", f"{result.liquid_fraction:.4f}")
+    m3.metric(
+        f"Bubble / Dew P ({result.pressure_unit})",
+        f"{result.bubble_pressure:,.1f} / {result.dew_pressure:,.1f}",
+    )
+
+    entered_sum = sum(z_inputs)
+    if abs(entered_sum - 1.0) > 1e-6:
+        st.caption(f"Entered zᵢ summed to {entered_sum:.3f}; normalised to 1.")
+
+    out_of_range = [
+        registry[k].name
+        for k in chosen
+        if not engine.temperature_in_range(
+            registry[k].antoine,
+            engine.convert_temperature(
+                result.temperature, result.temp_unit, registry[k].antoine.temperature_unit
+            ),
+        )
+    ]
+    if out_of_range:
+        st.warning(
+            "Temperature is outside the validated Antoine range for: "
+            + ", ".join(out_of_range)
+            + " — saturation pressures are extrapolated."
+        )
+
+    table = pd.DataFrame(
+        {
+            "Component": names,
+            "zᵢ (feed)": np.round(result.z, 4),
+            f"Pˢᵃᵗ ({result.pressure_unit})": np.round(result.psat, 3),
+            "Kᵢ = Pˢᵃᵗ/P": np.round(result.K, 4),
+            "xᵢ (liquid)": np.round(result.x, 4),
+            "yᵢ (vapor)": np.round(result.y, 4),
+        }
+    )
+    st.dataframe(table, hide_index=True, width="stretch")
+
+    chart_df = pd.DataFrame(
+        {"zᵢ feed": result.z, "xᵢ liquid": result.x, "yᵢ vapor": result.y}, index=names
+    ).dropna(axis=1, how="all")
+    st.caption("Phase compositions")
+    st.bar_chart(chart_df)
+
+    with st.expander("About the VLE flash"):
+        st.markdown(
+            "Isothermal flash using **Raoult's law** (ideal VLE): "
+            "Kᵢ = Pˢᵃᵗᵢ(T) / P, with Pˢᵃᵗ from the Antoine engine. The vapor "
+            "fraction β solves the **Rachford-Rice** equation "
+            "Σᵢ zᵢ(Kᵢ − 1) / (1 + β(Kᵢ − 1)) = 0 via SciPy's `brentq`.\n\n"
+            "- **Subcooled liquid** when P ≥ bubble pressure (β = 0)\n"
+            "- **Two-phase** when dew < P < bubble (0 < β < 1), with "
+            "xᵢ = zᵢ / (1 + β(Kᵢ − 1)) and yᵢ = Kᵢxᵢ\n"
+            "- **Superheated vapor** when P ≤ dew pressure (β = 1)\n\n"
+            "Saturation pressures are retrieved from the shared `thermo_engine`, "
+            "so components may even use different native units."
+        )
+
+
+def render() -> None:
+    """Render the full Streamlit page."""
+    st.set_page_config(page_title="Thermodynamic Property Calculator", page_icon="🧪")
+    st.title("🧪 Thermodynamic Property Calculator")
+    st.write(
+        "Antoine-equation property lookup **and** isothermal VLE flash "
+        "(Rachford-Rice). Pure-Python engine (NumPy + SciPy). Add species from "
+        "the **validated reference catalog** or enter your own — additions are "
+        "saved to `chemical_data.json`."
+    )
+
+    try:
+        registry = _load(str(DATA_PATH))
+    except SpeciesDataError as exc:
+        st.error(f"Failed to load chemical data: {exc}")
+        st.stop()
+
+    with st.sidebar:
+        st.header("Mode")
+        app_mode = st.radio(
+            "Mode",
+            [APP_MODE_LOOKUP, APP_MODE_FLASH],
+            key="app_mode",
+            label_visibility="collapsed",
+        )
+        st.divider()
+        with st.expander("➕ Add / manage species"):
+            tab_cat, tab_manual, tab_manage = st.tabs(["Catalog", "Manual", "Remove"])
+            with tab_cat:
+                _add_from_catalog_ui(registry)
+            with tab_manual:
+                _manual_add_ui(registry)
+            with tab_manage:
+                _manage_ui(registry)
+        st.divider()
+
+    if app_mode == APP_MODE_LOOKUP:
+        _property_lookup_mode(registry)
+    else:
+        _flash_mode(registry)
