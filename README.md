@@ -1,21 +1,29 @@
 # Thermodynamic Property Calculator
 
-A modular, data-driven Python application for chemical-engineering VLE work. Two
+A modular, data-driven Python application for chemical-engineering VLE work. Three
 modes, selectable from the sidebar:
 
 1. **Property Lookup** — vapor pressure ⇄ boiling temperature from the
    **Antoine equation**, with unit handling.
 2. **VLE Flash Calculation** — isothermal multicomponent flash via the
-   **Rachford-Rice** equation (ideal/Raoult), classifying the feed as subcooled
-   liquid, two-phase, or superheated vapor.
+   **Rachford-Rice** equation, with a selectable activity-coefficient model
+   (Raoult / Wilson / NRTL / UNIQUAC), classifying the feed as subcooled liquid,
+   two-phase, or superheated vapor.
+3. **Phase Diagram** — publication-quality **T–x–y / P–x–y** diagrams for binary
+   systems (zoom, PNG/SVG/CSV export), with automatic azeotrope detection.
 
-Built on a **Streamlit** UI with **NumPy** and **SciPy** numerics.
+Built on a **Streamlit** UI with **NumPy**, **SciPy**, and **Plotly** numerics.
 
 ```
-log10(P) = A − B / (T + C)                          Antoine   (T ⇄ P)
-K_i = P_i^sat(T) / P                                Raoult K-values
-Σ_i z_i (K_i − 1) / (1 + β(K_i − 1)) = 0            Rachford-Rice  (solve for β = V/F)
+log10(P) = A − B / (T + C)                          Antoine          (T ⇄ P)
+K_i = γ_i(x,T) · P_i^sat(T) / P                     modified Raoult  (γ from the model)
+Σ_i z_i (K_i − 1) / (1 + β(K_i − 1)) = 0            Rachford-Rice    (solve for β = V/F)
 ```
+
+Non-ideal models (Wilson/NRTL/UNIQUAC) reproduce real **azeotropes** — e.g.
+ethanol–water (x₁≈0.894, 78.15 °C) and acetone–methanol (x₁≈0.80, 55.5 °C). See
+[`docs/thermodynamics.md`](docs/thermodynamics.md) for equations, parameters, and
+provenance.
 
 ## Architecture
 
@@ -25,8 +33,10 @@ Deliberately separated layers (see [`PLAN.md`](PLAN.md)):
 | --- | --- | --- |
 | Data models | [`thermo/data_models.py`](thermo/data_models.py) | Dataclasses + JSON loader/validator. No math, no UI. |
 | Property engine | [`thermo/thermo_engine.py`](thermo/thermo_engine.py) | Pure Antoine math + unit conversion (NumPy/SciPy). No I/O, no UI. |
-| Flash engine | [`thermo/flash_engine.py`](thermo/flash_engine.py) | Rachford-Rice VLE flash (SciPy `brentq`). Gets `P^sat` from the property engine — no duplicated logic. No I/O, no UI. |
-| Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering (both modes), called by [`app.py`](app.py). |
+| Flash engine | [`thermo/flash_engine.py`](thermo/flash_engine.py) | Rachford-Rice VLE flash (SciPy `brentq`). Gets `P^sat` from the property engine. No I/O, no UI. |
+| Thermo models | [`thermo/models/`](thermo/models) | `ActivityModel` framework — Ideal/Wilson/NRTL/UNIQUAC + the `ThermodynamicModel` bubble/dew/flash solver. Pure math. |
+| Diagrams | [`thermo/diagrams.py`](thermo/diagrams.py) | Binary T–x–y / P–x–y curve generation. |
+| Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering (all modes), called by [`app.py`](app.py). |
 
 The flash engine consumes the **same `ChemicalSpecies` objects** loaded from
 `chemical_data.json` and calls `thermo_engine.vapor_pressure(...)` for every

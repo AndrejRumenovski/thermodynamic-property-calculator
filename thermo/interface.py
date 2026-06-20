@@ -12,9 +12,12 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
+from . import diagrams
 from . import flash_engine as flash
+from . import models as tmodels
 from . import thermo_engine as engine
 from .data_models import (
     SUPPORTED_PRESSURE_UNITS,
@@ -36,6 +39,7 @@ MODE_T_FROM_P = "Boiling temperature from pressure  (P → T)"
 
 APP_MODE_LOOKUP = "Property Lookup"
 APP_MODE_FLASH = "VLE Flash Calculation"
+APP_MODE_DIAGRAM = "Phase Diagram"
 
 # The phase triad — colours encode physical state, reused everywhere.
 _LIQUID = "#38BDF8"
@@ -535,6 +539,9 @@ def _flash_mode(registry: dict[str, ChemicalSpecies]) -> None:
             format_func=lambda k: registry[k].name,
             key="flash_components",
         )
+        model_name = st.selectbox(
+            "Thermodynamic model", tmodels.MODEL_NAMES, index=0, key="flash_model"
+        )
         c1, c2 = st.columns(2)
         temperature = c1.number_input("Temperature", value=95.0, step=1.0, key="flash_T")
         temp_unit = c2.selectbox(
@@ -570,20 +577,38 @@ def _flash_mode(registry: dict[str, ChemicalSpecies]) -> None:
         return
 
     species_list = _selected_species(registry, chosen)
+
+    # Route through the activity-coefficient framework. Non-ideal models need a
+    # binary pair with fitted parameters; otherwise fall back to ideal Raoult.
+    notice = None
+    use_model = model_name
+    if model_name != tmodels.IdealModel.name:
+        if len(species_list) != 2:
+            notice = f"{model_name} supports binary mixtures only — using Ideal (Raoult)."
+            use_model = tmodels.IdealModel.name
+        elif not tmodels.has_parameters(model_name, species_list[0], species_list[1]):
+            notice = (
+                f"No {model_name} parameters for this pair — using Ideal (Raoult)."
+            )
+            use_model = tmodels.IdealModel.name
+
     try:
-        result = flash.flash(
-            species_list,
-            z_inputs,
-            temperature,
-            pressure,
-            temp_unit=temp_unit,
-            pressure_unit=pressure_unit,
-        )
-    except (flash.FlashError, ValueError) as exc:
+        if use_model == tmodels.IdealModel.name:
+            result = flash.flash(species_list, z_inputs, temperature, pressure,
+                                 temp_unit=temp_unit, pressure_unit=pressure_unit)
+            provenance = "Raoult's law (ideal liquid; γ = 1)."
+        else:
+            model = tmodels.build_model(use_model, species_list[0], species_list[1])
+            provenance = model.provenance
+            result = model.flash(z_inputs, temperature, pressure,
+                                 temp_unit=temp_unit, pressure_unit=pressure_unit)
+    except (flash.FlashError, tmodels.NoParametersError, ValueError) as exc:
         st.error(f"Flash failed: {exc}")
         return
 
-    _render_flash_result(registry, chosen, z_inputs, result)
+    if notice:
+        st.warning(notice)
+    _render_flash_result(registry, chosen, z_inputs, result, provenance)
 
 
 def _render_flash_result(
@@ -591,6 +616,7 @@ def _render_flash_result(
     chosen: list[str],
     z_inputs: list[float],
     result: "flash.FlashResult",
+    provenance: str = "",
 ) -> None:
     names = [registry[k].name for k in chosen]
     st.subheader(
@@ -598,6 +624,7 @@ def _render_flash_result(
         f"and {result.pressure:g} {result.pressure_unit}"
     )
     _regime_card(result)
+    st.caption(f"Model: {result.model_name} — {provenance}")
 
     m1, m2, m3 = st.columns(3)
     m1.metric("Vapor fraction  β = V/F", f"{result.vapor_fraction:.4f}")
@@ -628,17 +655,17 @@ def _render_flash_result(
             + " — saturation pressures are extrapolated."
         )
 
-    table = pd.DataFrame(
-        {
-            "Component": names,
-            "zᵢ (feed)": np.round(result.z, 4),
-            f"Pˢᵃᵗ ({result.pressure_unit})": np.round(result.psat, 3),
-            "Kᵢ = Pˢᵃᵗ/P": np.round(result.K, 4),
-            "xᵢ (liquid)": np.round(result.x, 4),
-            "yᵢ (vapor)": np.round(result.y, 4),
-        }
-    )
-    st.dataframe(table, hide_index=True, width="stretch")
+    columns = {
+        "Component": names,
+        "zᵢ (feed)": np.round(result.z, 4),
+        f"Pˢᵃᵗ ({result.pressure_unit})": np.round(result.psat, 3),
+    }
+    if result.gamma is not None:
+        columns["γᵢ (activity)"] = np.round(result.gamma, 4)
+    columns["Kᵢ = γᵢPˢᵃᵗ/P"] = np.round(result.K, 4)
+    columns["xᵢ (liquid)"] = np.round(result.x, 4)
+    columns["yᵢ (vapor)"] = np.round(result.y, 4)
+    st.dataframe(pd.DataFrame(columns), hide_index=True, width="stretch")
 
     phase_colors = {"zᵢ feed": "#93A4C2", "xᵢ liquid": _LIQUID, "yᵢ vapor": _VAPOR}
     chart_df = pd.DataFrame(
@@ -666,6 +693,176 @@ def _render_flash_result(
         )
 
 
+def _rgba(hex_color: str, alpha: float) -> str:
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
+
+
+def _plotly_config(image_format: str, filename: str) -> dict:
+    """Modebar config: zoom/pan on, image button exports PNG or SVG client-side."""
+    return {
+        "displaylogo": False,
+        "scrollZoom": True,
+        "modeBarButtonsToRemove": ["lasso2d", "select2d"],
+        "toImageButtonOptions": {
+            "format": image_format,
+            "filename": filename,
+            "scale": 3 if image_format == "png" else 1,
+        },
+    }
+
+
+def _find_azeotrope(x1, y1, yv):
+    """Return (x_az, y_value) for an interior azeotrope (y₁≈x₁), else None."""
+    if len(x1) < 5:
+        return None
+    d = np.abs(y1 - x1)[1:-1]
+    i = int(np.argmin(d)) + 1
+    if d[i - 1] < 3e-3 and 0.02 < x1[i] < 0.98:
+        return float(x1[i]), float(yv[i])
+    return None
+
+
+def _phase_diagram_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 3 — binary T–x–y / P–x–y phase diagrams from any activity model."""
+    keys = list(registry.keys())
+
+    def _idx(name, fallback):
+        return keys.index(name) if name in keys else fallback
+
+    with st.sidebar:
+        st.subheader("Phase diagram")
+        k1 = st.selectbox("Component 1", keys, index=_idx("ethanol", 0),
+                          format_func=lambda k: registry[k].name, key="dia_c1")
+        k2 = st.selectbox("Component 2", keys, index=_idx("water", min(1, len(keys) - 1)),
+                          format_func=lambda k: registry[k].name, key="dia_c2")
+        model_name = st.selectbox("Thermodynamic model", tmodels.MODEL_NAMES,
+                                  index=tmodels.MODEL_NAMES.index(tmodels.NRTLModel.name),
+                                  key="dia_model")
+        is_txy = st.radio("Diagram", ["T–x–y (isobaric)", "P–x–y (isothermal)"],
+                          key="dia_type").startswith("T")
+        if is_txy:
+            cval = st.number_input("Pressure", value=760.0, min_value=1.0, step=10.0, key="dia_P")
+            cunit = st.selectbox("Pressure unit", SUPPORTED_PRESSURE_UNITS, 0, key="dia_Pu")
+            tunit = st.selectbox("Temperature unit", SUPPORTED_TEMPERATURE_UNITS, 0, key="dia_Tu")
+        else:
+            cval = st.number_input("Temperature", value=78.0, step=1.0, key="dia_T")
+            tunit = st.selectbox("Temperature unit", SUPPORTED_TEMPERATURE_UNITS, 0, key="dia_Tu2")
+            cunit = st.selectbox("Pressure unit", SUPPORTED_PRESSURE_UNITS, 0, key="dia_Pu2")
+        npts = st.slider("Resolution (points)", 41, 201, 101, step=20, key="dia_n")
+        template = st.radio("Style", ["Console (dark)", "Publication (light)"], key="dia_style")
+        img_fmt = st.selectbox("📷 export format", ["png", "svg"], 0, key="dia_img")
+
+    if k1 == k2:
+        st.info("Pick two different components to build a binary phase diagram.")
+        return
+
+    sp1, sp2 = registry[k1], registry[k2]
+    notice, use_model = None, model_name
+    if model_name != tmodels.IdealModel.name and not tmodels.has_parameters(model_name, sp1, sp2):
+        notice = (f"No {model_name} parameters for {sp1.name}/{sp2.name} — "
+                  f"showing Ideal (Raoult). Add parameters in thermo/models/parameters.py.")
+        use_model = tmodels.IdealModel.name
+
+    try:
+        model = tmodels.build_model(use_model, sp1, sp2)
+        if is_txy:
+            df = diagrams.txy(model, cval, pressure_unit=cunit, temp_unit=tunit, n=npts)
+        else:
+            df = diagrams.pxy(model, cval, temp_unit=tunit, pressure_unit=cunit, n=npts)
+    except (tmodels.NoParametersError, ValueError) as exc:
+        st.error(f"Could not build diagram: {exc}")
+        return
+
+    if notice:
+        st.warning(notice)
+    _render_phase_diagram(df, sp1, sp2, model, use_model, template, img_fmt,
+                          is_txy, cval, cunit, tunit)
+
+
+def _render_phase_diagram(df, sp1, sp2, model, model_name, template, img_fmt,
+                          is_txy, cval, cunit, tunit) -> None:
+    dark = template.startswith("Console")
+    pal = {
+        "liquid": "#38BDF8", "vapor": "#F6A93B", "two": "#34D399",
+        "grid": "#273656" if dark else "#D7DEE9",
+        "plot": "rgba(21,32,58,0.55)" if dark else "#FFFFFF",
+        "text": "#E7EDF7" if dark else "#15202B",
+    }
+    ykey = "T" if is_txy else "P"
+    yunit = tunit if is_txy else cunit
+    ylabel = f"Temperature ({yunit})" if is_txy else f"Pressure ({yunit})"
+    cond = f"{cval:g} {cunit}" if is_txy else f"{cval:g} {tunit}"
+    kind = "T–x–y" if is_txy else "P–x–y"
+    title = f"{kind}  ·  {sp1.name} (1) / {sp2.name} (2)  ·  {model_name}  ·  {cond}"
+
+    x1, y1, yv = df["x1"].to_numpy(), df["y1"].to_numpy(), df[ykey].to_numpy()
+
+    st.subheader(f"{kind} diagram — {sp1.name} / {sp2.name}")
+    st.caption(f"{model_name} · {model.provenance}")
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=np.concatenate([x1, y1[::-1]]), y=np.concatenate([yv, yv[::-1]]),
+        fill="toself", fillcolor=_rgba(pal["two"], 0.12), line=dict(width=0),
+        hoverinfo="skip", name="Two-phase region"))
+    fig.add_trace(go.Scatter(x=x1, y=yv, mode="lines", name="Bubble (liquid)",
+                             line=dict(color=pal["liquid"], width=2.6)))
+    fig.add_trace(go.Scatter(x=y1, y=yv, mode="lines", name="Dew (vapor)",
+                             line=dict(color=pal["vapor"], width=2.6)))
+    az = _find_azeotrope(x1, y1, yv)
+    if az:
+        fig.add_trace(go.Scatter(
+            x=[az[0]], y=[az[1]], mode="markers+text", text=["azeotrope"],
+            textposition="top center", name="Azeotrope",
+            marker=dict(color=pal["two"], size=11, symbol="diamond",
+                        line=dict(color=pal["text"], width=1))))
+    fig.update_layout(
+        title=dict(text=title, font=dict(size=15)),
+        xaxis_title=f"x₁, y₁  (mole fraction {sp1.name})", yaxis_title=ylabel,
+        height=500, template=None, paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor=pal["plot"], font=dict(family="IBM Plex Sans, sans-serif",
+                                            color=pal["text"], size=13),
+        legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
+        margin=dict(l=70, r=30, t=60, b=96),
+        xaxis=dict(range=[0, 1], gridcolor=pal["grid"], zeroline=False),
+        yaxis=dict(gridcolor=pal["grid"], zeroline=False),
+    )
+    st.plotly_chart(fig, width="stretch", theme=None,
+                    config=_plotly_config(img_fmt, f"{kind}_{sp1.key}_{sp2.key}"))
+
+    # x–y equilibrium diagram (the McCabe–Thiele precursor)
+    fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
+                              line=dict(color=pal["grid"], dash="dash", width=1.5)))
+    fig2.add_trace(go.Scatter(x=x1, y=y1, mode="lines", name="equilibrium",
+                              line=dict(color=pal["two"], width=2.6)))
+    fig2.update_layout(
+        title=dict(text=f"x–y equilibrium · {sp1.name} (1)", font=dict(size=14)),
+        xaxis_title=f"x₁ (liquid)", yaxis_title="y₁ (vapor)", height=420,
+        template=None, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor=pal["plot"],
+        font=dict(family="IBM Plex Sans, sans-serif", color=pal["text"], size=13),
+        showlegend=False, margin=dict(l=60, r=30, t=60, b=60),
+        xaxis=dict(range=[0, 1], gridcolor=pal["grid"], zeroline=False,
+                   scaleanchor="y", scaleratio=1),
+        yaxis=dict(range=[0, 1], gridcolor=pal["grid"], zeroline=False),
+    )
+    st.plotly_chart(fig2, width="stretch", theme=None,
+                    config=_plotly_config(img_fmt, f"xy_{sp1.key}_{sp2.key}"))
+
+    col1, col2 = st.columns([1, 2])
+    col1.download_button("⬇ Download CSV", df.to_csv(index=False).encode(),
+                         file_name=f"{kind}_{sp1.key}_{sp2.key}.csv", mime="text/csv")
+    col2.caption("Zoom/pan with the modebar; the 📷 button exports the chart as "
+                 f"{img_fmt.upper()}. CSV holds the tabulated x₁, y₁, {ykey}.")
+    if az:
+        st.caption(f"Azeotrope detected at x₁ ≈ {az[0]:.3f}, {ykey} ≈ {az[1]:.2f} {yunit}.")
+    with st.expander("Model parameters & provenance"):
+        st.json(model.activity.describe())
+        st.caption(model.provenance)
+
+
 def render() -> None:
     """Render the full Streamlit page."""
     st.set_page_config(
@@ -688,7 +885,7 @@ def render() -> None:
         st.header("Mode")
         app_mode = st.radio(
             "Mode",
-            [APP_MODE_LOOKUP, APP_MODE_FLASH],
+            [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM],
             key="app_mode",
             label_visibility="collapsed",
         )
@@ -705,5 +902,7 @@ def render() -> None:
 
     if app_mode == APP_MODE_LOOKUP:
         _property_lookup_mode(registry)
-    else:
+    elif app_mode == APP_MODE_FLASH:
         _flash_mode(registry)
+    else:
+        _phase_diagram_mode(registry)

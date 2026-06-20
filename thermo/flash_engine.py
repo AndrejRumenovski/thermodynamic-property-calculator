@@ -74,6 +74,8 @@ class FlashResult:
     temp_unit: str
     pressure: float
     pressure_unit: str
+    gamma: "np.ndarray | None" = None   # activity coefficients (None for ideal/Raoult)
+    model_name: str = "Ideal (Raoult)"  # thermodynamic model that produced the result
 
     @property
     def regime_label(self) -> str:

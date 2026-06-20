@@ -111,6 +111,38 @@
         "T_min": 176.3,
         "T_max": 257.37
       }
+    },
+    "hydrobromic_acid_d": {
+      "name": "hydrobromic acid-d",
+      "formula": "BrD",
+      "molar_mass": 81.9181,
+      "antoine_constants": {
+        "A": 8.28728,
+        "B": 505.68,
+        "C": -52.55,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 185.2,
+        "T_max": 221.89
+      }
+    },
+    "dimethyl_ether": {
+      "name": "dimethyl ether",
+      "formula": "C2H6O",
+      "molar_mass": 46.0684,
+      "antoine_constants": {
+        "A": 9.44136,
+        "B": 1025.56,
+        "C": -17.1,
+        "units": {
+          "P": "Pa",
+          "T": "Kelvin"
+        },
+        "T_min": 184.1,
+        "T_max": 264.8
+      }
     }
   }
 }
