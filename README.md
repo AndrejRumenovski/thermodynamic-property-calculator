@@ -24,7 +24,12 @@ cards), with six tools selectable from the sidebar:
    states), with a benchmarking dashboard (MAE / RMSE / R²) against a reference
    library and parity plots.
 
-Built on a **Streamlit** UI with **NumPy**, **SciPy**, and **Plotly** numerics.
+Built on a **Streamlit** UI with **NumPy**, **SciPy**, and **Plotly** numerics. The
+interface uses a terminal-style **command bar** (active module + live stats),
+a footer **status bar**, collapsible input panels, a **Comfortable/Compact**
+density control, and a single phase-colour system — **liquid = blue, vapor =
+orange, two-phase = green** — applied consistently across charts, tables, badges,
+and indicators.
 
 ```
 log10(P) = A − B / (T + C)                          Antoine          (T ⇄ P)

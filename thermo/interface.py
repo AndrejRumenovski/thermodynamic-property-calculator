@@ -168,6 +168,48 @@ hr{ border-color:var(--border); }
 .tpc-chip i{ width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--two); }
 .tpc-section{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
   letter-spacing:0.18em; font-size:0.74rem; color:var(--muted); margin:1.1rem 0 0.4rem; }
+/* --- Enterprise layout: denser block, command bar, status bar, panels --- */
+.block-container{ padding-top:1.1rem !important; max-width:1280px; }
+[data-testid="stMain"] h2, [data-testid="stMain"] h3{
+  border-left:3px solid var(--liquid); padding-left:0.6rem; }
+[data-testid="stMetricValue"]{ font-size:1.5rem !important; }
+/* Sticky terminal-style command bar */
+.tpc-cmdbar{ position:sticky; top:0; z-index:50; display:flex; flex-wrap:wrap;
+  justify-content:space-between; align-items:center; gap:0.6rem 1rem;
+  padding:0.5rem 0.9rem; margin:0 0 1rem; background:rgba(14,23,38,0.92);
+  backdrop-filter:blur(6px); border:1px solid var(--border); border-radius:0.6rem; }
+.tpc-cmd-left{ display:flex; align-items:center; gap:0.6rem; }
+.tpc-logo{ font-family:'Space Grotesk',sans-serif; font-weight:600; color:#F3F7FE;
+  letter-spacing:0.04em; }
+.tpc-sep{ color:var(--border); }
+.tpc-module{ font-family:'IBM Plex Mono',monospace; color:var(--liquid); font-size:0.82rem;
+  text-transform:uppercase; letter-spacing:0.12em; }
+.tpc-cmd-right{ display:flex; flex-wrap:wrap; align-items:center; gap:0.9rem;
+  font-family:'IBM Plex Mono',monospace; font-size:0.74rem; color:var(--muted); }
+.tpc-cmd-right b{ color:var(--text); font-weight:600; }
+.tpc-online{ display:inline-flex; align-items:center; gap:0.4rem; color:var(--two); }
+.tpc-online i{ width:8px; height:8px; border-radius:50%; background:var(--two);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--two) 25%, transparent); }
+/* Footer status bar */
+.tpc-statusbar{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:0.8rem;
+  margin-top:1.8rem; padding:0.55rem 0.9rem; border-top:1px solid var(--border);
+  font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--muted); }
+.tpc-statusbar i{ width:8px; height:8px; border-radius:50%; display:inline-block;
+  margin:0 0.3rem; }
+.tpc-statusbar .ph-liq{ background:var(--liquid); }
+.tpc-statusbar .ph-two{ background:var(--two); }
+.tpc-statusbar .ph-vap{ background:var(--vapor); }
+.tpc-ok i{ background:var(--two); margin-left:0; }
+"""
+
+# Extra overrides injected only when the user picks the Compact density.
+_COMPACT_CSS = """
+.block-container{ padding-top:0.5rem !important; }
+html, body, .stApp, [data-testid="stAppViewContainer"]{ font-size:0.92rem; }
+[data-testid="stMetric"]{ padding:0.5rem 0.7rem 0.6rem; }
+[data-testid="stMetricValue"]{ font-size:1.3rem !important; }
+[data-testid="stVerticalBlock"]{ gap:0.55rem; }
+.tpc-cmdbar{ padding:0.35rem 0.8rem; margin-bottom:0.7rem; }
 """
 
 
@@ -456,6 +498,44 @@ def _hero(registry: dict[str, ChemicalSpecies]) -> None:
     <span><i class="ph-two"></i>two-phase</span>
     <span><i class="ph-vap"></i>vapor</span>
   </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
+def _command_bar(app_mode: str, registry: dict[str, ChemicalSpecies]) -> None:
+    """Sticky terminal-style header: app, active module, live stats, status light."""
+    n_calc = st.session_state.get("sim_count", 0)
+    st.markdown(
+        f"""
+<div class="tpc-cmdbar">
+  <div class="tpc-cmd-left">
+    <span class="tpc-logo">🧪 VLE CONSOLE</span>
+    <span class="tpc-sep">/</span>
+    <span class="tpc-module">{app_mode}</span>
+  </div>
+  <div class="tpc-cmd-right">
+    <span><b>{len(registry)}</b> species</span>
+    <span><b>{len(tmodels.MODEL_NAMES)}</b> models</span>
+    <span><b>{n_calc}</b> calcs</span>
+    <span class="tpc-online"><i></i>online</span>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
+def _status_bar() -> None:
+    """Footer status bar reinforcing the global phase-colour key."""
+    st.markdown(
+        """
+<div class="tpc-statusbar">
+  <span class="tpc-ok"><i></i>Engine operational</span>
+  <span>NumPy · SciPy · Plotly</span>
+  <span>Phase key:<i class="ph-liq"></i>liquid<i class="ph-two"></i>two-phase<i class="ph-vap"></i>vapor</span>
+  <span>VLE Console · 6 tools</span>
 </div>
 """,
         unsafe_allow_html=True,
@@ -1428,14 +1508,14 @@ def render() -> None:
         initial_sidebar_state="expanded",
     )
     _inject_theme()
+    if st.session_state.get("density") == "Compact":
+        st.markdown(f"<style>{_COMPACT_CSS}</style>", unsafe_allow_html=True)
 
     try:
         registry = _load(str(DATA_PATH))
     except SpeciesDataError as exc:
         st.error(f"Failed to load chemical data: {exc}")
         st.stop()
-
-    _hero(registry)
 
     with st.sidebar:
         st.header("Mode")
@@ -1446,6 +1526,7 @@ def render() -> None:
             key="app_mode",
             label_visibility="collapsed",
         )
+        st.selectbox("Layout density", ["Comfortable", "Compact"], key="density")
         st.divider()
         with st.expander("➕ Add / manage species"):
             tab_cat, tab_manual, tab_manage = st.tabs(["Catalog", "Manual", "Remove"])
@@ -1457,7 +1538,10 @@ def render() -> None:
                 _manage_ui(registry)
         st.divider()
 
+    _command_bar(app_mode, registry)
+
     if app_mode == APP_MODE_DASHBOARD:
+        _hero(registry)
         _dashboard_mode(registry)
     elif app_mode == APP_MODE_LOOKUP:
         _property_lookup_mode(registry)
@@ -1471,3 +1555,5 @@ def render() -> None:
         _distillation_mode(registry)
     else:
         _property_prediction_mode(registry)
+
+    _status_bar()
