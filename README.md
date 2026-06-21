@@ -2,7 +2,7 @@
 
 A modular, data-driven Python application for chemical-engineering VLE work. It
 opens on a **research Dashboard** (project KPIs, status indicators, and module
-cards), with six tools selectable from the sidebar:
+cards), with seven tools selectable from the sidebar:
 
 1. **Property Lookup** — vapor pressure ⇄ boiling temperature from the
    **Antoine equation**, with unit handling.
@@ -23,6 +23,9 @@ cards), with six tools selectable from the sidebar:
    Pc, Vc, ω, and molar mass (vapor pressure via Lee–Kesler corresponding
    states), with a benchmarking dashboard (MAE / RMSE / R²) against a reference
    library and parity plots.
+7. **Molecular Viewer** — **RDKit** 2D depiction + interactive **3Dmol.js** 3D
+   structure (rotate / zoom / atom labels) for any SMILES, with formula, molar
+   mass, atom counts, and predicted properties.
 
 Built on a **Streamlit** UI with **NumPy**, **SciPy**, and **Plotly** numerics. The
 interface uses a terminal-style **command bar** (active module + live stats),
@@ -56,6 +59,7 @@ Deliberately separated layers (see [`PLAN.md`](PLAN.md)):
 | Validation | [`thermo/validation.py`](thermo/validation.py) | Literature VLE datasets + MAE/RMSE/% error scoring of any model. |
 | Distillation | [`thermo/distillation.py`](thermo/distillation.py) | McCabe–Thiele operating lines, q-line, stage stepping, R_min, feed stage. |
 | Property prediction | [`thermo/property_prediction.py`](thermo/property_prediction.py) | Joback group contribution + Lee–Kesler; predictor interface + benchmarking. |
+| Molecular viz | [`thermo/molviz.py`](thermo/molviz.py) | RDKit 2D SVG + 3D MolBlock; 3Dmol.js viewer HTML. |
 | Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering (all modes), called by [`app.py`](app.py). |
 
 The flash engine consumes the **same `ChemicalSpecies` objects** loaded from

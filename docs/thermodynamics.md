@@ -166,6 +166,16 @@ Benchmark over the bundled library (13 compounds; Poling 5th ed. / NIST):
 — consistent with Joback's documented accuracy (alcohols' Tb are under-predicted,
 a known limitation). Water is omitted (no suitable Joback group).
 
+## 9. Molecular visualization (`thermo/molviz.py`)
+
+RDKit parses a SMILES string, computes the molecular formula, molar mass, and
+atom counts, renders a 2D structure (SVG, dark-mode palette), and embeds a 3D
+conformer (ETKDG + MMFF optimization) exported as a MolBlock. The MolBlock is
+rendered by **3Dmol.js** (loaded in the browser) for an interactive viewer with
+rotate, zoom, selectable styles (ball-and-stick / stick / space-filling) and
+optional atom labels. Library molecules cross-link to their Joback predicted
+properties.
+
 ## References
 1. G. M. Wilson, *J. Am. Chem. Soc.* **86** (1964) 127.
 2. H. Renon, J. M. Prausnitz, *AIChE J.* **14** (1968) 135.

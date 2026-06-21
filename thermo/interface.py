@@ -14,11 +14,13 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 from . import diagrams
 from . import distillation as dist
 from . import flash_engine as flash
 from . import models as tmodels
+from . import molviz
 from . import property_prediction as predict
 from . import thermo_engine as engine
 from . import validation
@@ -47,6 +49,7 @@ APP_MODE_DIAGRAM = "Phase Diagram"
 APP_MODE_VALIDATION = "Model Validation"
 APP_MODE_DISTILL = "Distillation"
 APP_MODE_PREDICT = "Property Prediction"
+APP_MODE_MOLVIZ = "Molecular Viewer"
 
 _BADGE_COLOR = {
     "Excellent": "#34D399", "Good": "#38BDF8", "Fair": "#F6A93B", "Poor": "#F87171",
@@ -504,6 +507,61 @@ def _hero(registry: dict[str, ChemicalSpecies]) -> None:
     )
 
 
+def _molecular_viewer_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 7 — 2D (RDKit) + interactive 3D (3Dmol.js) molecular visualization."""
+    with st.sidebar:
+        st.subheader("Molecule")
+        pick = st.selectbox("Pick a molecule", list(molviz.MOLECULE_SMILES),
+                            index=list(molviz.MOLECULE_SMILES).index("Toluene"),
+                            key="mv_pick")
+        smiles = st.text_input("…or enter SMILES", value=molviz.MOLECULE_SMILES[pick],
+                               key="mv_smiles")
+        style = st.selectbox("3D style", ["Ball & stick", "Stick", "Space-filling"],
+                             key="mv_style")
+        show_labels = st.checkbox("Show atom labels", value=False, key="mv_labels")
+
+    try:
+        info = molviz.analyze(smiles)
+    except molviz.MolVizError as exc:
+        st.error(str(exc))
+        return
+    _record_calc("molviz")
+
+    st.subheader(f"{pick if molviz.MOLECULE_SMILES.get(pick) == smiles else 'Molecule'}"
+                 f"  ·  {info.formula}")
+    st.caption(f"SMILES: `{info.smiles}`  ·  drag to rotate, scroll to zoom.")
+
+    left, right = st.columns(2)
+    with left:
+        st.caption("2D structure (RDKit)")
+        components.html(
+            f'<div style="background:transparent">{info.svg_2d}</div>', height=280)
+    with right:
+        st.caption("3D structure (3Dmol.js)")
+        components.html(molviz.viewer_html(info.molblock_3d, show_labels, style),
+                        height=460)
+
+    m = st.columns(4)
+    m[0].metric("Molar mass", f"{info.molar_mass:.3f} g/mol")
+    m[1].metric("Heavy atoms", f"{info.heavy_atoms}")
+    m[2].metric("Total atoms", f"{info.total_atoms}")
+    m[3].metric("Rings", f"{info.rings}")
+
+    counts = "  ".join(f"{el}: {n}" for el, n in info.atom_counts.items())
+    st.markdown(f"**Atom counts** — {counts}")
+
+    # Cross-link to Joback predicted properties when available.
+    mol = predict.LIBRARY_BY_NAME.get(pick)
+    if mol is not None and molviz.MOLECULE_SMILES.get(pick) == smiles:
+        est = predict.estimate_molecule(mol)
+        st.markdown("**Predicted properties** (Joback + Lee–Kesler):")
+        p = st.columns(4)
+        p[0].metric("Boiling point Tb", f"{est.Tb - 273.15:.1f} °C")
+        p[1].metric("Critical temp Tc", f"{est.Tc:.1f} K")
+        p[2].metric("Critical pressure Pc", f"{est.Pc:.2f} bar")
+        p[3].metric("Acentric factor ω", f"{est.omega:.3f}")
+
+
 def _command_bar(app_mode: str, registry: dict[str, ChemicalSpecies]) -> None:
     """Sticky terminal-style header: app, active module, live stats, status light."""
     n_calc = st.session_state.get("sim_count", 0)
@@ -535,7 +593,7 @@ def _status_bar() -> None:
   <span class="tpc-ok"><i></i>Engine operational</span>
   <span>NumPy · SciPy · Plotly</span>
   <span>Phase key:<i class="ph-liq"></i>liquid<i class="ph-two"></i>two-phase<i class="ph-vap"></i>vapor</span>
-  <span>VLE Console · 6 tools</span>
+  <span>VLE Console · 7 tools</span>
 </div>
 """,
         unsafe_allow_html=True,
@@ -1347,6 +1405,12 @@ def _dashboard_mode(registry: dict[str, ChemicalSpecies]) -> None:
                       "Joback group contribution + Lee–Kesler, benchmarked.",
                       f"Tb MAPE **{tb}** over **{len(predict.LIBRARY)}** compounds",
                       APP_MODE_PREDICT)
+    row3 = st.columns(3)
+    with row3[0]:
+        _summary_card("Molecular Viewer",
+                      "2D depiction (RDKit) + interactive 3D (3Dmol.js).",
+                      f"**{len(molviz.MOLECULE_SMILES)}** molecules · any SMILES",
+                      APP_MODE_MOLVIZ)
 
 
 def _property_prediction_mode(registry: dict[str, ChemicalSpecies]) -> None:
@@ -1522,7 +1586,7 @@ def render() -> None:
         app_mode = st.radio(
             "Mode",
             [APP_MODE_DASHBOARD, APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM,
-             APP_MODE_VALIDATION, APP_MODE_DISTILL, APP_MODE_PREDICT],
+             APP_MODE_VALIDATION, APP_MODE_DISTILL, APP_MODE_PREDICT, APP_MODE_MOLVIZ],
             key="app_mode",
             label_visibility="collapsed",
         )
@@ -1553,7 +1617,9 @@ def render() -> None:
         _validation_mode(registry)
     elif app_mode == APP_MODE_DISTILL:
         _distillation_mode(registry)
-    else:
+    elif app_mode == APP_MODE_PREDICT:
         _property_prediction_mode(registry)
+    else:
+        _molecular_viewer_mode(registry)
 
     _status_bar()

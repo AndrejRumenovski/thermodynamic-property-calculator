@@ -3,4 +3,5 @@ numpy>=1.26
 scipy>=1.11
 pandas>=2.0
 plotly>=5.20
+rdkit>=2024.3
 pytest>=8.0
