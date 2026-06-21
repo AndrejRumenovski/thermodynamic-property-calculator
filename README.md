@@ -40,6 +40,12 @@ K_i = γ_i(x,T) · P_i^sat(T) / P                     modified Raoult  (γ from 
 Σ_i z_i (K_i − 1) / (1 + β(K_i − 1)) = 0            Rachford-Rice    (solve for β = V/F)
 ```
 
+A single **Active species** selector (in the sidebar, visible on the Dashboard and
+every page) drives Property Lookup, VLE Flash, Phase Diagram, and Distillation —
+choose species once and every tool follows (the first two active species are used
+for the binary diagram and the column). It also seeds the Property Prediction and
+Molecular Viewer defaults by name.
+
 Non-ideal models (Wilson/NRTL/UNIQUAC) reproduce real **azeotropes** — e.g.
 ethanol–water (x₁≈0.894, 78.15 °C) and acetone–methanol (x₁≈0.80, 55.5 °C). See
 [`docs/thermodynamics.md`](docs/thermodynamics.md) for equations, parameters, and

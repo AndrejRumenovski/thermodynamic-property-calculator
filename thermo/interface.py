@@ -511,8 +511,11 @@ def _molecular_viewer_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 7 — 2D (RDKit) + interactive 3D (3Dmol.js) molecular visualization."""
     with st.sidebar:
         st.subheader("Molecule")
-        pick = st.selectbox("Pick a molecule", list(molviz.MOLECULE_SMILES),
-                            index=list(molviz.MOLECULE_SMILES).index("Toluene"),
+        mv_names = list(molviz.MOLECULE_SMILES)
+        active_names = [registry[k].name for k in _active_keys(registry)]
+        mv_default = next((n for n in active_names if n in molviz.MOLECULE_SMILES), "Toluene")
+        pick = st.selectbox("Pick a molecule", mv_names,
+                            index=mv_names.index(mv_default) if mv_default in mv_names else 0,
                             key="mv_pick")
         smiles = st.text_input("…or enter SMILES", value=molviz.MOLECULE_SMILES[pick],
                                key="mv_smiles")
@@ -616,20 +619,32 @@ def _regime_card(result: "flash.FlashResult") -> None:
     )
 
 
+def _init_active_species(registry: dict[str, ChemicalSpecies]) -> None:
+    """Seed/sanitise the global active-species selection (shared across pages)."""
+    keys = list(registry.keys())
+    if "active_species" not in st.session_state:
+        default = [k for k in ("benzene", "toluene") if k in registry] or keys[: min(2, len(keys))]
+        st.session_state["active_species"] = default
+    else:
+        st.session_state["active_species"] = [
+            k for k in st.session_state["active_species"] if k in registry
+        ]
+
+
+def _active_keys(registry: dict[str, ChemicalSpecies]) -> list[str]:
+    return [k for k in st.session_state.get("active_species", []) if k in registry]
+
+
+def _active_species_list(registry: dict[str, ChemicalSpecies]) -> list[ChemicalSpecies]:
+    return [registry[k] for k in _active_keys(registry)]
+
+
 def _property_lookup_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 1 — single-species property lookup (vapor pressure ⇄ boiling T)."""
-    keys = list(registry.keys())
-    defaults = [k for k in ("water", "benzene") if k in registry] or keys[:1]
+    chosen = _active_keys(registry)
 
     with st.sidebar:
         st.subheader("Property inputs")
-        chosen = st.multiselect(
-            "Species",
-            options=keys,
-            default=defaults,
-            format_func=lambda k: registry[k].name,
-            key="lookup_species",
-        )
         mode = st.radio("Calculation", [MODE_P_FROM_T, MODE_T_FROM_P], key="lookup_calc")
 
         if mode == MODE_P_FROM_T:
@@ -683,20 +698,11 @@ def _property_lookup_mode(registry: dict[str, ChemicalSpecies]) -> None:
 
 def _flash_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 2 — isothermal VLE flash (Rachford-Rice, ideal/Raoult)."""
-    keys = list(registry.keys())
-    default_pair = [k for k in ("benzene", "toluene") if k in registry]
-    if len(default_pair) < 2:
-        default_pair = keys[:2]
+    chosen = _active_keys(registry)
 
     with st.sidebar:
         st.subheader("Flash inputs")
-        chosen = st.multiselect(
-            "Components (≥ 2)",
-            options=keys,
-            default=default_pair,
-            format_func=lambda k: registry[k].name,
-            key="flash_components",
-        )
+        st.caption("Components = the active species (set in the sidebar above).")
         model_name = st.selectbox(
             "Thermodynamic model", tmodels.MODEL_NAMES, index=0, key="flash_model"
         )
@@ -885,17 +891,13 @@ def _find_azeotrope(x1, y1, yv):
 
 def _phase_diagram_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 3 — binary T–x–y / P–x–y phase diagrams from any activity model."""
-    keys = list(registry.keys())
-
-    def _idx(name, fallback):
-        return keys.index(name) if name in keys else fallback
+    active = _active_keys(registry)
 
     with st.sidebar:
         st.subheader("Phase diagram")
-        k1 = st.selectbox("Component 1", keys, index=_idx("ethanol", 0),
-                          format_func=lambda k: registry[k].name, key="dia_c1")
-        k2 = st.selectbox("Component 2", keys, index=_idx("water", min(1, len(keys) - 1)),
-                          format_func=lambda k: registry[k].name, key="dia_c2")
+        if len(active) >= 2:
+            st.caption(f"Binary: **{registry[active[0]].name}** (1) / "
+                       f"**{registry[active[1]].name}** (2) — first two active species.")
         model_name = st.selectbox("Thermodynamic model", tmodels.MODEL_NAMES,
                                   index=tmodels.MODEL_NAMES.index(tmodels.NRTLModel.name),
                                   key="dia_model")
@@ -913,10 +915,11 @@ def _phase_diagram_mode(registry: dict[str, ChemicalSpecies]) -> None:
         template = st.radio("Style", ["Console (dark)", "Publication (light)"], key="dia_style")
         img_fmt = st.selectbox("📷 export format", ["png", "svg"], 0, key="dia_img")
 
-    if k1 == k2:
-        st.info("Pick two different components to build a binary phase diagram.")
+    if len(active) < 2:
+        st.info("Select at least two active species in the sidebar to build a diagram.")
         return
 
+    k1, k2 = active[0], active[1]
     sp1, sp2 = registry[k1], registry[k2]
     notice, use_model = None, model_name
     if model_name != tmodels.IdealModel.name and not tmodels.has_parameters(model_name, sp1, sp2):
@@ -1158,17 +1161,13 @@ _Q_PRESETS = {
 
 def _distillation_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 5 — binary distillation by the McCabe–Thiele method."""
-    keys = list(registry.keys())
-
-    def _idx(name, fallback):
-        return keys.index(name) if name in keys else fallback
+    active = _active_keys(registry)
 
     with st.sidebar:
         st.subheader("Distillation column")
-        k1 = st.selectbox("Light component (1)", keys, index=_idx("benzene", 0),
-                          format_func=lambda k: registry[k].name, key="dist_c1")
-        k2 = st.selectbox("Heavy component (2)", keys, index=_idx("toluene", min(1, len(keys) - 1)),
-                          format_func=lambda k: registry[k].name, key="dist_c2")
+        if len(active) >= 2:
+            st.caption(f"Light: **{registry[active[0]].name}** · "
+                       f"Heavy: **{registry[active[1]].name}** — first two active species.")
         model_name = st.selectbox("Thermodynamic model", tmodels.MODEL_NAMES, 0, key="dist_model")
         c1, c2 = st.columns(2)
         pressure = c1.number_input("Pressure", value=760.0, min_value=1.0, step=10.0, key="dist_P")
@@ -1182,11 +1181,11 @@ def _distillation_mode(registry: dict[str, ChemicalSpecies]) -> None:
         x_B = st.slider("Bottoms x_B (light)", 0.001, 0.50, 0.05, 0.005, key="dist_xB")
         R = st.number_input("Reflux ratio R = L/D", value=2.0, min_value=0.01, step=0.1, key="dist_R")
 
-    if k1 == k2:
-        st.info("Choose two different components for the binary column.")
+    if len(active) < 2:
+        st.info("Select at least two active species in the sidebar to run the column.")
         return
 
-    sp1, sp2 = registry[k1], registry[k2]
+    sp1, sp2 = registry[active[0]], registry[active[1]]
     use_model = model_name
     if model_name != tmodels.IdealModel.name and not tmodels.has_parameters(model_name, sp1, sp2):
         st.warning(f"No {model_name} parameters for {sp1.name}/{sp2.name} — using Ideal (Raoult).")
@@ -1377,6 +1376,16 @@ def _dashboard_mode(registry: dict[str, ChemicalSpecies]) -> None:
         unsafe_allow_html=True,
     )
 
+    active = _active_species_list(registry)
+    if active:
+        names = ", ".join(s.name for s in active)
+        st.caption(f"**Active species:** {names} — chosen in the sidebar, these drive "
+                   "Property Lookup, Flash, Phase Diagram, and Distillation "
+                   "(the first two are used for the binary diagrams and the column).")
+    else:
+        st.caption("**Active species:** none selected — pick species in the sidebar to "
+                   "drive the VLE tools.")
+
     st.markdown('<div class="tpc-section">Modules</div>', unsafe_allow_html=True)
     row1 = st.columns(3)
     with row1[0]:
@@ -1420,8 +1429,11 @@ def _property_prediction_mode(registry: dict[str, ChemicalSpecies]) -> None:
         source = st.radio("Molecule input", ["From library", "Custom (Joback groups)"],
                           key="pred_source")
         if source == "From library":
-            mol_name = st.selectbox("Molecule", list(predict.LIBRARY_BY_NAME),
-                                    index=list(predict.LIBRARY_BY_NAME).index("Benzene"),
+            lib = list(predict.LIBRARY_BY_NAME)
+            active_names = [registry[k].name for k in _active_keys(registry)]
+            default = next((n for n in active_names if n in predict.LIBRARY_BY_NAME), "Benzene")
+            mol_name = st.selectbox("Molecule", lib,
+                                    index=lib.index(default) if default in lib else 0,
                                     key="pred_lib")
             mol = predict.LIBRARY_BY_NAME[mol_name]
             name, formula, groups = mol.name, mol.formula, dict(mol.groups)
@@ -1581,6 +1593,8 @@ def render() -> None:
         st.error(f"Failed to load chemical data: {exc}")
         st.stop()
 
+    _init_active_species(registry)
+
     with st.sidebar:
         st.header("Mode")
         app_mode = st.radio(
@@ -1591,6 +1605,17 @@ def render() -> None:
             label_visibility="collapsed",
         )
         st.selectbox("Layout density", ["Comfortable", "Compact"], key="density")
+        st.divider()
+        st.markdown("**Active species**")
+        st.multiselect(
+            "Active species",
+            options=list(registry.keys()),
+            key="active_species",
+            format_func=lambda k: registry[k].name,
+            label_visibility="collapsed",
+            help="One selection drives Property Lookup, Flash, Phase Diagram, and "
+                 "Distillation. Phase Diagram and Distillation use the first two.",
+        )
         st.divider()
         with st.expander("➕ Add / manage species"):
             tab_cat, tab_manual, tab_manage = st.tabs(["Catalog", "Manual", "Remove"])
