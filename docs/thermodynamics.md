@@ -141,6 +141,31 @@ Example (benzene–toluene, z_F = 0.5, q = 1, x_D = 0.95, x_B = 0.05, R = 2):
 R_min ≈ 1.11, 11 theoretical stages (10 trays + reboiler), optimal feed at
 stage 5 — consistent with the standard textbook construction.
 
+## 8. Property prediction — Joback group contribution (`thermo/property_prediction.py`)
+
+Estimates pure-component properties from a molecule's Joback functional groups:
+
+    Tb = 198.2 + ΣΔTb           Tc = Tb / (0.584 + 0.965·ΣΔTc − (ΣΔTc)²)
+    Pc = (0.113 + 0.0032·N_atoms − ΣΔPc)⁻²        Vc = 17.5 + ΣΔVc
+
+Molar mass and atom count come from the formula. The acentric factor (Lee–Kesler,
+from Tb/Tc/Pc) then drives a corresponding-states vapor pressure
+ln(P/Pc) = f⁽⁰⁾(Tr) + ω·f⁽¹⁾(Tr), which returns exactly 1 atm at the boiling
+point by construction. A `PropertyPredictor` interface leaves room for
+data-driven models (Random Forest / Gradient Boosting / XGBoost / GNN) to be
+benchmarked alongside Joback.
+
+Benchmark over the bundled library (13 compounds; Poling 5th ed. / NIST):
+
+| Property | MAE | mean % error | R² |
+|---|---|---|---|
+| Tb | ~8.7 K | ~2.5 % | 0.86 |
+| Tc | ~12.9 K | ~2.5 % | 0.85 |
+| Pc | ~2.1 bar | ~3.7 % | 0.93 |
+
+— consistent with Joback's documented accuracy (alcohols' Tb are under-predicted,
+a known limitation). Water is omitted (no suitable Joback group).
+
 ## References
 1. G. M. Wilson, *J. Am. Chem. Soc.* **86** (1964) 127.
 2. H. Renon, J. M. Prausnitz, *AIChE J.* **14** (1968) 135.

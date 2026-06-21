@@ -19,6 +19,7 @@ from . import diagrams
 from . import distillation as dist
 from . import flash_engine as flash
 from . import models as tmodels
+from . import property_prediction as predict
 from . import thermo_engine as engine
 from . import validation
 from .data_models import (
@@ -44,6 +45,7 @@ APP_MODE_FLASH = "VLE Flash Calculation"
 APP_MODE_DIAGRAM = "Phase Diagram"
 APP_MODE_VALIDATION = "Model Validation"
 APP_MODE_DISTILL = "Distillation"
+APP_MODE_PREDICT = "Property Prediction"
 
 _BADGE_COLOR = {
     "Excellent": "#34D399", "Good": "#38BDF8", "Fair": "#F6A93B", "Poor": "#F87171",
@@ -1149,6 +1151,155 @@ def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
                            file_name=f"stages_{sp1.key}_{sp2.key}.csv", mime="text/csv")
 
 
+def _property_prediction_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 6 — Joback group-contribution property prediction + benchmarking."""
+    with st.sidebar:
+        st.subheader("Property prediction")
+        source = st.radio("Molecule input", ["From library", "Custom (Joback groups)"],
+                          key="pred_source")
+        if source == "From library":
+            mol_name = st.selectbox("Molecule", list(predict.LIBRARY_BY_NAME),
+                                    index=list(predict.LIBRARY_BY_NAME).index("Benzene"),
+                                    key="pred_lib")
+            mol = predict.LIBRARY_BY_NAME[mol_name]
+            name, formula, groups = mol.name, mol.formula, dict(mol.groups)
+            reference = mol
+        else:
+            reference = None
+            name = st.text_input("Name", value="My molecule", key="pred_name")
+            formula = st.text_input("Molecular formula", value="C4H10O",
+                                    help="e.g. C4H10O — used for molar mass and atom count.",
+                                    key="pred_formula")
+            chosen_groups = st.multiselect("Joback groups present",
+                                           list(predict.JOBACK_GROUPS), key="pred_groups")
+            groups = {}
+            for g in chosen_groups:
+                groups[g] = st.number_input(f"count · {g}", min_value=1, value=1, step=1,
+                                            key=f"pred_n_{g}")
+        st.text_input("SMILES (optional)", value="", key="pred_smiles",
+                      help="Automatic SMILES → groups needs RDKit (planned, Phase 6). "
+                           "For now use the library or enter groups directly.")
+        t_unit = st.selectbox("Temperature unit (Pˢᵃᵗ curve)",
+                              SUPPORTED_TEMPERATURE_UNITS, 0, key="pred_tunit")
+
+    st.subheader("Pure-component property prediction — Joback")
+    st.caption("Group-contribution estimates (Joback & Reid 1987); vapor pressure via "
+               "Lee–Kesler corresponding states. No training data — fully citable.")
+
+    if not groups:
+        st.info("Select at least one Joback group (or pick a library molecule).")
+    else:
+        try:
+            est = predict.joback_estimate(name, formula, groups)
+        except (predict.PropertyPredictionError, ValueError) as exc:
+            st.error(f"Cannot estimate: {exc}")
+            return
+        _render_property_estimate(est, reference, registry, t_unit)
+
+    st.markdown("---")
+    _render_benchmark_dashboard()
+
+
+def _render_property_estimate(est, reference, registry, t_unit) -> None:
+    st.markdown(f"### {est.name}  ·  {est.formula}")
+    c = st.columns(3)
+    c[0].metric("Molar mass (g/mol)", f"{est.molar_mass:.3f}")
+    c[1].metric("Boiling point Tb", f"{est.Tb:.1f} K  ({est.Tb - 273.15:.1f} °C)")
+    c[2].metric("Acentric factor ω", f"{est.omega:.3f}")
+    c2 = st.columns(3)
+    c2[0].metric("Critical temp Tc", f"{est.Tc:.1f} K")
+    c2[1].metric("Critical pressure Pc", f"{est.Pc:.2f} bar")
+    c2[2].metric("Critical volume Vc", f"{est.Vc:.1f} cm³/mol")
+
+    if reference is not None:
+        st.caption("Predicted vs. experimental (Poling 5th ed. / NIST):")
+        rows = [
+            ("Tb (K)", est.Tb, reference.Tb_exp),
+            ("Tc (K)", est.Tc, reference.Tc_exp),
+            ("Pc (bar)", est.Pc, reference.Pc_exp),
+        ]
+        df = pd.DataFrame({
+            "Property": [r[0] for r in rows],
+            "Predicted": [round(r[1], 2) for r in rows],
+            "Experimental": [round(r[2], 2) for r in rows],
+            "% error": [round(abs(r[1] - r[2]) / r[2] * 100, 2) for r in rows],
+        })
+        st.dataframe(df, hide_index=True, width="stretch")
+
+    # Vapor-pressure curve (Lee–Kesler); overlay Antoine if the species is in the DB.
+    t_lo, t_hi = 0.55 * est.Tc, min(est.Tc, est.Tb + 60.0)
+    t_grid = np.linspace(t_lo, t_hi, 120)
+    psat = np.array([est.vapor_pressure(t, "mmHg") for t in t_grid])
+    t_disp = engine.convert_temperature(t_grid, "Kelvin", t_unit)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=t_disp, y=psat, mode="lines",
+                             name="Joback + Lee–Kesler",
+                             line=dict(color="#38BDF8", width=2.6)))
+    match = next((s for s in registry.values() if s.name.lower() == est.name.lower()), None)
+    if match is not None:
+        psat_antoine = engine.vapor_pressure_curve(match.antoine, t_grid,
+                                                   temp_unit="Kelvin", pressure_unit="mmHg")
+        fig.add_trace(go.Scatter(x=t_disp, y=psat_antoine, mode="lines",
+                                 name="Antoine (measured fit)",
+                                 line=dict(color="#F6A93B", width=2.2, dash="dot")))
+    fig.update_layout(
+        height=380, template=None, paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(21,32,58,0.55)",
+        font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=12),
+        xaxis_title=f"Temperature ({t_unit})", yaxis_title="Vapor pressure (mmHg)",
+        legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
+        margin=dict(l=70, r=30, t=20, b=80),
+        xaxis=dict(gridcolor="#273656", zeroline=False),
+        yaxis=dict(gridcolor="#273656", zeroline=False),
+    )
+    st.caption("Estimated vapor-pressure curve"
+               + (" (orange: independent Antoine fit for cross-check)" if match else ""))
+    st.plotly_chart(fig, width="stretch", theme=None,
+                    config=_plotly_config("png", f"psat_{est.formula}"))
+
+
+def _render_benchmark_dashboard() -> None:
+    st.subheader("Benchmarking dashboard")
+    st.caption("Joback predictions vs. experimental across the reference library. "
+               "Architecture supports adding data-driven models (Random Forest / "
+               "Gradient Boosting / XGBoost / GNN) to this table later.")
+    rows, metrics = predict.benchmark()
+
+    k = st.columns(3)
+    for col, prop, unit in zip(k, ("Tb", "Tc", "Pc"), ("K", "K", "bar")):
+        m = metrics[prop]
+        col.metric(f"{prop} — MAE / R²", f"{m['MAE']:.2f} {unit}  /  {m['R2']:.3f}",
+                   help=f"RMSE {m['RMSE']:.2f} {unit}, mean abs % error {m['MPE']:.2f}%")
+
+    st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+
+    # Parity plots for Tb, Tc, Pc.
+    cols = st.columns(3)
+    for col, prop, unit in zip(cols, ("Tb", "Tc", "Pc"), ("K", "K", "bar")):
+        exp = [r[f"{prop} exp ({unit})"] for r in rows]
+        pred_v = [r[f"{prop} pred ({unit})"] for r in rows]
+        lo, hi = min(exp + pred_v), max(exp + pred_v)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=[lo, hi], y=[lo, hi], mode="lines",
+                                 line=dict(color="#475569", dash="dash", width=1.2),
+                                 showlegend=False))
+        fig.add_trace(go.Scatter(x=exp, y=pred_v, mode="markers",
+                                 marker=dict(color="#34D399", size=8), showlegend=False,
+                                 text=[r["Molecule"] for r in rows]))
+        fig.update_layout(
+            title=dict(text=f"{prop} ({unit})", font=dict(size=13)),
+            height=300, template=None, paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(21,32,58,0.55)",
+            font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=11),
+            xaxis_title="experimental", yaxis_title="predicted",
+            margin=dict(l=50, r=20, t=40, b=45),
+            xaxis=dict(gridcolor="#273656", zeroline=False),
+            yaxis=dict(gridcolor="#273656", zeroline=False),
+        )
+        col.plotly_chart(fig, width="stretch", theme=None,
+                         config=_plotly_config("png", f"parity_{prop}"))
+
+
 def render() -> None:
     """Render the full Streamlit page."""
     st.set_page_config(
@@ -1172,7 +1323,7 @@ def render() -> None:
         app_mode = st.radio(
             "Mode",
             [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM, APP_MODE_VALIDATION,
-             APP_MODE_DISTILL],
+             APP_MODE_DISTILL, APP_MODE_PREDICT],
             key="app_mode",
             label_visibility="collapsed",
         )
@@ -1195,5 +1346,7 @@ def render() -> None:
         _phase_diagram_mode(registry)
     elif app_mode == APP_MODE_VALIDATION:
         _validation_mode(registry)
-    else:
+    elif app_mode == APP_MODE_DISTILL:
         _distillation_mode(registry)
+    else:
+        _property_prediction_mode(registry)
