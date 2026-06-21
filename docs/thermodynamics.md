@@ -118,6 +118,29 @@ The headline finding is model-ranking, robust to small data uncertainty: ideal
 Raoult fails on azeotropic systems, and the activity models correct it to
 within experimental scatter.
 
+## 7. Distillation — McCabe–Thiele (`thermo/distillation.py`)
+
+Binary distillation stepped against the **real** equilibrium curve y*(x) (from
+the selected activity model at the column pressure), light component in mole
+fractions:
+
+- **Rectifying operating line:** y = R/(R+1)·x + x_D/(R+1)
+- **q-line:** y = q/(q−1)·x − z_F/(q−1)  (vertical x = z_F for a saturated
+  liquid feed, q = 1; q = 0 for a saturated vapor feed)
+- **Stripping operating line:** through (x_B, x_B) and the ROL ∩ q-line point.
+- **Minimum reflux** R_min from the pinch where the q-line meets the
+  equilibrium curve: slope = (x_D − y_p)/(x_D − x_p), R_min = slope/(1 − slope).
+
+Stages are stepped from (x_D, x_D), alternating horizontal moves to the
+equilibrium curve and vertical moves to the operating line (ROL above the feed
+pinch, SOL below); the partial reboiler is one equilibrium stage and the optimal
+feed is the stage where the construction crosses the intersection. The solver
+flags `feasible = False` when R ≤ R_min (infinite-stage pinch).
+
+Example (benzene–toluene, z_F = 0.5, q = 1, x_D = 0.95, x_B = 0.05, R = 2):
+R_min ≈ 1.11, 11 theoretical stages (10 trays + reboiler), optimal feed at
+stage 5 — consistent with the standard textbook construction.
+
 ## References
 1. G. M. Wilson, *J. Am. Chem. Soc.* **86** (1964) 127.
 2. H. Renon, J. M. Prausnitz, *AIChE J.* **14** (1968) 135.

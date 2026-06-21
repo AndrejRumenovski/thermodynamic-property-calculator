@@ -1,6 +1,6 @@
 # Thermodynamic Property Calculator
 
-A modular, data-driven Python application for chemical-engineering VLE work. Four
+A modular, data-driven Python application for chemical-engineering VLE work. Five
 modes, selectable from the sidebar:
 
 1. **Property Lookup** — vapor pressure ⇄ boiling temperature from the
@@ -14,6 +14,10 @@ modes, selectable from the sidebar:
 4. **Model Validation** — scores each model against literature VLE datasets
    (MAE / RMSE / mean % error), with sortable tables, quality badges, and
    predicted-vs-experimental parity plots.
+5. **Distillation** — binary **McCabe–Thiele** simulator: operating lines,
+   q-line, stage stepping against the real equilibrium curve, R_min, feed-stage
+   location, theoretical stages, an interactive stage slider, and full
+   calculation breakdown.
 
 Built on a **Streamlit** UI with **NumPy**, **SciPy**, and **Plotly** numerics.
 
@@ -40,6 +44,7 @@ Deliberately separated layers (see [`PLAN.md`](PLAN.md)):
 | Thermo models | [`thermo/models/`](thermo/models) | `ActivityModel` framework — Ideal/Wilson/NRTL/UNIQUAC + the `ThermodynamicModel` bubble/dew/flash solver. Pure math. |
 | Diagrams | [`thermo/diagrams.py`](thermo/diagrams.py) | Binary T–x–y / P–x–y curve generation. |
 | Validation | [`thermo/validation.py`](thermo/validation.py) | Literature VLE datasets + MAE/RMSE/% error scoring of any model. |
+| Distillation | [`thermo/distillation.py`](thermo/distillation.py) | McCabe–Thiele operating lines, q-line, stage stepping, R_min, feed stage. |
 | Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering (all modes), called by [`app.py`](app.py). |
 
 The flash engine consumes the **same `ChemicalSpecies` objects** loaded from

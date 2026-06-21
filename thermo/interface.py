@@ -16,6 +16,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from . import diagrams
+from . import distillation as dist
 from . import flash_engine as flash
 from . import models as tmodels
 from . import thermo_engine as engine
@@ -42,6 +43,7 @@ APP_MODE_LOOKUP = "Property Lookup"
 APP_MODE_FLASH = "VLE Flash Calculation"
 APP_MODE_DIAGRAM = "Phase Diagram"
 APP_MODE_VALIDATION = "Model Validation"
+APP_MODE_DISTILL = "Distillation"
 
 _BADGE_COLOR = {
     "Excellent": "#34D399", "Good": "#38BDF8", "Fair": "#F6A93B", "Poor": "#F87171",
@@ -993,6 +995,160 @@ def _render_validation_system(res: "validation.ValidationResult") -> None:
                     config=_plotly_config("png", f"validation_{ds.comp1_key}_{ds.comp2_key}"))
 
 
+_Q_PRESETS = {
+    "Saturated liquid (q = 1)": 1.0,
+    "Saturated vapor (q = 0)": 0.0,
+    "Custom q": None,
+}
+
+
+def _distillation_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 5 — binary distillation by the McCabe–Thiele method."""
+    keys = list(registry.keys())
+
+    def _idx(name, fallback):
+        return keys.index(name) if name in keys else fallback
+
+    with st.sidebar:
+        st.subheader("Distillation column")
+        k1 = st.selectbox("Light component (1)", keys, index=_idx("benzene", 0),
+                          format_func=lambda k: registry[k].name, key="dist_c1")
+        k2 = st.selectbox("Heavy component (2)", keys, index=_idx("toluene", min(1, len(keys) - 1)),
+                          format_func=lambda k: registry[k].name, key="dist_c2")
+        model_name = st.selectbox("Thermodynamic model", tmodels.MODEL_NAMES, 0, key="dist_model")
+        c1, c2 = st.columns(2)
+        pressure = c1.number_input("Pressure", value=760.0, min_value=1.0, step=10.0, key="dist_P")
+        punit = c2.selectbox("P unit", SUPPORTED_PRESSURE_UNITS, 0, key="dist_Pu")
+        z_F = st.slider("Feed composition z_F (light)", 0.05, 0.95, 0.50, 0.01, key="dist_zF")
+        q_choice = st.selectbox("Feed condition", list(_Q_PRESETS), 0, key="dist_qsel")
+        q = _Q_PRESETS[q_choice]
+        if q is None:
+            q = st.number_input("q (custom)", value=0.5, step=0.1, key="dist_q")
+        x_D = st.slider("Distillate x_D (light)", 0.50, 0.999, 0.95, 0.005, key="dist_xD")
+        x_B = st.slider("Bottoms x_B (light)", 0.001, 0.50, 0.05, 0.005, key="dist_xB")
+        R = st.number_input("Reflux ratio R = L/D", value=2.0, min_value=0.01, step=0.1, key="dist_R")
+
+    if k1 == k2:
+        st.info("Choose two different components for the binary column.")
+        return
+
+    sp1, sp2 = registry[k1], registry[k2]
+    use_model = model_name
+    if model_name != tmodels.IdealModel.name and not tmodels.has_parameters(model_name, sp1, sp2):
+        st.warning(f"No {model_name} parameters for {sp1.name}/{sp2.name} — using Ideal (Raoult).")
+        use_model = tmodels.IdealModel.name
+
+    # Convert column pressure to mmHg (the engine's internal basis).
+    p_mmhg = engine.convert_pressure(pressure, punit, "mmHg")
+    try:
+        model = tmodels.build_model(use_model, sp1, sp2)
+        res = dist.mccabe_thiele(model, z_F=z_F, q=q, R=R, x_D=x_D, x_B=x_B,
+                                 pressure_mmHg=p_mmhg)
+    except (dist.DistillationError, tmodels.NoParametersError, ValueError) as exc:
+        st.error(f"Cannot run column: {exc}")
+        return
+
+    _render_distillation(res, sp1, sp2, use_model, pressure, punit)
+
+
+def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
+    st.subheader(f"McCabe–Thiele — {sp1.name} / {sp2.name}")
+    st.caption(f"{model_name} · {pressure:g} {punit} · feed z_F = {res.z_F:g}, q = {res.q:g}")
+
+    if not res.feasible:
+        st.error(res.message)
+
+    m1, m2, m3, m4, m5 = st.columns(5)
+    m1.metric("Theoretical stages", f"{res.n_stages}" if res.feasible else "∞",
+              help="Includes the partial reboiler.")
+    m2.metric("Column trays", f"{res.n_trays}" if res.feasible else "—")
+    m3.metric("Feed stage", f"{res.feed_stage}" if res.feasible else "—")
+    m4.metric("R_min", f"{res.R_min:.3f}")
+    m5.metric("R / R_min", f"{res.reflux_ratio_to_min:.2f}")
+
+    # Stage-stepping slider (interactive).
+    n_show = res.n_stages if res.feasible else min(res.n_stages, 30)
+    k = st.slider("Show stages", 1, max(n_show, 1), max(n_show, 1), key="dist_show") \
+        if n_show > 1 else 1
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
+                             line=dict(color="#475569", dash="dash", width=1.2)))
+    fig.add_trace(go.Scatter(x=res.x_eq, y=res.y_eq, mode="lines", name="Equilibrium",
+                             line=dict(color="#34D399", width=2.6)))
+    # operating lines
+    xi, yi = res.intersection
+    fig.add_trace(go.Scatter(x=[res.x_D, xi], y=[res.x_D, yi], mode="lines",
+                             name="Rectifying (ROL)", line=dict(color="#38BDF8", width=2.2)))
+    fig.add_trace(go.Scatter(x=[xi, res.x_B], y=[yi, res.x_B], mode="lines",
+                             name="Stripping (SOL)", line=dict(color="#F6A93B", width=2.2)))
+    fig.add_trace(go.Scatter(x=[res.z_F, xi], y=[res.z_F, yi], mode="lines",
+                             name="q-line", line=dict(color="#C792EA", width=1.8, dash="dot")))
+    # staircase up to k stages (each stage = 2 segments after the start point)
+    stair = res.steps[: 2 * k + 1]
+    sx = [p[0] for p in stair]
+    sy = [p[1] for p in stair]
+    fig.add_trace(go.Scatter(x=sx, y=sy, mode="lines", name="Stages",
+                             line=dict(color="#E7EDF7", width=1.4)))
+    # spec points
+    fig.add_trace(go.Scatter(
+        x=[res.x_B, res.z_F, res.x_D], y=[res.x_B, res.z_F, res.x_D],
+        mode="markers+text", text=["x_B", "z_F", "x_D"], textposition="bottom right",
+        marker=dict(color="#38BDF8", size=8), name="specs", showlegend=False))
+    # feed-stage marker
+    if res.feasible and 1 <= res.feed_stage <= len(res.stage_corners):
+        fx, fy = res.stage_corners[res.feed_stage - 1]
+        fig.add_trace(go.Scatter(x=[fx], y=[fy], mode="markers", name="Feed stage",
+                                 marker=dict(color="#F6A93B", size=13, symbol="diamond",
+                                             line=dict(color="#E7EDF7", width=1))))
+    fig.update_layout(
+        height=560, template=None, paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(21,32,58,0.55)",
+        font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=12),
+        xaxis_title=f"x (liquid, {sp1.name})", yaxis_title=f"y (vapor, {sp1.name})",
+        legend=dict(orientation="h", yanchor="top", y=-0.13, x=0.5, xanchor="center"),
+        margin=dict(l=60, r=30, t=20, b=80),
+        xaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False,
+                   scaleanchor="y", scaleratio=1),
+        yaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False),
+    )
+    st.plotly_chart(fig, width="stretch", theme=None,
+                    config=_plotly_config("png", f"mccabe_thiele_{sp1.key}_{sp2.key}"))
+
+    a = res.R / (res.R + 1.0)
+    b = res.x_D / (res.R + 1.0)
+    with st.expander("Complete calculations", expanded=False):
+        lines = [
+            f"**Rectifying operating line (ROL):**  y = {a:.4f}·x + {b:.4f}  "
+            f"(slope R/(R+1), intercept x_D/(R+1))",
+        ]
+        if abs(res.q - 1.0) < 1e-9:
+            lines.append(f"**q-line:**  vertical at x = z_F = {res.z_F:g}  (saturated liquid, q = 1)")
+        else:
+            sq, bq = res.q / (res.q - 1.0), -res.z_F / (res.q - 1.0)
+            lines.append(f"**q-line:**  y = {sq:.4f}·x + {bq:.4f}")
+        msol = (yi - res.x_B) / (xi - res.x_B)
+        lines += [
+            f"**ROL ∩ q-line:**  ({xi:.4f}, {yi:.4f})",
+            f"**Stripping operating line (SOL):**  through (x_B, x_B) and the intersection, "
+            f"slope = {msol:.4f}",
+            f"**Pinch (q-line ∩ equilibrium):**  ({res.pinch[0]:.4f}, {res.pinch[1]:.4f})  "
+            f"→  **R_min = {res.R_min:.4f}**,  operating R = {res.R:g}  (R/R_min = "
+            f"{res.reflux_ratio_to_min:.2f})",
+            f"**Result:**  {res.n_stages} theoretical stages (incl. reboiler) = "
+            f"{res.n_trays} trays + reboiler; optimal feed on stage {res.feed_stage}.",
+        ]
+        st.markdown("\n\n".join(lines))
+
+    if res.feasible:
+        corners = pd.DataFrame(
+            {"Stage": range(1, len(res.stage_corners) + 1),
+             "x (liquid)": [round(p[0], 4) for p in res.stage_corners],
+             "y (vapor)": [round(p[1], 4) for p in res.stage_corners]})
+        st.download_button("⬇ Stage data (CSV)", corners.to_csv(index=False).encode(),
+                           file_name=f"stages_{sp1.key}_{sp2.key}.csv", mime="text/csv")
+
+
 def render() -> None:
     """Render the full Streamlit page."""
     st.set_page_config(
@@ -1015,7 +1171,8 @@ def render() -> None:
         st.header("Mode")
         app_mode = st.radio(
             "Mode",
-            [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM, APP_MODE_VALIDATION],
+            [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM, APP_MODE_VALIDATION,
+             APP_MODE_DISTILL],
             key="app_mode",
             label_visibility="collapsed",
         )
@@ -1036,5 +1193,7 @@ def render() -> None:
         _flash_mode(registry)
     elif app_mode == APP_MODE_DIAGRAM:
         _phase_diagram_mode(registry)
-    else:
+    elif app_mode == APP_MODE_VALIDATION:
         _validation_mode(registry)
+    else:
+        _distillation_mode(registry)
