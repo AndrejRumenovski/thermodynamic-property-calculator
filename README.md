@@ -1,6 +1,6 @@
 # Thermodynamic Property Calculator
 
-A modular, data-driven Python application for chemical-engineering VLE work. Three
+A modular, data-driven Python application for chemical-engineering VLE work. Four
 modes, selectable from the sidebar:
 
 1. **Property Lookup** — vapor pressure ⇄ boiling temperature from the
@@ -11,6 +11,9 @@ modes, selectable from the sidebar:
    two-phase, or superheated vapor.
 3. **Phase Diagram** — publication-quality **T–x–y / P–x–y** diagrams for binary
    systems (zoom, PNG/SVG/CSV export), with automatic azeotrope detection.
+4. **Model Validation** — scores each model against literature VLE datasets
+   (MAE / RMSE / mean % error), with sortable tables, quality badges, and
+   predicted-vs-experimental parity plots.
 
 Built on a **Streamlit** UI with **NumPy**, **SciPy**, and **Plotly** numerics.
 
@@ -36,6 +39,7 @@ Deliberately separated layers (see [`PLAN.md`](PLAN.md)):
 | Flash engine | [`thermo/flash_engine.py`](thermo/flash_engine.py) | Rachford-Rice VLE flash (SciPy `brentq`). Gets `P^sat` from the property engine. No I/O, no UI. |
 | Thermo models | [`thermo/models/`](thermo/models) | `ActivityModel` framework — Ideal/Wilson/NRTL/UNIQUAC + the `ThermodynamicModel` bubble/dew/flash solver. Pure math. |
 | Diagrams | [`thermo/diagrams.py`](thermo/diagrams.py) | Binary T–x–y / P–x–y curve generation. |
+| Validation | [`thermo/validation.py`](thermo/validation.py) | Literature VLE datasets + MAE/RMSE/% error scoring of any model. |
 | Interface | [`thermo/interface.py`](thermo/interface.py) | Streamlit rendering (all modes), called by [`app.py`](app.py). |
 
 The flash engine consumes the **same `ChemicalSpecies` objects** loaded from

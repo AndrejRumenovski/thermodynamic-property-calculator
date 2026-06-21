@@ -19,6 +19,7 @@ from . import diagrams
 from . import flash_engine as flash
 from . import models as tmodels
 from . import thermo_engine as engine
+from . import validation
 from .data_models import (
     SUPPORTED_PRESSURE_UNITS,
     SUPPORTED_TEMPERATURE_UNITS,
@@ -40,6 +41,11 @@ MODE_T_FROM_P = "Boiling temperature from pressure  (P → T)"
 APP_MODE_LOOKUP = "Property Lookup"
 APP_MODE_FLASH = "VLE Flash Calculation"
 APP_MODE_DIAGRAM = "Phase Diagram"
+APP_MODE_VALIDATION = "Model Validation"
+
+_BADGE_COLOR = {
+    "Excellent": "#34D399", "Good": "#38BDF8", "Fair": "#F6A93B", "Poor": "#F87171",
+}
 
 # The phase triad — colours encode physical state, reused everywhere.
 _LIQUID = "#38BDF8"
@@ -863,6 +869,130 @@ def _render_phase_diagram(df, sp1, sp2, model, model_name, template, img_fmt,
         st.caption(model.provenance)
 
 
+def _badge(title: str, label: str) -> str:
+    color = _BADGE_COLOR.get(label, "#93A4C2")
+    return (
+        f'<div style="font-family:IBM Plex Mono,monospace;font-size:.72rem;'
+        f'color:#93A4C2;margin-bottom:2px">{title}</div>'
+        f'<span style="display:inline-block;padding:.18rem .7rem;border-radius:999px;'
+        f'font-weight:600;font-size:.85rem;color:{color};'
+        f'background:{_rgba(color, 0.14)};border:1px solid {_rgba(color, 0.5)}">{label}</span>'
+    )
+
+
+def _validation_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Mode 4 — score activity models against literature VLE datasets."""
+    with st.sidebar:
+        st.subheader("Validation")
+        model_name = st.selectbox(
+            "Model to inspect", tmodels.MODEL_NAMES,
+            index=tmodels.MODEL_NAMES.index(tmodels.NRTLModel.name), key="val_model")
+
+    st.subheader("Model validation against literature VLE data")
+    st.caption(
+        "Experimental points are digitized from cited standard references "
+        "(Gmehling/DECHEMA; Perry's CEH). Predictions use the modified-Raoult γ–φ "
+        "model; lower MAE/RMSE is better. Activity-model parameters were fit only "
+        "to each azeotrope — matching the full curves here is genuine validation."
+    )
+
+    # Score every model × dataset once.
+    results: dict[tuple, validation.ValidationResult] = {}
+    for ds in validation.DATASETS:
+        sp1, sp2 = registry.get(ds.comp1_key), registry.get(ds.comp2_key)
+        if sp1 is None or sp2 is None:
+            continue
+        for m in tmodels.MODEL_NAMES:
+            try:
+                mdl = tmodels.build_model(m, sp1, sp2)
+            except tmodels.NoParametersError:
+                continue
+            results[(ds.system, m)] = validation.validate(mdl, ds, m)
+
+    # Aggregate KPIs for the inspected model.
+    chosen = [results[(ds.system, model_name)] for ds in validation.DATASETS
+              if (ds.system, model_name) in results]
+    if chosen:
+        k1, k2, k3, k4 = st.columns(4)
+        k1.metric("Systems scored", f"{len(chosen)}")
+        k2.metric("Mean y₁ MAE", f"{np.mean([r.y1_metrics['MAE'] for r in chosen]):.4f}")
+        k3.metric("Mean y₁ RMSE", f"{np.mean([r.y1_metrics['RMSE'] for r in chosen]):.4f}")
+        k4.metric("Mean T MAE (°C)", f"{np.mean([r.T_metrics['MAE'] for r in chosen]):.2f}")
+
+    # Model-comparison overview: y₁ RMSE per system × model.
+    st.markdown("**Vapor-composition error (y₁ RMSE) by model**")
+    overview = []
+    for ds in validation.DATASETS:
+        row = {"System": ds.system}
+        for m in tmodels.MODEL_NAMES:
+            res = results.get((ds.system, m))
+            row[m] = round(res.y1_metrics["RMSE"], 4) if res else None
+        overview.append(row)
+    st.dataframe(pd.DataFrame(overview), hide_index=True, width="stretch")
+
+    for ds in validation.DATASETS:
+        res = results.get((ds.system, model_name))
+        st.markdown("---")
+        if res is None:
+            st.info(f"**{ds.system}** — no {model_name} parameters for this pair "
+                    f"(it has no azeotrope record). Try Ideal (Raoult) or another system.")
+            continue
+        _render_validation_system(res)
+
+
+def _render_validation_system(res: "validation.ValidationResult") -> None:
+    ds = res.dataset
+    st.subheader(ds.system)
+    st.caption(f"{ds.source}  ·  {ds.note}")
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.markdown(_badge("Vapor y₁", res.y1_badge), unsafe_allow_html=True)
+    c2.metric("y₁ MAE / RMSE",
+              f"{res.y1_metrics['MAE']:.4f} / {res.y1_metrics['RMSE']:.4f}")
+    c3.markdown(_badge("Temperature", res.T_badge), unsafe_allow_html=True)
+    c4.metric("T MAE / mean %err",
+              f"{res.T_metrics['MAE']:.2f} °C / {res.T_metrics['MPE']:.2f}%")
+
+    with np.errstate(divide="ignore", invalid="ignore"):
+        dy = np.abs(res.y1_pred - res.y1_exp)
+        t_pct = np.where(res.T_exp != 0,
+                         np.abs(res.T_pred - res.T_exp) / np.abs(res.T_exp) * 100, np.nan)
+    table = pd.DataFrame({
+        "x₁": np.round(res.x1, 4),
+        "y₁ exp": np.round(res.y1_exp, 4),
+        "y₁ pred": np.round(res.y1_pred, 4),
+        "|Δy₁|": np.round(dy, 4),
+        "T exp (°C)": np.round(res.T_exp, 2),
+        "T pred (°C)": np.round(res.T_pred, 2),
+        "T %err": np.round(t_pct, 3),
+    })
+    st.dataframe(table, hide_index=True, width="stretch")
+
+    # x–y fit: experimental points vs. predicted curve
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
+                             line=dict(color="#475569", dash="dash", width=1.2)))
+    fig.add_trace(go.Scatter(x=res.x1, y=res.y1_pred, mode="lines",
+                             name=f"{res.model_name} (predicted)",
+                             line=dict(color="#34D399", width=2.4)))
+    fig.add_trace(go.Scatter(x=res.x1, y=res.y1_exp, mode="markers", name="experimental",
+                             marker=dict(color="#F6A93B", size=8, symbol="circle-open",
+                                         line=dict(width=2))))
+    fig.update_layout(
+        height=380, template=None, paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(21,32,58,0.55)",
+        font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=12),
+        xaxis_title="x₁ (liquid)", yaxis_title="y₁ (vapor)",
+        legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
+        margin=dict(l=60, r=30, t=20, b=80),
+        xaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False,
+                   scaleanchor="y", scaleratio=1),
+        yaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False),
+    )
+    st.plotly_chart(fig, width="stretch", theme=None,
+                    config=_plotly_config("png", f"validation_{ds.comp1_key}_{ds.comp2_key}"))
+
+
 def render() -> None:
     """Render the full Streamlit page."""
     st.set_page_config(
@@ -885,7 +1015,7 @@ def render() -> None:
         st.header("Mode")
         app_mode = st.radio(
             "Mode",
-            [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM],
+            [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM, APP_MODE_VALIDATION],
             key="app_mode",
             label_visibility="collapsed",
         )
@@ -904,5 +1034,7 @@ def render() -> None:
         _property_lookup_mode(registry)
     elif app_mode == APP_MODE_FLASH:
         _flash_mode(registry)
-    else:
+    elif app_mode == APP_MODE_DIAGRAM:
         _phase_diagram_mode(registry)
+    else:
+        _validation_mode(registry)

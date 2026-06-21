@@ -95,6 +95,29 @@ Structural parameters (Poling, Prausnitz & O'Connell, 5th ed.):
 against x₁ traces the bubble line and against y₁ the dew line. Exports: PNG/SVG
 (chart modebar) and CSV.
 
+## 6. Validation — `thermo/validation.py`
+
+Each model is scored against isobaric (1 atm) literature T–x–y datasets for
+benzene–toluene, ethanol–water, and acetone–methanol (digitized from
+Gmehling/DECHEMA and Perry's CEH; anchored to accepted endpoints and azeotropes,
+with consistency checked in the test suite). For every experimental composition
+the bubble point is predicted and compared to the measured vapor composition y₁
+and temperature T, reporting **MAE**, **RMSE**, and **mean % error**, with
+quality badges (Excellent/Good/Fair/Poor).
+
+The activity-model parameters were fit only to each azeotrope, so reproducing the
+**full curves** is genuine validation. Representative results (y₁ MAE):
+
+| System | Ideal (Raoult) | Wilson | NRTL | UNIQUAC |
+|---|---|---|---|---|
+| benzene–toluene | 0.002 (Excellent) | — | — | — |
+| ethanol–water | 0.107 (Poor) | 0.009 | 0.006 | 0.004 |
+| acetone–methanol | 0.036 (Fair) | 0.003 | 0.003 | 0.003 |
+
+The headline finding is model-ranking, robust to small data uncertainty: ideal
+Raoult fails on azeotropic systems, and the activity models correct it to
+within experimental scatter.
+
 ## References
 1. G. M. Wilson, *J. Am. Chem. Soc.* **86** (1964) 127.
 2. H. Renon, J. M. Prausnitz, *AIChE J.* **14** (1968) 135.
