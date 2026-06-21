@@ -1,7 +1,8 @@
 # Thermodynamic Property Calculator
 
-A modular, data-driven Python application for chemical-engineering VLE work. Six
-modes, selectable from the sidebar:
+A modular, data-driven Python application for chemical-engineering VLE work. It
+opens on a **research Dashboard** (project KPIs, status indicators, and module
+cards), with six tools selectable from the sidebar:
 
 1. **Property Lookup** — vapor pressure ⇄ boiling temperature from the
    **Antoine equation**, with unit handling.

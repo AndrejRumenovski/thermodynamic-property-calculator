@@ -40,6 +40,7 @@ CATALOG_PATH = Path(__file__).resolve().parent.parent / "antoine_catalog.json"
 MODE_P_FROM_T = "Vapor pressure from temperature  (T → P)"
 MODE_T_FROM_P = "Boiling temperature from pressure  (P → T)"
 
+APP_MODE_DASHBOARD = "Dashboard"
 APP_MODE_LOOKUP = "Property Lookup"
 APP_MODE_FLASH = "VLE Flash Calculation"
 APP_MODE_DIAGRAM = "Phase Diagram"
@@ -158,6 +159,15 @@ hr{ border-color:var(--border); }
 :focus-visible{ outline:2px solid var(--liquid); outline-offset:2px; }
 @keyframes tpcRise{ from{ opacity:0; transform:translateY(9px);} to{ opacity:1; transform:none;} }
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+/* Dashboard status chips */
+.tpc-chips{ display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.2rem 0 0.4rem; }
+.tpc-chip{ display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.7rem;
+  border-radius:999px; font-family:'IBM Plex Mono',monospace; font-size:0.76rem;
+  color:var(--muted); background:rgba(21,32,58,0.7); border:1px solid var(--border); }
+.tpc-chip b{ color:var(--text); font-weight:600; }
+.tpc-chip i{ width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--two); }
+.tpc-section{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
+  letter-spacing:0.18em; font-size:0.74rem; color:var(--muted); margin:1.1rem 0 0.4rem; }
 """
 
 
@@ -618,6 +628,7 @@ def _flash_mode(registry: dict[str, ChemicalSpecies]) -> None:
 
     if notice:
         st.warning(notice)
+    _record_calc("flash")
     _render_flash_result(registry, chosen, z_inputs, result, provenance)
 
 
@@ -787,6 +798,7 @@ def _phase_diagram_mode(registry: dict[str, ChemicalSpecies]) -> None:
 
     if notice:
         st.warning(notice)
+    _record_calc("diagram")
     _render_phase_diagram(df, sp1, sp2, model, use_model, template, img_fmt,
                           is_txy, cval, cunit, tunit)
 
@@ -912,6 +924,8 @@ def _validation_mode(registry: dict[str, ChemicalSpecies]) -> None:
             except tmodels.NoParametersError:
                 continue
             results[(ds.system, m)] = validation.validate(mdl, ds, m)
+
+    _record_calc("validation")
 
     # Aggregate KPIs for the inspected model.
     chosen = [results[(ds.system, model_name)] for ds in validation.DATASETS
@@ -1050,6 +1064,7 @@ def _distillation_mode(registry: dict[str, ChemicalSpecies]) -> None:
         st.error(f"Cannot run column: {exc}")
         return
 
+    _record_calc("distillation")
     _render_distillation(res, sp1, sp2, use_model, pressure, punit)
 
 
@@ -1151,6 +1166,109 @@ def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
                            file_name=f"stages_{sp1.key}_{sp2.key}.csv", mime="text/csv")
 
 
+def _record_calc(kind: str) -> None:
+    """Increment the session activity counter (shown on the dashboard)."""
+    st.session_state["sim_count"] = st.session_state.get("sim_count", 0) + 1
+    by_kind = st.session_state.setdefault("sim_by_kind", {})
+    by_kind[kind] = by_kind.get(kind, 0) + 1
+
+
+@st.cache_data(show_spinner=False)
+def _dashboard_metrics(data_path: str) -> dict:
+    """Compute headline accuracy KPIs once (cached; static reference data)."""
+    registry = load_species(data_path)
+    out = {"vle_mae": None, "joback_tb_mape": None}
+    try:
+        maes = []
+        for ds in validation.DATASETS:
+            sp1, sp2 = registry.get(ds.comp1_key), registry.get(ds.comp2_key)
+            if sp1 is None or sp2 is None:
+                continue
+            name = tmodels.NRTLModel.name if tmodels.has_parameters(
+                tmodels.NRTLModel.name, sp1, sp2) else tmodels.IdealModel.name
+            res = validation.validate(tmodels.build_model(name, sp1, sp2), ds)
+            maes.append(res.y1_metrics["MAE"])
+        if maes:
+            out["vle_mae"] = float(np.mean(maes))
+    except Exception:  # noqa: BLE001 - the dashboard must never crash
+        pass
+    try:
+        _, metrics = predict.benchmark()
+        out["joback_tb_mape"] = metrics["Tb"]["MPE"]
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
+def _summary_card(title: str, description: str, stat: str, target_mode: str) -> None:
+    with st.container(border=True):
+        st.markdown(f"**{title}**")
+        st.caption(description)
+        st.markdown(stat)
+        if st.button("Open", key=f"goto_{target_mode}", width="stretch"):
+            st.session_state["app_mode"] = target_mode
+            st.rerun()
+
+
+def _dashboard_mode(registry: dict[str, ChemicalSpecies]) -> None:
+    """Top-level research dashboard — project KPIs, status, and module cards."""
+    metrics = _dashboard_metrics(str(DATA_PATH))
+    vle = f"{metrics['vle_mae']:.4f}" if metrics["vle_mae"] is not None else "—"
+    tb = f"{metrics['joback_tb_mape']:.1f}%" if metrics["joback_tb_mape"] is not None else "—"
+    n_calc = st.session_state.get("sim_count", 0)
+
+    st.markdown('<div class="tpc-section">Project metrics</div>', unsafe_allow_html=True)
+    a = st.columns(3)
+    a[0].metric("Species in database", f"{len(registry)}")
+    a[1].metric("Thermodynamic models", f"{len(tmodels.MODEL_NAMES)}",
+                help="Ideal (Raoult), Wilson, NRTL, UNIQUAC")
+    a[2].metric("Validation datasets", f"{len(validation.DATASETS)}")
+    b = st.columns(3)
+    b[0].metric("Reference molecules", f"{len(predict.LIBRARY)}", help="Joback benchmark set")
+    b[1].metric("Mean VLE error (y₁ MAE)", vle, help="Best model per validation system")
+    b[2].metric("Joback Tb error (MAPE)", tb)
+
+    st.markdown(
+        f'<div class="tpc-chips">'
+        f'<span class="tpc-chip"><i></i>Engine <b>operational</b></span>'
+        f'<span class="tpc-chip"><i></i><b>{len(tmodels.MODEL_NAMES)}</b> models loaded</span>'
+        f'<span class="tpc-chip"><i></i><b>{len(validation.DATASETS)}</b> datasets validated</span>'
+        f'<span class="tpc-chip"><i style="background:var(--liquid)"></i>'
+        f'<b>{n_calc}</b> calculations this session</span>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<div class="tpc-section">Modules</div>', unsafe_allow_html=True)
+    row1 = st.columns(3)
+    with row1[0]:
+        _summary_card("Property Lookup",
+                      "Antoine vapor pressure ⇄ boiling point with unit conversion.",
+                      f"**{len(registry)}** species · 5 P-units · 3 T-units", APP_MODE_LOOKUP)
+    with row1[1]:
+        _summary_card("VLE Flash",
+                      "Isothermal Rachford–Rice flash with selectable activity model.",
+                      "Raoult · Wilson · NRTL · UNIQUAC", APP_MODE_FLASH)
+    with row1[2]:
+        _summary_card("Phase Diagram",
+                      "T–x–y / P–x–y diagrams with azeotrope detection and export.",
+                      "PNG · SVG · CSV · zoom", APP_MODE_DIAGRAM)
+    row2 = st.columns(3)
+    with row2[0]:
+        _summary_card("Model Validation",
+                      "Predictions vs. literature VLE data with quality badges.",
+                      f"mean y₁ MAE **{vle}**", APP_MODE_VALIDATION)
+    with row2[1]:
+        _summary_card("Distillation",
+                      "Binary McCabe–Thiele: stages, feed location, R_min.",
+                      "operating lines · q-line · stepping", APP_MODE_DISTILL)
+    with row2[2]:
+        _summary_card("Property Prediction",
+                      "Joback group contribution + Lee–Kesler, benchmarked.",
+                      f"Tb MAPE **{tb}** over **{len(predict.LIBRARY)}** compounds",
+                      APP_MODE_PREDICT)
+
+
 def _property_prediction_mode(registry: dict[str, ChemicalSpecies]) -> None:
     """Mode 6 — Joback group-contribution property prediction + benchmarking."""
     with st.sidebar:
@@ -1194,6 +1312,7 @@ def _property_prediction_mode(registry: dict[str, ChemicalSpecies]) -> None:
         except (predict.PropertyPredictionError, ValueError) as exc:
             st.error(f"Cannot estimate: {exc}")
             return
+        _record_calc("prediction")
         _render_property_estimate(est, reference, registry, t_unit)
 
     st.markdown("---")
@@ -1322,8 +1441,8 @@ def render() -> None:
         st.header("Mode")
         app_mode = st.radio(
             "Mode",
-            [APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM, APP_MODE_VALIDATION,
-             APP_MODE_DISTILL, APP_MODE_PREDICT],
+            [APP_MODE_DASHBOARD, APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM,
+             APP_MODE_VALIDATION, APP_MODE_DISTILL, APP_MODE_PREDICT],
             key="app_mode",
             label_visibility="collapsed",
         )
@@ -1338,7 +1457,9 @@ def render() -> None:
                 _manage_ui(registry)
         st.divider()
 
-    if app_mode == APP_MODE_LOOKUP:
+    if app_mode == APP_MODE_DASHBOARD:
+        _dashboard_mode(registry)
+    elif app_mode == APP_MODE_LOOKUP:
         _property_lookup_mode(registry)
     elif app_mode == APP_MODE_FLASH:
         _flash_mode(registry)
