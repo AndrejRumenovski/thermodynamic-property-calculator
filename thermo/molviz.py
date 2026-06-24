@@ -122,7 +122,7 @@ def viewer_html(molblock: str, show_labels: bool = False,
     style_js = _STYLE_JS.get(style, _STYLE_JS["Ball & stick"])
     labels_js = (
         "viewer.addPropertyLabels('elem', {}, {fontColor:'white', fontSize:11,"
-        " backgroundColor:'0x15203A', backgroundOpacity:0.65});" if show_labels else ""
+        " backgroundColor:'0x242a32', backgroundOpacity:0.65});" if show_labels else ""
     )
     return f"""<div id="mv" style="width:100%;height:{height}px;position:relative;
 border-radius:10px;overflow:hidden;border:1px solid #273656;"></div>
@@ -131,7 +131,7 @@ border-radius:10px;overflow:hidden;border:1px solid #273656;"></div>
 (function(){{
   var run=function(){{
     var el=document.getElementById('mv');
-    var viewer=$3Dmol.createViewer(el,{{backgroundColor:'0x0E1726'}});
+    var viewer=$3Dmol.createViewer(el,{{backgroundColor:'0x171b21'}});
     viewer.addModel(`{safe}`,'sdf');
     viewer.setStyle({{}}, {style_js});
     {labels_js}

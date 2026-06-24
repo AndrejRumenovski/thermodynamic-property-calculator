@@ -68,54 +68,39 @@ _PHASE_COLOR = {
 _THEME_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 :root{
-  --bg:#0E1726; --panel:#15203A; --border:#273656;
-  --text:#E7EDF7; --muted:#93A4C2;
-  --liquid:#38BDF8; --two:#34D399; --vapor:#F6A93B;
+  --bg:#171b21; --panel:#242a32; --panel-head:#2b313b; --raised:#2e353f;
+  --border:#363d47; --text:#d7dce3; --muted:#838c99; --grid:#363d47;
+  --primary:#4a9eff; --liquid:#38BDF8; --two:#34D399; --vapor:#F6A93B;
 }
 /* Type */
 html, body, .stApp, [data-testid="stAppViewContainer"]{
-  font-family:'IBM Plex Sans', system-ui, sans-serif;
-  color:var(--text);
-}
+  font-family:'IBM Plex Sans', system-ui, sans-serif; color:var(--text); }
 h1,h2,h3,h4,[data-testid="stHeading"]{
-  font-family:'Space Grotesk','IBM Plex Sans',sans-serif !important;
-  letter-spacing:-0.015em;
-}
+  font-family:'Space Grotesk','IBM Plex Sans',sans-serif !important; letter-spacing:-0.01em; }
 [data-testid="stCaptionContainer"], .stCaption, small{
-  color:var(--muted) !important;
-  font-family:'IBM Plex Mono', monospace;
-  letter-spacing:0.02em;
-}
-/* Phase-diagram ground: cool (liquid) glow top-left, warm (vapor) top-right, fine grid */
-.stApp{
-  background-color:var(--bg);
-  background-image:
-    radial-gradient(1100px 560px at 8% -12%, rgba(56,189,248,0.10), transparent 60%),
-    radial-gradient(1000px 620px at 104% -4%, rgba(246,169,59,0.07), transparent 56%),
-    linear-gradient(rgba(39,54,86,0.30) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(39,54,86,0.30) 1px, transparent 1px);
-  background-size:100% 100%, 100% 100%, 46px 46px, 46px 46px;
-  background-attachment:fixed;
-}
+  color:var(--muted) !important; font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em; }
+/* Flat neutral workspace ground */
+.stApp{ background:var(--bg); }
 [data-testid="stHeader"]{ background:transparent; }
-.block-container{ padding-top:2.2rem; max-width:1180px; }
-/* Hero */
-.tpc-hero{ margin:0.2rem 0 1.6rem; animation:tpcRise .5s ease-out both; }
-.tpc-eyebrow{
-  font-family:'IBM Plex Mono', monospace; text-transform:uppercase;
-  letter-spacing:0.34em; font-size:0.72rem; color:var(--liquid); margin-bottom:0.5rem;
-}
-.tpc-title{
-  font-family:'Space Grotesk',sans-serif; font-weight:600;
-  font-size:2.5rem; line-height:1.04; margin:0; color:#F3F7FE;
-}
-.tpc-sub{ color:var(--muted); font-size:1.02rem; margin:0.55rem 0 0.9rem; max-width:60ch; }
+.block-container{ padding-top:1.1rem !important; max-width:1320px; }
+/* Panels (st.container(border=True)) -> steamplot-style cards */
+[data-testid="stVerticalBlockBorderWrapper"]{
+  background:var(--panel); border:1px solid var(--border) !important; border-radius:10px; }
+/* Section headings -> panel header strips */
+[data-testid="stMain"] :is(h2,h3){
+  background:var(--panel-head); border:1px solid var(--border);
+  border-left:3px solid var(--primary); border-radius:8px;
+  padding:0.42rem 0.8rem !important; margin:1.1rem 0 0.7rem !important; font-size:1.15rem !important; }
+/* Hero (dashboard only) */
+.tpc-hero{ margin:0.2rem 0 1.4rem; animation:tpcRise .5s ease-out both; }
+.tpc-eyebrow{ font-family:'IBM Plex Mono', monospace; text-transform:uppercase;
+  letter-spacing:0.34em; font-size:0.72rem; color:var(--muted); margin-bottom:0.5rem; }
+.tpc-title{ font-family:'Space Grotesk',sans-serif; font-weight:600;
+  font-size:2.2rem; line-height:1.05; margin:0; color:#f1f4f9; }
+.tpc-sub{ color:var(--muted); font-size:1.0rem; margin:0.55rem 0 0.9rem; max-width:62ch; }
 .tpc-sub b{ color:var(--text); font-weight:600; }
-.tpc-spine{
-  height:3px; width:100%; border-radius:3px;
-  background:linear-gradient(90deg,var(--liquid),var(--two) 52%,var(--vapor));
-  box-shadow:0 0 22px rgba(56,189,248,0.25);
-}
+.tpc-spine{ height:3px; width:100%; border-radius:3px;
+  background:linear-gradient(90deg,var(--liquid),var(--two) 52%,var(--vapor)); }
 .tpc-legend{ display:flex; gap:1.4rem; margin-top:0.7rem;
   font-family:'IBM Plex Mono',monospace; font-size:0.76rem; color:var(--muted); }
 .tpc-legend span{ display:inline-flex; align-items:center; gap:0.42rem; }
@@ -124,68 +109,70 @@ h1,h2,h3,h4,[data-testid="stHeading"]{
 .tpc-legend .ph-two{ background:var(--two); }
 .tpc-legend .ph-vap{ background:var(--vapor); }
 /* Regime card */
-.tpc-regime{
-  display:flex; gap:0.95rem; align-items:center; margin:0.3rem 0 1.1rem;
-  padding:1rem 1.15rem; border-radius:0.85rem;
-  border:1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
-  background:linear-gradient(90deg, color-mix(in srgb, var(--accent) 15%, var(--panel)), var(--panel) 62%);
-  position:relative; overflow:hidden;
-}
+.tpc-regime{ display:flex; gap:0.95rem; align-items:center; margin:0.3rem 0 1.1rem;
+  padding:0.9rem 1.1rem; border-radius:10px;
+  border:1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+  background:linear-gradient(90deg, color-mix(in srgb, var(--accent) 14%, var(--panel)), var(--panel) 60%);
+  position:relative; overflow:hidden; }
 .tpc-regime::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--accent); }
 .tpc-regime-dot{ width:13px; height:13px; border-radius:50%; background:var(--accent);
-  box-shadow:0 0 0 5px color-mix(in srgb, var(--accent) 24%, transparent); flex:0 0 auto; }
-.tpc-regime-label{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1.18rem; color:#F3F7FE; }
+  box-shadow:0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); flex:0 0 auto; }
+.tpc-regime-label{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1.15rem; color:#f1f4f9; }
 .tpc-regime-meta{ font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--muted); margin-top:0.12rem; }
-/* Metric cards -> instrument readouts */
-[data-testid="stMetric"]{
-  background:linear-gradient(180deg, var(--panel), #111B30);
-  border:1px solid var(--border); border-radius:0.75rem;
-  padding:0.85rem 1rem 0.95rem; position:relative; overflow:hidden;
-}
-[data-testid="stMetric"]::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
-  background:var(--liquid); opacity:0.75; }
+/* Metric cards -> readout tiles */
+[data-testid="stMetric"]{ background:var(--raised); border:1px solid var(--border);
+  border-radius:8px; padding:0.65rem 0.85rem 0.7rem; position:relative; overflow:hidden; }
+[data-testid="stMetric"]::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:2px;
+  background:var(--primary); opacity:0.7; }
 [data-testid="stMetricValue"]{ font-family:'IBM Plex Mono',monospace !important; font-weight:600;
-  font-size:1.65rem !important; line-height:1.15; }
+  font-size:1.45rem !important; line-height:1.15; color:#eef2f7; }
 [data-testid="stMetricLabel"]{ color:var(--muted) !important; }
 [data-testid="stAppDeployButton"]{ display:none; }
-/* Sidebar */
-[data-testid="stSidebar"]{ background:#0F182B; border-right:1px solid var(--border); }
-[data-testid="stSidebar"] h2,[data-testid="stSidebar"] h3{ font-size:0.78rem; text-transform:uppercase;
+/* Sidebar = left tool panel */
+[data-testid="stSidebar"]{ background:#1d2229; border-right:1px solid var(--border); }
+[data-testid="stSidebar"] [data-testid="stHeading"]{ background:transparent; border:none;
+  padding:0 !important; font-size:0.74rem !important; text-transform:uppercase;
   letter-spacing:0.18em; color:var(--muted); }
 /* Buttons */
-.stButton>button{ border-radius:0.6rem; border:1px solid var(--border); font-weight:600; transition:all .15s ease; }
-.stButton>button:hover{ border-color:var(--liquid); color:var(--liquid); transform:translateY(-1px); }
-/* Tables, tabs, dividers */
-[data-testid="stDataFrame"]{ border:1px solid var(--border); border-radius:0.6rem; }
-[data-baseweb="tab-list"]{ gap:0.25rem; }
+.stButton>button{ border-radius:7px; border:1px solid var(--border); font-weight:600;
+  background:var(--raised); transition:all .15s ease; }
+.stButton>button:hover{ border-color:var(--primary); color:var(--primary); }
+/* Tabs -> steamplot tab strip */
+[data-baseweb="tab-list"]{ gap:0.2rem; border-bottom:1px solid var(--border); }
+[data-baseweb="tab"]{ background:var(--bg); border:1px solid var(--border); border-bottom:none;
+  border-radius:8px 8px 0 0; padding:0.35rem 0.85rem !important; color:var(--muted) !important; }
+[data-baseweb="tab"][aria-selected="true"]{ background:var(--panel); color:var(--text) !important; }
+[data-baseweb="tab-highlight"]{ background:var(--primary); }
+/* Tables, inputs, dividers */
+[data-testid="stDataFrame"]{ border:1px solid var(--border); border-radius:8px; }
 hr{ border-color:var(--border); }
-:focus-visible{ outline:2px solid var(--liquid); outline-offset:2px; }
+:focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
 @keyframes tpcRise{ from{ opacity:0; transform:translateY(9px);} to{ opacity:1; transform:none;} }
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
-/* Dashboard status chips */
+/* Status chips */
 .tpc-chips{ display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.2rem 0 0.4rem; }
 .tpc-chip{ display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.7rem;
   border-radius:999px; font-family:'IBM Plex Mono',monospace; font-size:0.76rem;
-  color:var(--muted); background:rgba(21,32,58,0.7); border:1px solid var(--border); }
+  color:var(--muted); background:var(--raised); border:1px solid var(--border); }
 .tpc-chip b{ color:var(--text); font-weight:600; }
 .tpc-chip i{ width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--two); }
 .tpc-section{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
   letter-spacing:0.18em; font-size:0.74rem; color:var(--muted); margin:1.1rem 0 0.4rem; }
-/* --- Enterprise layout: denser block, command bar, status bar, panels --- */
-.block-container{ padding-top:1.1rem !important; max-width:1280px; }
-[data-testid="stMain"] h2, [data-testid="stMain"] h3{
-  border-left:3px solid var(--liquid); padding-left:0.6rem; }
-[data-testid="stMetricValue"]{ font-size:1.5rem !important; }
-/* Sticky terminal-style command bar */
+/* Label/value rows */
+.tpc-kv{ display:flex; justify-content:space-between; gap:1rem; padding:0.5rem 0.1rem;
+  border-bottom:1px solid var(--border); font-size:0.92rem; }
+.tpc-kv .k{ color:var(--muted); } .tpc-kv .v{ font-family:'IBM Plex Mono',monospace; color:var(--text); }
+/* Minimal top command bar */
 .tpc-cmdbar{ position:sticky; top:0; z-index:50; display:flex; flex-wrap:wrap;
   justify-content:space-between; align-items:center; gap:0.6rem 1rem;
-  padding:0.5rem 0.9rem; margin:0 0 1rem; background:rgba(14,23,38,0.92);
-  backdrop-filter:blur(6px); border:1px solid var(--border); border-radius:0.6rem; }
+  padding:0.45rem 0.2rem 0.5rem; margin:0 0 1rem; background:var(--bg);
+  border-bottom:1px solid var(--border); }
 .tpc-cmd-left{ display:flex; align-items:center; gap:0.6rem; }
-.tpc-logo{ font-family:'Space Grotesk',sans-serif; font-weight:600; color:#F3F7FE;
-  letter-spacing:0.04em; }
+.tpc-logo{ font-family:'Space Grotesk',sans-serif; font-weight:700; color:#f1f4f9;
+  letter-spacing:0.02em; background:var(--raised); border:1px solid var(--border);
+  padding:0.15rem 0.55rem; border-radius:7px; }
 .tpc-sep{ color:var(--border); }
-.tpc-module{ font-family:'IBM Plex Mono',monospace; color:var(--liquid); font-size:0.82rem;
+.tpc-module{ font-family:'IBM Plex Mono',monospace; color:var(--text); font-size:0.82rem;
   text-transform:uppercase; letter-spacing:0.12em; }
 .tpc-cmd-right{ display:flex; flex-wrap:wrap; align-items:center; gap:0.9rem;
   font-family:'IBM Plex Mono',monospace; font-size:0.74rem; color:var(--muted); }
@@ -195,10 +182,9 @@ hr{ border-color:var(--border); }
   box-shadow:0 0 0 3px color-mix(in srgb, var(--two) 25%, transparent); }
 /* Footer status bar */
 .tpc-statusbar{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:0.8rem;
-  margin-top:1.8rem; padding:0.55rem 0.9rem; border-top:1px solid var(--border);
+  margin-top:1.8rem; padding:0.55rem 0.2rem; border-top:1px solid var(--border);
   font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--muted); }
-.tpc-statusbar i{ width:8px; height:8px; border-radius:50%; display:inline-block;
-  margin:0 0.3rem; }
+.tpc-statusbar i{ width:8px; height:8px; border-radius:50%; display:inline-block; margin:0 0.3rem; }
 .tpc-statusbar .ph-liq{ background:var(--liquid); }
 .tpc-statusbar .ph-two{ background:var(--two); }
 .tpc-statusbar .ph-vap{ background:var(--vapor); }
@@ -1139,14 +1125,14 @@ def _render_validation_system(res: "validation.ValidationResult") -> None:
                                          line=dict(width=2))))
     fig.update_layout(
         height=380, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(21,32,58,0.55)",
-        font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=12),
+        plot_bgcolor="#242a32",
+        font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=12),
         xaxis_title="x₁ (liquid)", yaxis_title="y₁ (vapor)",
         legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
         margin=dict(l=60, r=30, t=20, b=80),
-        xaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False,
+        xaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False,
                    scaleanchor="y", scaleratio=1),
-        yaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False),
+        yaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False),
     )
     st.plotly_chart(fig, width="stretch", theme=None,
                     config=_plotly_config("png", f"validation_{ds.comp1_key}_{ds.comp2_key}"))
@@ -1243,7 +1229,7 @@ def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
     sx = [p[0] for p in stair]
     sy = [p[1] for p in stair]
     fig.add_trace(go.Scatter(x=sx, y=sy, mode="lines", name="Stages",
-                             line=dict(color="#E7EDF7", width=1.4)))
+                             line=dict(color="#d7dce3", width=1.4)))
     # spec points
     fig.add_trace(go.Scatter(
         x=[res.x_B, res.z_F, res.x_D], y=[res.x_B, res.z_F, res.x_D],
@@ -1254,17 +1240,17 @@ def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
         fx, fy = res.stage_corners[res.feed_stage - 1]
         fig.add_trace(go.Scatter(x=[fx], y=[fy], mode="markers", name="Feed stage",
                                  marker=dict(color="#F6A93B", size=13, symbol="diamond",
-                                             line=dict(color="#E7EDF7", width=1))))
+                                             line=dict(color="#d7dce3", width=1))))
     fig.update_layout(
         height=560, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(21,32,58,0.55)",
-        font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=12),
+        plot_bgcolor="#242a32",
+        font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=12),
         xaxis_title=f"x (liquid, {sp1.name})", yaxis_title=f"y (vapor, {sp1.name})",
         legend=dict(orientation="h", yanchor="top", y=-0.13, x=0.5, xanchor="center"),
         margin=dict(l=60, r=30, t=20, b=80),
-        xaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False,
+        xaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False,
                    scaleanchor="y", scaleratio=1),
-        yaxis=dict(range=[0, 1], gridcolor="#273656", zeroline=False),
+        yaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False),
     )
     st.plotly_chart(fig, width="stretch", theme=None,
                     config=_plotly_config("png", f"mccabe_thiele_{sp1.key}_{sp2.key}"))
@@ -1524,13 +1510,13 @@ def _render_property_estimate(est, reference, registry, t_unit) -> None:
                                  line=dict(color="#F6A93B", width=2.2, dash="dot")))
     fig.update_layout(
         height=380, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(21,32,58,0.55)",
-        font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=12),
+        plot_bgcolor="#242a32",
+        font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=12),
         xaxis_title=f"Temperature ({t_unit})", yaxis_title="Vapor pressure (mmHg)",
         legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
         margin=dict(l=70, r=30, t=20, b=80),
-        xaxis=dict(gridcolor="#273656", zeroline=False),
-        yaxis=dict(gridcolor="#273656", zeroline=False),
+        xaxis=dict(gridcolor="#363d47", zeroline=False),
+        yaxis=dict(gridcolor="#363d47", zeroline=False),
     )
     st.caption("Estimated vapor-pressure curve"
                + (" (orange: independent Antoine fit for cross-check)" if match else ""))
@@ -1569,12 +1555,12 @@ def _render_benchmark_dashboard() -> None:
         fig.update_layout(
             title=dict(text=f"{prop} ({unit})", font=dict(size=13)),
             height=300, template=None, paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(21,32,58,0.55)",
-            font=dict(family="IBM Plex Sans, sans-serif", color="#E7EDF7", size=11),
+            plot_bgcolor="#242a32",
+            font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=11),
             xaxis_title="experimental", yaxis_title="predicted",
             margin=dict(l=50, r=20, t=40, b=45),
-            xaxis=dict(gridcolor="#273656", zeroline=False),
-            yaxis=dict(gridcolor="#273656", zeroline=False),
+            xaxis=dict(gridcolor="#363d47", zeroline=False),
+            yaxis=dict(gridcolor="#363d47", zeroline=False),
         )
         col.plotly_chart(fig, width="stretch", theme=None,
                          config=_plotly_config("png", f"parity_{prop}"))

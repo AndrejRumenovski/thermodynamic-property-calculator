@@ -3,12 +3,12 @@
 # thermo/interface.py; this file themes Streamlit's native widgets to match.
 [theme]
 base = "dark"
-primaryColor = "#38BDF8"
-backgroundColor = "#0E1726"
-secondaryBackgroundColor = "#15203A"
-textColor = "#E7EDF7"
-linkColor = "#7CC9F0"
-baseRadius = "0.6rem"
-borderColor = "#273656"
+primaryColor = "#4a9eff"
+backgroundColor = "#171b21"
+secondaryBackgroundColor = "#242a32"
+textColor = "#d7dce3"
+linkColor = "#6fb2ff"
+baseRadius = "0.5rem"
+borderColor = "#363d47"
 showWidgetBorder = true
 showSidebarBorder = true
