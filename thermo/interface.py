@@ -1337,14 +1337,19 @@ def _dashboard_metrics(data_path: str) -> dict:
     return out
 
 
+def _goto_mode(mode: str) -> None:
+    """Switch the active page. Run as a button callback (before the Mode radio is
+    re-instantiated), so writing its widget-bound session-state key is allowed."""
+    st.session_state["app_mode"] = mode
+
+
 def _summary_card(title: str, description: str, stat: str, target_mode: str) -> None:
     with st.container(border=True):
         st.markdown(f"**{title}**")
         st.caption(description)
         st.markdown(stat)
-        if st.button("Open", key=f"goto_{target_mode}", width="stretch"):
-            st.session_state["app_mode"] = target_mode
-            st.rerun()
+        st.button("Open", key=f"goto_{target_mode}", width="stretch",
+                  on_click=_goto_mode, args=(target_mode,))
 
 
 def _dashboard_mode(registry: dict[str, ChemicalSpecies]) -> None:
