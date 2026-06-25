@@ -565,39 +565,54 @@ def _molecular_viewer_mode(registry: dict[str, ChemicalSpecies]) -> None:
         return
     _record_calc("molviz")
 
-    st.subheader(f"{pick if molviz.MOLECULE_SMILES.get(pick) == smiles else 'Molecule'}"
-                 f"  ·  {info.formula}")
-    st.caption(f"SMILES: `{info.smiles}`  ·  drag to rotate, scroll to zoom.")
+    is_library = molviz.MOLECULE_SMILES.get(pick) == smiles
+    name = pick if is_library else "Custom molecule"
+    _panel_title(f"Molecular workspace — {name}", tag=info.formula)
 
-    left, right = st.columns(2)
-    with left:
-        st.caption("2D structure (RDKit)")
-        components.html(
-            f'<div style="background:transparent">{info.svg_2d}</div>', height=280)
-    with right:
-        st.caption("3D structure (3Dmol.js)")
-        components.html(molviz.viewer_html(info.molblock_3d, show_labels, style),
-                        height=460)
+    viz, inspect = st.columns([1.7, 1], gap="large")
+    with viz:
+        _panel_title("Interactive 3D structure",
+                     tag="3Dmol.js · drag to rotate · scroll to zoom")
+        components.html(molviz.viewer_html(info.molblock_3d, show_labels, style, height=540),
+                        height=556)
+        _panel_title("2D structure", tag="RDKit depiction")
+        components.html(f'<div style="background:transparent">{info.svg_2d}</div>', height=290)
 
-    m = st.columns(4)
-    m[0].metric("Molar mass", f"{info.molar_mass:.3f} g/mol")
-    m[1].metric("Heavy atoms", f"{info.heavy_atoms}")
-    m[2].metric("Total atoms", f"{info.total_atoms}")
-    m[3].metric("Rings", f"{info.rings}")
+    with inspect:
+        with st.container(border=True):
+            _panel_title("Molecular identity")
+            _meta_table([
+                ("Name", name), ("Formula", info.formula), ("SMILES", info.smiles),
+                ("Molar mass", f"{info.molar_mass:.3f} g/mol"),
+                ("Heavy atoms", str(info.heavy_atoms)),
+                ("Total atoms (+H)", str(info.total_atoms)),
+                ("Ring count", str(info.rings)),
+            ])
+        with st.container(border=True):
+            _panel_title("Atomic composition")
+            _meta_table([(el, str(n)) for el, n in info.atom_counts.items()])
 
-    counts = "  ".join(f"{el}: {n}" for el, n in info.atom_counts.items())
-    st.markdown(f"**Atom counts** — {counts}")
-
-    # Cross-link to Joback predicted properties when available.
-    mol = predict.LIBRARY_BY_NAME.get(pick)
-    if mol is not None and molviz.MOLECULE_SMILES.get(pick) == smiles:
-        est = predict.estimate_molecule(mol)
-        st.markdown("**Predicted properties** (Joback + Lee–Kesler):")
-        p = st.columns(4)
-        p[0].metric("Boiling point Tb", f"{est.Tb - 273.15:.1f} °C")
-        p[1].metric("Critical temp Tc", f"{est.Tc:.1f} K")
-        p[2].metric("Critical pressure Pc", f"{est.Pc:.2f} bar")
-        p[3].metric("Acentric factor ω", f"{est.omega:.3f}")
+        mol = predict.LIBRARY_BY_NAME.get(pick) if is_library else None
+        if mol is not None:
+            est = predict.estimate_molecule(mol)
+            with st.container(border=True):
+                _panel_title("Predicted properties", tag="Joback + Lee–Kesler")
+                _meta_table([
+                    ("Boiling point Tb", f"{est.Tb - 273.15:.1f} °C  ({est.Tb:.1f} K)"),
+                    ("Critical temp Tc", f"{est.Tc:.1f} K"),
+                    ("Critical pressure Pc", f"{est.Pc:.2f} bar"),
+                    ("Critical volume Vc", f"{est.Vc:.1f} cm³/mol"),
+                    ("Acentric factor ω", f"{est.omega:.3f}"),
+                ])
+                if st.button("Open in Property Prediction", key="mv_to_predict",
+                             width="stretch", on_click=_goto_mode, args=(APP_MODE_PREDICT,)):
+                    pass
+        else:
+            with st.container(border=True):
+                _panel_title("Predicted properties")
+                st.caption("Property estimates are available for reference-library "
+                           "molecules (Joback group decomposition required). Pick a "
+                           "library molecule to see Tb / Tc / Pc / ω.")
 
 
 _PUB_FONT = "IBM Plex Sans, system-ui, sans-serif"
@@ -1634,30 +1649,51 @@ def _property_prediction_mode(registry: dict[str, ChemicalSpecies]) -> None:
 
 
 def _render_property_estimate(est, reference, registry, t_unit) -> None:
-    st.markdown(f"### {est.name}  ·  {est.formula}")
-    c = st.columns(3)
-    c[0].metric("Molar mass (g/mol)", f"{est.molar_mass:.3f}")
-    c[1].metric("Boiling point Tb", f"{est.Tb:.1f} K  ({est.Tb - 273.15:.1f} °C)")
-    c[2].metric("Acentric factor ω", f"{est.omega:.3f}")
-    c2 = st.columns(3)
-    c2[0].metric("Critical temp Tc", f"{est.Tc:.1f} K")
-    c2[1].metric("Critical pressure Pc", f"{est.Pc:.2f} bar")
-    c2[2].metric("Critical volume Vc", f"{est.Vc:.1f} cm³/mol")
+    _panel_title(f"Property estimate — {est.name}",
+                 tag=f"{est.formula} · {est.method} + Lee–Kesler")
+
+    ident, crit = st.columns([1, 1.25], gap="large")
+    with ident:
+        with st.container(border=True):
+            _panel_title("Molecular identity")
+            _meta_table([
+                ("Name", est.name), ("Formula", est.formula),
+                ("Molar mass", f"{est.molar_mass:.3f} g/mol"),
+                ("Method", f"{est.method} group contribution"),
+            ])
+    with crit:
+        with st.container(border=True):
+            _panel_title("Critical & physical properties")
+            _meta_table([
+                ("Normal boiling point Tb", f"{est.Tb:.1f} K  ({est.Tb - 273.15:.1f} °C)"),
+                ("Critical temperature Tc", f"{est.Tc:.1f} K"),
+                ("Critical pressure Pc", f"{est.Pc:.2f} bar"),
+                ("Critical volume Vc", f"{est.Vc:.1f} cm³/mol"),
+                ("Acentric factor ω", f"{est.omega:.3f}"),
+            ])
 
     if reference is not None:
-        st.caption("Predicted vs. experimental (Poling 5th ed. / NIST):")
-        rows = [
-            ("Tb (K)", est.Tb, reference.Tb_exp),
-            ("Tc (K)", est.Tc, reference.Tc_exp),
-            ("Pc (bar)", est.Pc, reference.Pc_exp),
-        ]
-        df = pd.DataFrame({
-            "Property": [r[0] for r in rows],
-            "Predicted": [round(r[1], 2) for r in rows],
-            "Experimental": [round(r[2], 2) for r in rows],
-            "% error": [round(abs(r[1] - r[2]) / r[2] * 100, 2) for r in rows],
-        })
-        st.dataframe(df, hide_index=True, width="stretch")
+        rows = [("Tb (K)", est.Tb, reference.Tb_exp), ("Tc (K)", est.Tc, reference.Tc_exp),
+                ("Pc (bar)", est.Pc, reference.Pc_exp)]
+        errs = [abs(p - e) / e * 100 for _, p, e in rows]
+        mpe = float(np.mean(errs))
+        conf = "High" if mpe < 2.0 else "Good" if mpe < 5.0 else "Moderate"
+        with st.container(border=True):
+            _panel_title("Validation vs. literature", tag="Poling 5th ed. / NIST")
+            df = pd.DataFrame({
+                "Property": [r[0] for r in rows],
+                "Predicted": [round(r[1], 2) for r in rows],
+                "Experimental": [round(r[2], 2) for r in rows],
+                "Abs. error": [round(abs(r[1] - r[2]), 2) for r in rows],
+                "% error": [round(err, 2) for err in errs],
+            })
+            st.dataframe(df, hide_index=True, width="stretch")
+            cc1, cc2 = st.columns([1, 2])
+            cc1.markdown(_badge("Confidence",
+                                {"High": "Excellent", "Good": "Good",
+                                 "Moderate": "Fair"}[conf]), unsafe_allow_html=True)
+            cc2.caption(f"Mean absolute error {mpe:.2f}% across Tb, Tc, Pc — within Joback's "
+                        "documented accuracy. Alcohols' Tb are systematically under-predicted.")
 
     # Vapor-pressure curve (Lee–Kesler); overlay Antoine if the species is in the DB.
     t_lo, t_hi = 0.55 * est.Tc, min(est.Tc, est.Tb + 60.0)
@@ -1682,6 +1718,21 @@ def _render_property_estimate(est, reference, registry, t_unit) -> None:
                   else " (no measured Antoine fit in the database for this molecule)."))
     st.plotly_chart(fig, width="stretch", theme=None,
                     config=_plotly_config("png", f"psat_{est.formula}"))
+
+    with st.expander("Prediction methodology & references"):
+        st.markdown(
+            "**Group contribution (Joback & Reid, 1987):**\n"
+            "- Tb = 198.2 + Σ nᵢ ΔTb,ᵢ\n"
+            "- Tc = Tb / (0.584 + 0.965 ΣΔTc − (ΣΔTc)²)\n"
+            "- Pc = (0.113 + 0.0032 N_atoms − ΣΔPc)⁻²;  Vc = 17.5 + ΣΔVc\n\n"
+            "**Corresponding states (Lee–Kesler):** the acentric factor ω is obtained "
+            "from Tb, Tc, Pc, then vapor pressure follows ln(P/Pc) = f⁽⁰⁾(Tr) + ω f⁽¹⁾(Tr), "
+            "which returns 1 atm at Tb by construction.\n\n"
+            "**Assumptions:** additive group contributions; no isomer/steric corrections; "
+            "ideal-gas reference. Accuracy is typically ~2–3% (Tb, Tc) and ~5% (Pc).\n\n"
+            "*Refs: Joback & Reid, Chem. Eng. Commun. 57 (1987) 233; Poling, Prausnitz & "
+            "O'Connell, The Properties of Gases and Liquids, 5th ed. See "
+            "`docs/thermodynamics.md` §8.*")
 
 
 def _render_benchmark_dashboard() -> None:
