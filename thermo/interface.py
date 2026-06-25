@@ -1482,6 +1482,13 @@ def _goto_mode(mode: str) -> None:
     st.session_state["app_mode"] = mode
 
 
+def _reset_session() -> None:
+    """Clear all session state — active species, navigation, inputs, and the
+    run counter — back to defaults. Run as a button callback so widget-bound
+    keys can be cleared before the widgets are re-instantiated."""
+    st.session_state.clear()
+
+
 def _summary_card(title: str, description: str, stat: str, target_mode: str) -> None:
     with st.container(border=True):
         st.markdown(f"**{title}**")
@@ -1818,7 +1825,13 @@ def render() -> None:
             with tab_manage:
                 _manage_ui(registry)
         st.selectbox("Layout density", ["Comfortable", "Compact"], key="density")
+        st.divider()
+        st.button("↺  Reset session", key="reset_session", width="stretch",
+                  on_click=_reset_session,
+                  help="Clear active species, navigation, inputs, and the run counter "
+                       "back to defaults. Saved species in chemical_data.json are kept.")
 
+    st.session_state.setdefault("app_mode", APP_MODE_DASHBOARD)
     app_mode = st.session_state["app_mode"]
     _command_bar(app_mode, registry)
 
