@@ -51,6 +51,22 @@ APP_MODE_DISTILL = "Distillation"
 APP_MODE_PREDICT = "Property Prediction"
 APP_MODE_MOLVIZ = "Molecular Viewer"
 
+# Grouped navigation: (section, [(mode, glyph, short label)]).
+NAV_GROUPS = [
+    ("Workspace", [(APP_MODE_DASHBOARD, "▦", "Dashboard")]),
+    ("Analysis", [
+        (APP_MODE_LOOKUP, "≈", "Property Lookup"),
+        (APP_MODE_DIAGRAM, "△", "Phase Diagram"),
+        (APP_MODE_VALIDATION, "✓", "Model Validation"),
+        (APP_MODE_DISTILL, "≣", "Distillation"),
+    ]),
+    ("Modeling", [
+        (APP_MODE_FLASH, "◑", "VLE Flash"),
+        (APP_MODE_PREDICT, "ƒ", "Property Prediction"),
+        (APP_MODE_MOLVIZ, "⬡", "Molecular Viewer"),
+    ]),
+]
+
 _BADGE_COLOR = {
     "Excellent": "#34D399", "Good": "#38BDF8", "Fair": "#F6A93B", "Poor": "#F87171",
 }
@@ -189,6 +205,39 @@ hr{ border-color:var(--border); }
 .tpc-statusbar .ph-two{ background:var(--two); }
 .tpc-statusbar .ph-vap{ background:var(--vapor); }
 .tpc-ok i{ background:var(--two); margin-left:0; }
+/* --- Grouped scientific navigation --- */
+.nav-brand{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.02rem;
+  color:#f1f4f9; letter-spacing:0.06em; padding:0.1rem 0.2rem 0.6rem; }
+.nav-brand small{ display:block; font-family:'IBM Plex Mono',monospace; font-weight:400;
+  font-size:0.62rem; letter-spacing:0.22em; color:var(--muted); margin-top:0.15rem; }
+.nav-group{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
+  letter-spacing:0.2em; font-size:0.66rem; color:var(--muted); margin:0.9rem 0.2rem 0.25rem; }
+[data-testid="stSidebar"] .stButton>button{ justify-content:flex-start; text-align:left;
+  border:1px solid transparent; background:transparent; color:var(--muted);
+  font-weight:500; padding:0.34rem 0.6rem; border-radius:7px; box-shadow:none; }
+[data-testid="stSidebar"] .stButton>button:hover{ background:var(--raised); color:var(--text);
+  border-color:transparent; transform:none; }
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"]{
+  background:color-mix(in srgb, var(--primary) 16%, transparent) !important;
+  color:#eef2f7 !important; border:1px solid color-mix(in srgb, var(--primary) 45%, transparent) !important;
+  border-left:3px solid var(--primary) !important; font-weight:600; }
+/* --- Workstation panels & research metadata --- */
+.tpc-ptitle{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem;
+  font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.96rem; color:#eef2f7;
+  padding:0.45rem 0.7rem; background:var(--panel-head); border:1px solid var(--border);
+  border-left:3px solid var(--primary); border-radius:8px; margin:0.2rem 0 0.6rem; }
+.tpc-ptitle .tag{ font-family:'IBM Plex Mono',monospace; font-size:0.66rem; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); }
+.tpc-note{ font-size:0.82rem; color:var(--muted); line-height:1.5; }
+.tpc-note b{ color:var(--text); }
+.tpc-meta{ display:grid; grid-template-columns:auto 1fr; gap:0.3rem 0.9rem; font-size:0.84rem; }
+.tpc-meta .k{ color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+.tpc-meta .v{ color:var(--text); }
+/* KPI strip in the command bar */
+.tpc-kpis{ display:flex; flex-wrap:wrap; gap:1.1rem; font-family:'IBM Plex Mono',monospace;
+  font-size:0.74rem; color:var(--muted); }
+.tpc-kpis .kpi b{ color:#eef2f7; font-size:0.92rem; font-weight:600; }
+.tpc-kpis .kpi span{ display:block; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; }
 """
 
 # Extra overrides injected only when the user picks the Compact density.
@@ -551,22 +600,82 @@ def _molecular_viewer_mode(registry: dict[str, ChemicalSpecies]) -> None:
         p[3].metric("Acentric factor ω", f"{est.omega:.3f}")
 
 
+_PUB_FONT = "IBM Plex Sans, system-ui, sans-serif"
+_PUB_MONO = "IBM Plex Mono, monospace"
+
+
+def _sidebar_nav() -> None:
+    """Grouped scientific navigation with a strong active state."""
+    current = st.session_state.get("app_mode", APP_MODE_DASHBOARD)
+    for group, items in NAV_GROUPS:
+        st.markdown(f'<div class="nav-group">{group}</div>', unsafe_allow_html=True)
+        for mode, glyph, label in items:
+            st.button(f"{glyph}  {label}", key=f"nav_{mode}", width="stretch",
+                      on_click=_goto_mode, args=(mode,),
+                      type="primary" if mode == current else "tertiary")
+
+
+def _panel_title(title: str, tag: str = "") -> None:
+    """Render a workstation-style panel header bar."""
+    tag_html = f'<span class="tag">{tag}</span>' if tag else ""
+    st.markdown(f'<div class="tpc-ptitle"><span>{title}</span>{tag_html}</div>',
+                unsafe_allow_html=True)
+
+
+def _pub_layout(fig, *, title: str = "", xtitle: str = "", ytitle: str = "",
+                height: int = 560, legend: str = "bottom", x_range=None, y_range=None,
+                square: bool = False, log_y: bool = False):
+    """Apply a consistent publication-quality layout to a Plotly figure."""
+    fig.update_layout(
+        template=None, height=height, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#222831",
+        font=dict(family=_PUB_FONT, color="#c7cdd6", size=13),
+        title=dict(text=title, font=dict(family="Space Grotesk, sans-serif", size=15,
+                   color="#eef2f7"), x=0.01, xanchor="left", y=0.98),
+        margin=dict(l=74, r=28, t=44 if title else 16,
+                    b=86 if legend == "bottom" else 56),
+        hoverlabel=dict(font_family=_PUB_MONO, bgcolor="#1d2229", bordercolor="#363d47"),
+    )
+    if legend == "bottom":
+        fig.update_layout(legend=dict(orientation="h", yanchor="top", y=-0.16, x=0.5,
+            xanchor="center", font=dict(family=_PUB_MONO, size=11), bgcolor="rgba(0,0,0,0)"))
+    elif legend == "topright":
+        fig.update_layout(legend=dict(orientation="v", yanchor="top", y=0.99, x=0.985,
+            xanchor="right", font=dict(family=_PUB_MONO, size=11),
+            bgcolor="rgba(29,34,41,0.88)", bordercolor="#363d47", borderwidth=1))
+    elif legend == "none":
+        fig.update_layout(showlegend=False)
+    axis = dict(gridcolor="#333b45", griddash="dot", zeroline=False, showline=True,
+                linecolor="#4a525e", linewidth=1, ticks="outside", tickcolor="#4a525e",
+                ticklen=5, tickfont=dict(family=_PUB_MONO, size=11), mirror=True,
+                minor=dict(showgrid=True, gridcolor="#272d36", griddash="dot"))
+    fig.update_xaxes(title=dict(text=xtitle, font=dict(size=13)), range=x_range, **axis)
+    y_axis = dict(axis)
+    if log_y:
+        y_axis.update(type="log", exponentformat="power")
+    fig.update_yaxes(title=dict(text=ytitle, font=dict(size=13)), range=y_range, **y_axis)
+    if square:
+        fig.update_xaxes(scaleanchor="y", scaleratio=1)
+    return fig
+
+
 def _command_bar(app_mode: str, registry: dict[str, ChemicalSpecies]) -> None:
-    """Sticky terminal-style header: app, active module, live stats, status light."""
+    """Top status bar: platform, active module, and live research KPIs."""
     n_calc = st.session_state.get("sim_count", 0)
     st.markdown(
         f"""
 <div class="tpc-cmdbar">
   <div class="tpc-cmd-left">
-    <span class="tpc-logo">🧪 VLE CONSOLE</span>
+    <span class="tpc-logo">⬡ VLE&nbsp;PLATFORM</span>
     <span class="tpc-sep">/</span>
     <span class="tpc-module">{app_mode}</span>
   </div>
-  <div class="tpc-cmd-right">
-    <span><b>{len(registry)}</b> species</span>
-    <span><b>{len(tmodels.MODEL_NAMES)}</b> models</span>
-    <span><b>{n_calc}</b> calcs</span>
-    <span class="tpc-online"><i></i>online</span>
+  <div class="tpc-kpis">
+    <span class="kpi"><b>{len(registry)}</b><span>species</span></span>
+    <span class="kpi"><b>{len(tmodels.MODEL_NAMES)}</b><span>models</span></span>
+    <span class="kpi"><b>{len(validation.DATASETS)}</b><span>datasets</span></span>
+    <span class="kpi"><b>{len(predict.LIBRARY)}</b><span>ref mols</span></span>
+    <span class="kpi"><b>{n_calc}</b><span>runs</span></span>
+    <span class="tpc-online"><i></i>engine ready</span>
   </div>
 </div>
 """,
@@ -897,9 +1006,8 @@ def _phase_diagram_mode(registry: dict[str, ChemicalSpecies]) -> None:
             cval = st.number_input("Temperature", value=78.0, step=1.0, key="dia_T")
             tunit = st.selectbox("Temperature unit", SUPPORTED_TEMPERATURE_UNITS, 0, key="dia_Tu2")
             cunit = st.selectbox("Pressure unit", SUPPORTED_PRESSURE_UNITS, 0, key="dia_Pu2")
-        npts = st.slider("Resolution (points)", 41, 201, 101, step=20, key="dia_n")
-        template = st.radio("Style", ["Console (dark)", "Publication (light)"], key="dia_style")
-        img_fmt = st.selectbox("📷 export format", ["png", "svg"], 0, key="dia_img")
+        npts = st.slider("Resolution (points)", 41, 201, 121, step=20, key="dia_n")
+        img_fmt = st.selectbox("Image export format", ["png", "svg"], 0, key="dia_img")
 
     if len(active) < 2:
         st.info("Select at least two active species in the sidebar to build a diagram.")
@@ -926,90 +1034,105 @@ def _phase_diagram_mode(registry: dict[str, ChemicalSpecies]) -> None:
     if notice:
         st.warning(notice)
     _record_calc("diagram")
-    _render_phase_diagram(df, sp1, sp2, model, use_model, template, img_fmt,
+    _render_phase_diagram(df, sp1, sp2, model, use_model, img_fmt,
                           is_txy, cval, cunit, tunit)
 
 
-def _render_phase_diagram(df, sp1, sp2, model, model_name, template, img_fmt,
+def _meta_table(rows: list[tuple[str, str]]) -> None:
+    body = "".join(f'<span class="k">{k}</span><span class="v">{v}</span>' for k, v in rows)
+    st.markdown(f'<div class="tpc-meta">{body}</div>', unsafe_allow_html=True)
+
+
+def _render_phase_diagram(df, sp1, sp2, model, model_name, img_fmt,
                           is_txy, cval, cunit, tunit) -> None:
-    dark = template.startswith("Console")
-    pal = {
-        "liquid": "#38BDF8", "vapor": "#F6A93B", "two": "#34D399",
-        "grid": "#273656" if dark else "#D7DEE9",
-        "plot": "rgba(21,32,58,0.55)" if dark else "#FFFFFF",
-        "text": "#E7EDF7" if dark else "#15202B",
-    }
+    LIQ, VAP, TWO = _LIQUID, _VAPOR, _TWO_PHASE
     ykey = "T" if is_txy else "P"
     yunit = tunit if is_txy else cunit
     ylabel = f"Temperature ({yunit})" if is_txy else f"Pressure ({yunit})"
     cond = f"{cval:g} {cunit}" if is_txy else f"{cval:g} {tunit}"
     kind = "T–x–y" if is_txy else "P–x–y"
-    title = f"{kind}  ·  {sp1.name} (1) / {sp2.name} (2)  ·  {model_name}  ·  {cond}"
-
     x1, y1, yv = df["x1"].to_numpy(), df["y1"].to_numpy(), df[ykey].to_numpy()
-
-    st.subheader(f"{kind} diagram — {sp1.name} / {sp2.name}")
-    st.caption(f"{model_name} · {model.provenance}")
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=np.concatenate([x1, y1[::-1]]), y=np.concatenate([yv, yv[::-1]]),
-        fill="toself", fillcolor=_rgba(pal["two"], 0.12), line=dict(width=0),
-        hoverinfo="skip", name="Two-phase region"))
-    fig.add_trace(go.Scatter(x=x1, y=yv, mode="lines", name="Bubble (liquid)",
-                             line=dict(color=pal["liquid"], width=2.6)))
-    fig.add_trace(go.Scatter(x=y1, y=yv, mode="lines", name="Dew (vapor)",
-                             line=dict(color=pal["vapor"], width=2.6)))
     az = _find_azeotrope(x1, y1, yv)
-    if az:
-        fig.add_trace(go.Scatter(
-            x=[az[0]], y=[az[1]], mode="markers+text", text=["azeotrope"],
-            textposition="top center", name="Azeotrope",
-            marker=dict(color=pal["two"], size=11, symbol="diamond",
-                        line=dict(color=pal["text"], width=1))))
-    fig.update_layout(
-        title=dict(text=title, font=dict(size=15)),
-        xaxis_title=f"x₁, y₁  (mole fraction {sp1.name})", yaxis_title=ylabel,
-        height=500, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor=pal["plot"], font=dict(family="IBM Plex Sans, sans-serif",
-                                            color=pal["text"], size=13),
-        legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
-        margin=dict(l=70, r=30, t=60, b=96),
-        xaxis=dict(range=[0, 1], gridcolor=pal["grid"], zeroline=False),
-        yaxis=dict(gridcolor=pal["grid"], zeroline=False),
-    )
-    st.plotly_chart(fig, width="stretch", theme=None,
-                    config=_plotly_config(img_fmt, f"{kind}_{sp1.key}_{sp2.key}"))
 
-    # x–y equilibrium diagram (the McCabe–Thiele precursor)
+    _panel_title(f"{kind} phase diagram — {sp1.name} (1) / {sp2.name} (2)",
+                 tag=f"{model_name} · {cond}")
+
+    main, side = st.columns([3, 1.2], gap="large")
+    with main:
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=np.concatenate([x1, y1[::-1]]), y=np.concatenate([yv, yv[::-1]]),
+            fill="toself", fillcolor=_rgba(TWO, 0.10), line=dict(width=0),
+            hoverinfo="skip", name="Two-phase region"))
+        fig.add_trace(go.Scatter(x=x1, y=yv, mode="lines", name="Bubble (liquid)",
+                                 line=dict(color=LIQ, width=3.2)))
+        fig.add_trace(go.Scatter(x=y1, y=yv, mode="lines", name="Dew (vapor)",
+                                 line=dict(color=VAP, width=3.2)))
+        fig.add_trace(go.Scatter(
+            x=[0.0, 1.0], y=[yv[0], yv[-1]], mode="markers", name="Pure components",
+            marker=dict(color="#cfd6df", size=8, symbol="circle-open", line=dict(width=2)),
+            hoverinfo="skip"))
+        if az:
+            fig.add_trace(go.Scatter(
+                x=[az[0]], y=[az[1]], mode="markers", name="Azeotrope",
+                marker=dict(color=TWO, size=13, symbol="diamond",
+                            line=dict(color="#eef2f7", width=1.4))))
+            fig.add_annotation(x=az[0], y=az[1], text=f"azeotrope  x₁={az[0]:.3f}",
+                               showarrow=True, arrowhead=2, arrowcolor=TWO, ax=36, ay=-36,
+                               font=dict(family=_PUB_MONO, size=10, color="#eef2f7"),
+                               bgcolor="rgba(29,34,41,0.92)", bordercolor=TWO, borderwidth=1)
+        _pub_layout(fig, xtitle=f"x₁, y₁  —  mole fraction {sp1.name}", ytitle=ylabel,
+                    height=640, legend="bottom", x_range=[0, 1])
+        st.plotly_chart(fig, width="stretch", theme=None,
+                        config=_plotly_config(img_fmt, f"{kind}_{sp1.key}_{sp2.key}"))
+
+    with side:
+        with st.container(border=True):
+            _panel_title("Equilibrium analysis")
+            rows = [("Component 1", sp1.name), ("Component 2", sp2.name),
+                    ("Activity model", model_name), ("Condition", cond),
+                    (f"Pure-1 {ykey}", f"{yv[-1]:.2f} {yunit}"),
+                    (f"Pure-2 {ykey}", f"{yv[0]:.2f} {yunit}")]
+            rows += ([("Azeotrope x₁", f"{az[0]:.3f}"),
+                      (f"Azeotrope {ykey}", f"{az[1]:.2f} {yunit}")]
+                     if az else [("Azeotrope", "none (zeotropic)")])
+            _meta_table(rows)
+        with st.container(border=True):
+            _panel_title("Model provenance")
+            st.caption(model.provenance)
+            st.json(model.activity.describe())
+        with st.container(border=True):
+            _panel_title("Export")
+            st.download_button("Tabulated data (CSV)", df.to_csv(index=False).encode(),
+                               file_name=f"{kind}_{sp1.key}_{sp2.key}.csv", mime="text/csv",
+                               width="stretch")
+            st.caption(f"Chart camera → {img_fmt.upper()}; modebar zoom/pan enabled.")
+
+    _panel_title(f"x–y equilibrium — {sp1.name} (1)", tag="McCabe–Thiele basis")
     fig2 = go.Figure()
-    fig2.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
-                              line=dict(color=pal["grid"], dash="dash", width=1.5)))
-    fig2.add_trace(go.Scatter(x=x1, y=y1, mode="lines", name="equilibrium",
-                              line=dict(color=pal["two"], width=2.6)))
-    fig2.update_layout(
-        title=dict(text=f"x–y equilibrium · {sp1.name} (1)", font=dict(size=14)),
-        xaxis_title=f"x₁ (liquid)", yaxis_title="y₁ (vapor)", height=420,
-        template=None, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor=pal["plot"],
-        font=dict(family="IBM Plex Sans, sans-serif", color=pal["text"], size=13),
-        showlegend=False, margin=dict(l=60, r=30, t=60, b=60),
-        xaxis=dict(range=[0, 1], gridcolor=pal["grid"], zeroline=False,
-                   scaleanchor="y", scaleratio=1),
-        yaxis=dict(range=[0, 1], gridcolor=pal["grid"], zeroline=False),
-    )
+    fig2.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x (diagonal)",
+                              line=dict(color="#5b6470", dash="dash", width=1.6)))
+    fig2.add_trace(go.Scatter(x=x1, y=y1, mode="lines", name="Equilibrium curve",
+                              line=dict(color=TWO, width=3.2)))
+    if az:
+        fig2.add_trace(go.Scatter(x=[az[0]], y=[az[0]], mode="markers", name="Azeotrope",
+                       marker=dict(color=TWO, size=12, symbol="diamond",
+                                   line=dict(color="#eef2f7", width=1.3))))
+    _pub_layout(fig2, xtitle="x₁ (liquid mole fraction)", ytitle="y₁ (vapor mole fraction)",
+                height=470, legend="topright", x_range=[0, 1], y_range=[0, 1], square=True)
     st.plotly_chart(fig2, width="stretch", theme=None,
                     config=_plotly_config(img_fmt, f"xy_{sp1.key}_{sp2.key}"))
 
-    col1, col2 = st.columns([1, 2])
-    col1.download_button("⬇ Download CSV", df.to_csv(index=False).encode(),
-                         file_name=f"{kind}_{sp1.key}_{sp2.key}.csv", mime="text/csv")
-    col2.caption("Zoom/pan with the modebar; the 📷 button exports the chart as "
-                 f"{img_fmt.upper()}. CSV holds the tabulated x₁, y₁, {ykey}.")
-    if az:
-        st.caption(f"Azeotrope detected at x₁ ≈ {az[0]:.3f}, {ykey} ≈ {az[1]:.2f} {yunit}.")
-    with st.expander("Model parameters & provenance"):
-        st.json(model.activity.describe())
-        st.caption(model.provenance)
+    with st.expander("Assumptions & governing equations"):
+        st.markdown(
+            "- **Closure:** modified Raoult's law, yᵢP = xᵢγᵢ(x,T)Pᵢˢᵃᵗ(T) — ideal vapor, "
+            "real liquid.\n"
+            "- **Saturation pressure** from the Antoine equation; **activity coefficients** "
+            f"from the {model_name} model.\n"
+            "- **Bubble line:** P or T where the first vapor bubble forms; **dew line:** "
+            "where the first liquid drop forms.\n"
+            "- Valid at low-to-moderate pressure, away from the critical region. See "
+            "`docs/thermodynamics.md` for full derivations and parameter sources.")
 
 
 def _badge(title: str, label: str) -> str:
@@ -1113,29 +1236,34 @@ def _render_validation_system(res: "validation.ValidationResult") -> None:
     })
     st.dataframe(table, hide_index=True, width="stretch")
 
-    # x–y fit: experimental points vs. predicted curve
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
-                             line=dict(color="#475569", dash="dash", width=1.2)))
-    fig.add_trace(go.Scatter(x=res.x1, y=res.y1_pred, mode="lines",
-                             name=f"{res.model_name} (predicted)",
-                             line=dict(color="#34D399", width=2.4)))
-    fig.add_trace(go.Scatter(x=res.x1, y=res.y1_exp, mode="markers", name="experimental",
-                             marker=dict(color="#F6A93B", size=8, symbol="circle-open",
-                                         line=dict(width=2))))
-    fig.update_layout(
-        height=380, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#242a32",
-        font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=12),
-        xaxis_title="x₁ (liquid)", yaxis_title="y₁ (vapor)",
-        legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
-        margin=dict(l=60, r=30, t=20, b=80),
-        xaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False,
-                   scaleanchor="y", scaleratio=1),
-        yaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False),
-    )
-    st.plotly_chart(fig, width="stretch", theme=None,
-                    config=_plotly_config("png", f"validation_{ds.comp1_key}_{ds.comp2_key}"))
+    fit_col, res_col = st.columns([1.25, 1], gap="large")
+    with fit_col:
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
+                                 line=dict(color="#5b6470", dash="dash", width=1.6)))
+        fig.add_trace(go.Scatter(x=res.x1, y=res.y1_pred, mode="lines",
+                                 name=f"{res.model_name} predicted",
+                                 line=dict(color=_TWO_PHASE, width=3.0)))
+        fig.add_trace(go.Scatter(x=res.x1, y=res.y1_exp, mode="markers", name="experimental",
+                                 marker=dict(color=_VAPOR, size=9, symbol="circle-open",
+                                             line=dict(width=2))))
+        _pub_layout(fig, title="x–y fit", xtitle="x₁ (liquid)", ytitle="y₁ (vapor)",
+                    height=440, legend="topright", x_range=[0, 1], y_range=[0, 1], square=True)
+        st.plotly_chart(fig, width="stretch", theme=None,
+                        config=_plotly_config("png", f"validation_{ds.comp1_key}_{ds.comp2_key}"))
+    with res_col:
+        residual = res.y1_pred - res.y1_exp
+        rfig = go.Figure()
+        rfig.add_trace(go.Scatter(x=[0, 1], y=[0, 0], mode="lines", showlegend=False,
+                                  line=dict(color="#5b6470", width=1.4)))
+        rfig.add_trace(go.Scatter(x=res.x1, y=residual, mode="markers", showlegend=False,
+                                  marker=dict(color=_LIQUID, size=8,
+                                              line=dict(color="#0d1117", width=1))))
+        lim = float(max(0.03, np.nanmax(np.abs(residual)) * 1.25))
+        _pub_layout(rfig, title="Residuals  (y₁ pred − exp)", xtitle="x₁ (liquid)",
+                    ytitle="Δy₁", height=440, legend="none", x_range=[0, 1], y_range=[-lim, lim])
+        st.plotly_chart(rfig, width="stretch", theme=None,
+                        config=_plotly_config("png", f"residual_{ds.comp1_key}_{ds.comp2_key}"))
 
 
 _Q_PRESETS = {
@@ -1192,68 +1320,74 @@ def _distillation_mode(registry: dict[str, ChemicalSpecies]) -> None:
 
 
 def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
-    st.subheader(f"McCabe–Thiele — {sp1.name} / {sp2.name}")
-    st.caption(f"{model_name} · {pressure:g} {punit} · feed z_F = {res.z_F:g}, q = {res.q:g}")
-
+    _panel_title(f"Binary distillation column — {sp1.name} / {sp2.name}",
+                 tag=f"McCabe–Thiele · {model_name} · {pressure:g} {punit}")
     if not res.feasible:
         st.error(res.message)
 
-    m1, m2, m3, m4, m5 = st.columns(5)
-    m1.metric("Theoretical stages", f"{res.n_stages}" if res.feasible else "∞",
-              help="Includes the partial reboiler.")
-    m2.metric("Column trays", f"{res.n_trays}" if res.feasible else "—")
-    m3.metric("Feed stage", f"{res.feed_stage}" if res.feasible else "—")
-    m4.metric("R_min", f"{res.R_min:.3f}")
-    m5.metric("R / R_min", f"{res.reflux_ratio_to_min:.2f}")
+    main, side = st.columns([2.2, 1], gap="large")
+    with side:
+        with st.container(border=True):
+            _panel_title("Column performance")
+            _meta_table([
+                ("Theoretical stages", f"{res.n_stages}" if res.feasible else "∞ (pinch)"),
+                ("Column trays", f"{res.n_trays}" if res.feasible else "—"),
+                ("Optimal feed stage", f"{res.feed_stage}" if res.feasible else "—"),
+                ("Minimum reflux R_min", f"{res.R_min:.3f}"),
+                ("Operating reflux R", f"{res.R:g}"),
+                ("R / R_min", f"{res.reflux_ratio_to_min:.2f}"),
+            ])
+        with st.container(border=True):
+            _panel_title("Product specification")
+            _meta_table([
+                ("Feed z_F (light)", f"{res.z_F:.3f}"),
+                ("Feed quality q", f"{res.q:g}"),
+                ("Distillate x_D", f"{res.x_D:.3f}"),
+                ("Bottoms x_B", f"{res.x_B:.3f}"),
+                ("Distillate purity", f"{res.x_D * 100:.1f}% {sp1.name}"),
+                ("Bottoms purity", f"{(1 - res.x_B) * 100:.1f}% {sp2.name}"),
+            ])
+        n_show = res.n_stages if res.feasible else min(res.n_stages, 30)
+        k = (st.slider("Stages shown", 1, max(n_show, 1), max(n_show, 1), key="dist_show")
+             if n_show > 1 else 1)
 
-    # Stage-stepping slider (interactive).
-    n_show = res.n_stages if res.feasible else min(res.n_stages, 30)
-    k = st.slider("Show stages", 1, max(n_show, 1), max(n_show, 1), key="dist_show") \
-        if n_show > 1 else 1
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
-                             line=dict(color="#475569", dash="dash", width=1.2)))
-    fig.add_trace(go.Scatter(x=res.x_eq, y=res.y_eq, mode="lines", name="Equilibrium",
-                             line=dict(color="#34D399", width=2.6)))
-    # operating lines
-    xi, yi = res.intersection
-    fig.add_trace(go.Scatter(x=[res.x_D, xi], y=[res.x_D, yi], mode="lines",
-                             name="Rectifying (ROL)", line=dict(color="#38BDF8", width=2.2)))
-    fig.add_trace(go.Scatter(x=[xi, res.x_B], y=[yi, res.x_B], mode="lines",
-                             name="Stripping (SOL)", line=dict(color="#F6A93B", width=2.2)))
-    fig.add_trace(go.Scatter(x=[res.z_F, xi], y=[res.z_F, yi], mode="lines",
-                             name="q-line", line=dict(color="#C792EA", width=1.8, dash="dot")))
-    # staircase up to k stages (each stage = 2 segments after the start point)
-    stair = res.steps[: 2 * k + 1]
-    sx = [p[0] for p in stair]
-    sy = [p[1] for p in stair]
-    fig.add_trace(go.Scatter(x=sx, y=sy, mode="lines", name="Stages",
-                             line=dict(color="#d7dce3", width=1.4)))
-    # spec points
-    fig.add_trace(go.Scatter(
-        x=[res.x_B, res.z_F, res.x_D], y=[res.x_B, res.z_F, res.x_D],
-        mode="markers+text", text=["x_B", "z_F", "x_D"], textposition="bottom right",
-        marker=dict(color="#38BDF8", size=8), name="specs", showlegend=False))
-    # feed-stage marker
-    if res.feasible and 1 <= res.feed_stage <= len(res.stage_corners):
-        fx, fy = res.stage_corners[res.feed_stage - 1]
-        fig.add_trace(go.Scatter(x=[fx], y=[fy], mode="markers", name="Feed stage",
-                                 marker=dict(color="#F6A93B", size=13, symbol="diamond",
-                                             line=dict(color="#d7dce3", width=1))))
-    fig.update_layout(
-        height=560, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#242a32",
-        font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=12),
-        xaxis_title=f"x (liquid, {sp1.name})", yaxis_title=f"y (vapor, {sp1.name})",
-        legend=dict(orientation="h", yanchor="top", y=-0.13, x=0.5, xanchor="center"),
-        margin=dict(l=60, r=30, t=20, b=80),
-        xaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False,
-                   scaleanchor="y", scaleratio=1),
-        yaxis=dict(range=[0, 1], gridcolor="#363d47", zeroline=False),
-    )
-    st.plotly_chart(fig, width="stretch", theme=None,
-                    config=_plotly_config("png", f"mccabe_thiele_{sp1.key}_{sp2.key}"))
+    with main:
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x (diagonal)",
+                                 line=dict(color="#5b6470", dash="dash", width=1.6)))
+        fig.add_trace(go.Scatter(x=res.x_eq, y=res.y_eq, mode="lines", name="Equilibrium",
+                                 line=dict(color=_TWO_PHASE, width=3.2)))
+        xi, yi = res.intersection
+        fig.add_trace(go.Scatter(x=[res.x_D, xi], y=[res.x_D, yi], mode="lines",
+                                 name="Rectifying line", line=dict(color=_LIQUID, width=2.8)))
+        fig.add_trace(go.Scatter(x=[xi, res.x_B], y=[yi, res.x_B], mode="lines",
+                                 name="Stripping line", line=dict(color=_VAPOR, width=2.8)))
+        fig.add_trace(go.Scatter(x=[res.z_F, xi], y=[res.z_F, yi], mode="lines",
+                                 name="q-line", line=dict(color="#C792EA", width=2.0, dash="dot")))
+        stair = res.steps[: 2 * k + 1]
+        fig.add_trace(go.Scatter(x=[p[0] for p in stair], y=[p[1] for p in stair],
+                                 mode="lines", name="Equilibrium stages",
+                                 line=dict(color="#e3e8ef", width=1.6)))
+        fig.add_trace(go.Scatter(
+            x=[res.x_B, res.z_F, res.x_D], y=[res.x_B, res.z_F, res.x_D],
+            mode="markers+text", text=["x_B", "z_F", "x_D"], textposition="top left",
+            textfont=dict(family=_PUB_MONO, size=11, color="#cfd6df"),
+            marker=dict(color=_LIQUID, size=9, line=dict(color="#0d1117", width=1)),
+            name="Specs", showlegend=False))
+        if res.feasible and 1 <= res.feed_stage <= len(res.stage_corners):
+            fx, fy = res.stage_corners[res.feed_stage - 1]
+            fig.add_trace(go.Scatter(x=[fx], y=[fy], mode="markers", name="Feed stage",
+                                     marker=dict(color=_VAPOR, size=14, symbol="diamond",
+                                                 line=dict(color="#eef2f7", width=1.4))))
+            fig.add_annotation(x=fx, y=fy, text=f"feed · stage {res.feed_stage}",
+                               showarrow=True, arrowhead=2, arrowcolor=_VAPOR, ax=40, ay=20,
+                               font=dict(family=_PUB_MONO, size=10, color="#eef2f7"),
+                               bgcolor="rgba(29,34,41,0.92)", bordercolor=_VAPOR, borderwidth=1)
+        _pub_layout(fig, xtitle=f"x — liquid mole fraction {sp1.name}",
+                    ytitle=f"y — vapor mole fraction {sp1.name}", height=660,
+                    legend="bottom", x_range=[0, 1], y_range=[0, 1], square=True)
+        st.plotly_chart(fig, width="stretch", theme=None,
+                        config=_plotly_config("png", f"mccabe_thiele_{sp1.key}_{sp2.key}"))
 
     a = res.R / (res.R + 1.0)
     b = res.x_D / (res.R + 1.0)
@@ -1300,7 +1434,7 @@ def _record_calc(kind: str) -> None:
 def _dashboard_metrics(data_path: str) -> dict:
     """Compute headline accuracy KPIs once (cached; static reference data)."""
     registry = load_species(data_path)
-    out = {"vle_mae": None, "joback_tb_mape": None}
+    out = {"vle_mae": None, "joback_tb_mape": None, "val_rows": []}
     try:
         maes = []
         for ds in validation.DATASETS:
@@ -1311,6 +1445,10 @@ def _dashboard_metrics(data_path: str) -> dict:
                 tmodels.NRTLModel.name, sp1, sp2) else tmodels.IdealModel.name
             res = validation.validate(tmodels.build_model(name, sp1, sp2), ds)
             maes.append(res.y1_metrics["MAE"])
+            out["val_rows"].append({
+                "System": ds.system, "Best model": name,
+                "y₁ MAE": round(res.y1_metrics["MAE"], 4),
+                "T MAE (°C)": round(res.T_metrics["MAE"], 2), "Rating": res.y1_badge})
         if maes:
             out["vle_mae"] = float(np.mean(maes))
     except Exception:  # noqa: BLE001 - the dashboard must never crash
@@ -1377,7 +1515,36 @@ def _dashboard_mode(registry: dict[str, ChemicalSpecies]) -> None:
         st.caption("**Active species:** none selected — pick species in the sidebar to "
                    "drive the VLE tools.")
 
-    st.markdown('<div class="tpc-section">Modules</div>', unsafe_allow_html=True)
+    st.markdown('<div class="tpc-section">Research overview</div>', unsafe_allow_html=True)
+    ov1, ov2 = st.columns(2, gap="large")
+    with ov1:
+        with st.container(border=True):
+            _panel_title("Thermodynamic model inventory")
+            inventory = pd.DataFrame([
+                {"Model": "Ideal (Raoult)", "Type": "Reference (γ = 1)",
+                 "Parameters": "none", "Status": "ready"},
+                {"Model": "Wilson", "Type": "Activity coefficient",
+                 "Parameters": "a₁₂, a₂₁ + Vᵢ", "Status": "ready"},
+                {"Model": "NRTL", "Type": "Activity coefficient",
+                 "Parameters": "a₁₂, a₂₁, α", "Status": "ready"},
+                {"Model": "UNIQUAC", "Type": "Activity coefficient",
+                 "Parameters": "a₁₂, a₂₁ + r, q", "Status": "ready"},
+            ])
+            st.dataframe(inventory, hide_index=True, width="stretch")
+            st.caption("γ–φ closure (modified Raoult). EOS models can be added to the "
+                       "same `ActivityModel` interface.")
+    with ov2:
+        with st.container(border=True):
+            _panel_title("Validation accuracy", tag="vs. literature VLE")
+            if metrics["val_rows"]:
+                st.dataframe(pd.DataFrame(metrics["val_rows"]), hide_index=True, width="stretch")
+                st.caption("Best activity model per system; parameters fitted only to the "
+                           "azeotrope, so matching the full curve is genuine validation.")
+            else:
+                st.caption("Validation unavailable (missing reference species).")
+
+    st.markdown('<div class="tpc-section">Simulation capabilities</div>',
+                unsafe_allow_html=True)
     row1 = st.columns(3)
     with row1[0]:
         _summary_card("Property Lookup",
@@ -1500,26 +1667,19 @@ def _render_property_estimate(est, reference, registry, t_unit) -> None:
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=t_disp, y=psat, mode="lines",
                              name="Joback + Lee–Kesler",
-                             line=dict(color="#38BDF8", width=2.6)))
+                             line=dict(color=_LIQUID, width=3.0)))
     match = next((s for s in registry.values() if s.name.lower() == est.name.lower()), None)
     if match is not None:
         psat_antoine = engine.vapor_pressure_curve(match.antoine, t_grid,
                                                    temp_unit="Kelvin", pressure_unit="mmHg")
         fig.add_trace(go.Scatter(x=t_disp, y=psat_antoine, mode="lines",
                                  name="Antoine (measured fit)",
-                                 line=dict(color="#F6A93B", width=2.2, dash="dot")))
-    fig.update_layout(
-        height=380, template=None, paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#242a32",
-        font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=12),
-        xaxis_title=f"Temperature ({t_unit})", yaxis_title="Vapor pressure (mmHg)",
-        legend=dict(orientation="h", yanchor="top", y=-0.18, x=0.5, xanchor="center"),
-        margin=dict(l=70, r=30, t=20, b=80),
-        xaxis=dict(gridcolor="#363d47", zeroline=False),
-        yaxis=dict(gridcolor="#363d47", zeroline=False),
-    )
-    st.caption("Estimated vapor-pressure curve"
-               + (" (orange: independent Antoine fit for cross-check)" if match else ""))
+                                 line=dict(color=_VAPOR, width=2.4, dash="dot")))
+    _pub_layout(fig, title="Vapor-pressure curve", xtitle=f"Temperature ({t_unit})",
+                ytitle="Vapor pressure (mmHg)", height=420, legend="topright")
+    st.caption("Estimated by corresponding states"
+               + (" — orange is the independent Antoine fit (cross-check)." if match
+                  else " (no measured Antoine fit in the database for this molecule)."))
     st.plotly_chart(fig, width="stretch", theme=None,
                     config=_plotly_config("png", f"psat_{est.formula}"))
 
@@ -1545,23 +1705,19 @@ def _render_benchmark_dashboard() -> None:
         exp = [r[f"{prop} exp ({unit})"] for r in rows]
         pred_v = [r[f"{prop} pred ({unit})"] for r in rows]
         lo, hi = min(exp + pred_v), max(exp + pred_v)
+        pad = (hi - lo) * 0.06 or 1.0
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=[lo, hi], y=[lo, hi], mode="lines",
-                                 line=dict(color="#475569", dash="dash", width=1.2),
+        fig.add_trace(go.Scatter(x=[lo - pad, hi + pad], y=[lo - pad, hi + pad], mode="lines",
+                                 line=dict(color="#5b6470", dash="dash", width=1.6),
                                  showlegend=False))
         fig.add_trace(go.Scatter(x=exp, y=pred_v, mode="markers",
-                                 marker=dict(color="#34D399", size=8), showlegend=False,
-                                 text=[r["Molecule"] for r in rows]))
-        fig.update_layout(
-            title=dict(text=f"{prop} ({unit})", font=dict(size=13)),
-            height=300, template=None, paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="#242a32",
-            font=dict(family="IBM Plex Sans, sans-serif", color="#d7dce3", size=11),
-            xaxis_title="experimental", yaxis_title="predicted",
-            margin=dict(l=50, r=20, t=40, b=45),
-            xaxis=dict(gridcolor="#363d47", zeroline=False),
-            yaxis=dict(gridcolor="#363d47", zeroline=False),
-        )
+                                 marker=dict(color=_TWO_PHASE, size=9,
+                                             line=dict(color="#0d1117", width=1)),
+                                 showlegend=False, text=[r["Molecule"] for r in rows],
+                                 hovertemplate="%{text}<br>exp %{x:.1f}<br>pred %{y:.1f}<extra></extra>"))
+        _pub_layout(fig, title=f"{prop} ({unit})", xtitle="experimental", ytitle="predicted",
+                    height=340, legend="none",
+                    x_range=[lo - pad, hi + pad], y_range=[lo - pad, hi + pad], square=True)
         col.plotly_chart(fig, width="stretch", theme=None,
                          config=_plotly_config("png", f"parity_{prop}"))
 
@@ -1585,19 +1741,14 @@ def render() -> None:
         st.stop()
 
     _init_active_species(registry)
+    st.session_state.setdefault("app_mode", APP_MODE_DASHBOARD)
 
     with st.sidebar:
-        st.header("Mode")
-        app_mode = st.radio(
-            "Mode",
-            [APP_MODE_DASHBOARD, APP_MODE_LOOKUP, APP_MODE_FLASH, APP_MODE_DIAGRAM,
-             APP_MODE_VALIDATION, APP_MODE_DISTILL, APP_MODE_PREDICT, APP_MODE_MOLVIZ],
-            key="app_mode",
-            label_visibility="collapsed",
-        )
-        st.selectbox("Layout density", ["Comfortable", "Compact"], key="density")
+        st.markdown('<div class="nav-brand">⬡ VLE PLATFORM<small>THERMODYNAMIC '
+                    'MODELING SUITE</small></div>', unsafe_allow_html=True)
+        _sidebar_nav()
         st.divider()
-        st.markdown("**Active species**")
+        st.markdown('<div class="nav-group">Active species</div>', unsafe_allow_html=True)
         st.multiselect(
             "Active species",
             options=list(registry.keys()),
@@ -1607,8 +1758,7 @@ def render() -> None:
             help="One selection drives Property Lookup, Flash, Phase Diagram, and "
                  "Distillation. Phase Diagram and Distillation use the first two.",
         )
-        st.divider()
-        with st.expander("➕ Add / manage species"):
+        with st.expander("Add / manage species"):
             tab_cat, tab_manual, tab_manage = st.tabs(["Catalog", "Manual", "Remove"])
             with tab_cat:
                 _add_from_catalog_ui(registry)
@@ -1616,8 +1766,9 @@ def render() -> None:
                 _manual_add_ui(registry)
             with tab_manage:
                 _manage_ui(registry)
-        st.divider()
+        st.selectbox("Layout density", ["Comfortable", "Compact"], key="density")
 
+    app_mode = st.session_state["app_mode"]
     _command_bar(app_mode, registry)
 
     if app_mode == APP_MODE_DASHBOARD:
