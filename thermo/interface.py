@@ -68,13 +68,14 @@ NAV_GROUPS = [
 ]
 
 _BADGE_COLOR = {
-    "Excellent": "#34D399", "Good": "#38BDF8", "Fair": "#F6A93B", "Poor": "#F87171",
+    "Excellent": "#047857", "Good": "#1D4ED8", "Fair": "#B45309", "Poor": "#B91C1C",
 }
 
 # The phase triad — colours encode physical state, reused everywhere.
-_LIQUID = "#38BDF8"
-_TWO_PHASE = "#34D399"
-_VAPOR = "#F6A93B"
+# Saturated, journal-style hues that read clearly on a light background.
+_LIQUID = "#2563EB"
+_TWO_PHASE = "#059669"
+_VAPOR = "#EA580C"
 _PHASE_COLOR = {
     flash.REGIME_SUBCOOLED: _LIQUID,
     flash.REGIME_TWO_PHASE: _TWO_PHASE,
@@ -82,162 +83,154 @@ _PHASE_COLOR = {
 }
 
 _THEME_CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap');
 :root{
-  --bg:#171b21; --panel:#242a32; --panel-head:#2b313b; --raised:#2e353f;
-  --border:#363d47; --text:#d7dce3; --muted:#838c99; --grid:#363d47;
-  --primary:#4a9eff; --liquid:#38BDF8; --two:#34D399; --vapor:#F6A93B;
+  --bg:#f4f6f9; --panel:#ffffff; --panel-head:#eef2f7; --raised:#f8fafc;
+  --border:#dbe1ea; --border-strong:#c4cdda; --text:#0f172a; --muted:#475569;
+  --grid:#e3e8ef; --primary:#1d4ed8; --primary-soft:#e8eefc;
+  --liquid:#2563EB; --two:#059669; --vapor:#EA580C; --warn:#b45309;
 }
-/* Type */
 html, body, .stApp, [data-testid="stAppViewContainer"]{
-  font-family:'IBM Plex Sans', system-ui, sans-serif; color:var(--text); }
+  font-family:'Fira Sans', system-ui, sans-serif; color:var(--text); }
 h1,h2,h3,h4,[data-testid="stHeading"]{
-  font-family:'Space Grotesk','IBM Plex Sans',sans-serif !important; letter-spacing:-0.01em; }
+  font-family:'Fira Sans',sans-serif !important; letter-spacing:-0.005em; color:var(--text); }
 [data-testid="stCaptionContainer"], .stCaption, small{
-  color:var(--muted) !important; font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em; }
-/* Flat neutral workspace ground */
+  color:var(--muted) !important; font-family:'Fira Sans', sans-serif; }
 .stApp{ background:var(--bg); }
 [data-testid="stHeader"]{ background:transparent; }
 .block-container{ padding-top:1.1rem !important; max-width:1320px; }
-/* Panels (st.container(border=True)) -> steamplot-style cards */
+/* Panels */
 [data-testid="stVerticalBlockBorderWrapper"]{
-  background:var(--panel); border:1px solid var(--border) !important; border-radius:10px; }
+  background:var(--panel); border:1px solid var(--border) !important; border-radius:8px; }
 /* Section headings -> panel header strips */
 [data-testid="stMain"] :is(h2,h3){
   background:var(--panel-head); border:1px solid var(--border);
-  border-left:3px solid var(--primary); border-radius:8px;
-  padding:0.42rem 0.8rem !important; margin:1.1rem 0 0.7rem !important; font-size:1.15rem !important; }
+  border-left:3px solid var(--primary); border-radius:6px;
+  padding:0.42rem 0.8rem !important; margin:1.1rem 0 0.7rem !important; font-size:1.12rem !important;
+  font-weight:600; }
 /* Hero (dashboard only) */
-.tpc-hero{ margin:0.2rem 0 1.4rem; animation:tpcRise .5s ease-out both; }
-.tpc-eyebrow{ font-family:'IBM Plex Mono', monospace; text-transform:uppercase;
-  letter-spacing:0.34em; font-size:0.72rem; color:var(--muted); margin-bottom:0.5rem; }
-.tpc-title{ font-family:'Space Grotesk',sans-serif; font-weight:600;
-  font-size:2.2rem; line-height:1.05; margin:0; color:#f1f4f9; }
-.tpc-sub{ color:var(--muted); font-size:1.0rem; margin:0.55rem 0 0.9rem; max-width:62ch; }
+.tpc-hero{ margin:0.2rem 0 1.4rem; }
+.tpc-eyebrow{ font-family:'Fira Sans',sans-serif; text-transform:uppercase; font-weight:600;
+  letter-spacing:0.12em; font-size:0.72rem; color:var(--primary); margin-bottom:0.45rem; }
+.tpc-title{ font-family:'Fira Sans',sans-serif; font-weight:700;
+  font-size:1.95rem; line-height:1.1; margin:0; color:var(--text); }
+.tpc-sub{ color:var(--muted); font-size:0.98rem; line-height:1.6; margin:0.5rem 0 0.85rem; max-width:64ch; }
 .tpc-sub b{ color:var(--text); font-weight:600; }
-.tpc-spine{ height:3px; width:100%; border-radius:3px;
-  background:linear-gradient(90deg,var(--liquid),var(--two) 52%,var(--vapor)); }
+.tpc-spine{ height:1px; width:100%; background:var(--border-strong); }
 .tpc-legend{ display:flex; gap:1.4rem; margin-top:0.7rem;
-  font-family:'IBM Plex Mono',monospace; font-size:0.76rem; color:var(--muted); }
+  font-family:'Fira Sans',sans-serif; font-size:0.78rem; color:var(--muted); }
 .tpc-legend span{ display:inline-flex; align-items:center; gap:0.42rem; }
-.tpc-legend i{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+.tpc-legend i{ width:10px; height:10px; border-radius:2px; display:inline-block; }
 .tpc-legend .ph-liq{ background:var(--liquid); }
 .tpc-legend .ph-two{ background:var(--two); }
 .tpc-legend .ph-vap{ background:var(--vapor); }
 /* Regime card */
-.tpc-regime{ display:flex; gap:0.95rem; align-items:center; margin:0.3rem 0 1.1rem;
-  padding:0.9rem 1.1rem; border-radius:10px;
-  border:1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
-  background:linear-gradient(90deg, color-mix(in srgb, var(--accent) 14%, var(--panel)), var(--panel) 60%);
+.tpc-regime{ display:flex; gap:0.9rem; align-items:center; margin:0.3rem 0 1.1rem;
+  padding:0.85rem 1.05rem; border-radius:8px;
+  border:1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  background:color-mix(in srgb, var(--accent) 7%, var(--panel));
   position:relative; overflow:hidden; }
 .tpc-regime::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--accent); }
-.tpc-regime-dot{ width:13px; height:13px; border-radius:50%; background:var(--accent);
-  box-shadow:0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); flex:0 0 auto; }
-.tpc-regime-label{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1.15rem; color:#f1f4f9; }
-.tpc-regime-meta{ font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--muted); margin-top:0.12rem; }
-/* Metric cards -> readout tiles */
+.tpc-regime-dot{ width:12px; height:12px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+.tpc-regime-label{ font-family:'Fira Sans',sans-serif; font-weight:600; font-size:1.12rem; color:var(--text); }
+.tpc-regime-meta{ font-family:'Fira Code',monospace; font-size:0.82rem; color:var(--muted); margin-top:0.12rem; }
+/* Metric tiles */
 [data-testid="stMetric"]{ background:var(--raised); border:1px solid var(--border);
-  border-radius:8px; padding:0.65rem 0.85rem 0.7rem; position:relative; overflow:hidden; }
-[data-testid="stMetric"]::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:2px;
-  background:var(--primary); opacity:0.7; }
-[data-testid="stMetricValue"]{ font-family:'IBM Plex Mono',monospace !important; font-weight:600;
-  font-size:1.45rem !important; line-height:1.15; color:#eef2f7; }
-[data-testid="stMetricLabel"]{ color:var(--muted) !important; }
+  border-radius:6px; padding:0.6rem 0.85rem 0.65rem; }
+[data-testid="stMetricValue"]{ font-family:'Fira Code',monospace !important; font-weight:600;
+  font-size:1.4rem !important; line-height:1.15; color:var(--text); }
+[data-testid="stMetricLabel"]{ color:var(--muted) !important; font-size:0.82rem; }
 [data-testid="stAppDeployButton"]{ display:none; }
-/* Sidebar = left tool panel */
-[data-testid="stSidebar"]{ background:#1d2229; border-right:1px solid var(--border); }
+/* Sidebar */
+[data-testid="stSidebar"]{ background:#ffffff; border-right:1px solid var(--border); }
 [data-testid="stSidebar"] [data-testid="stHeading"]{ background:transparent; border:none;
-  padding:0 !important; font-size:0.74rem !important; text-transform:uppercase;
-  letter-spacing:0.18em; color:var(--muted); }
+  padding:0 !important; font-size:0.72rem !important; text-transform:uppercase;
+  letter-spacing:0.08em; color:var(--muted); font-weight:600; }
 /* Buttons */
-.stButton>button{ border-radius:7px; border:1px solid var(--border); font-weight:600;
-  background:var(--raised); transition:all .15s ease; }
-.stButton>button:hover{ border-color:var(--primary); color:var(--primary); }
-/* Tabs -> steamplot tab strip */
-[data-baseweb="tab-list"]{ gap:0.2rem; border-bottom:1px solid var(--border); }
-[data-baseweb="tab"]{ background:var(--bg); border:1px solid var(--border); border-bottom:none;
-  border-radius:8px 8px 0 0; padding:0.35rem 0.85rem !important; color:var(--muted) !important; }
-[data-baseweb="tab"][aria-selected="true"]{ background:var(--panel); color:var(--text) !important; }
+.stButton>button{ border-radius:6px; border:1px solid var(--border-strong); font-weight:600;
+  background:var(--panel); color:var(--text); transition:all .15s ease; }
+.stButton>button:hover{ border-color:var(--primary); color:var(--primary); background:var(--primary-soft); }
+[data-testid="stBaseButton-primary"]{ background:var(--primary) !important; border-color:var(--primary) !important; color:#fff !important; }
+/* Tabs */
+[data-baseweb="tab-list"]{ gap:0.15rem; border-bottom:1px solid var(--border); }
+[data-baseweb="tab"]{ background:var(--raised); border:1px solid var(--border); border-bottom:none;
+  border-radius:6px 6px 0 0; padding:0.32rem 0.85rem !important; color:var(--muted) !important; }
+[data-baseweb="tab"][aria-selected="true"]{ background:var(--panel); color:var(--primary) !important; font-weight:600; }
 [data-baseweb="tab-highlight"]{ background:var(--primary); }
-/* Tables, inputs, dividers */
-[data-testid="stDataFrame"]{ border:1px solid var(--border); border-radius:8px; }
+/* Tables, dividers */
+[data-testid="stDataFrame"]{ border:1px solid var(--border); border-radius:6px; }
 hr{ border-color:var(--border); }
 :focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
-@keyframes tpcRise{ from{ opacity:0; transform:translateY(9px);} to{ opacity:1; transform:none;} }
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 /* Status chips */
 .tpc-chips{ display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.2rem 0 0.4rem; }
 .tpc-chip{ display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.7rem;
-  border-radius:999px; font-family:'IBM Plex Mono',monospace; font-size:0.76rem;
+  border-radius:5px; font-family:'Fira Sans',sans-serif; font-size:0.78rem;
   color:var(--muted); background:var(--raised); border:1px solid var(--border); }
 .tpc-chip b{ color:var(--text); font-weight:600; }
 .tpc-chip i{ width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--two); }
-.tpc-section{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
-  letter-spacing:0.18em; font-size:0.74rem; color:var(--muted); margin:1.1rem 0 0.4rem; }
+.tpc-section{ font-family:'Fira Sans',sans-serif; text-transform:uppercase; font-weight:600;
+  letter-spacing:0.08em; font-size:0.74rem; color:var(--muted); margin:1.1rem 0 0.4rem; }
 /* Label/value rows */
 .tpc-kv{ display:flex; justify-content:space-between; gap:1rem; padding:0.5rem 0.1rem;
-  border-bottom:1px solid var(--border); font-size:0.92rem; }
-.tpc-kv .k{ color:var(--muted); } .tpc-kv .v{ font-family:'IBM Plex Mono',monospace; color:var(--text); }
-/* Minimal top command bar */
+  border-bottom:1px solid var(--border); font-size:0.9rem; }
+.tpc-kv .k{ color:var(--muted); } .tpc-kv .v{ font-family:'Fira Code',monospace; color:var(--text); }
+/* Top app bar */
 .tpc-cmdbar{ position:sticky; top:0; z-index:50; display:flex; flex-wrap:wrap;
   justify-content:space-between; align-items:center; gap:0.6rem 1rem;
-  padding:0.45rem 0.2rem 0.5rem; margin:0 0 1rem; background:var(--bg);
-  border-bottom:1px solid var(--border); }
-.tpc-cmd-left{ display:flex; align-items:center; gap:0.6rem; }
-.tpc-logo{ font-family:'Space Grotesk',sans-serif; font-weight:700; color:#f1f4f9;
-  letter-spacing:0.02em; background:var(--raised); border:1px solid var(--border);
-  padding:0.15rem 0.55rem; border-radius:7px; }
-.tpc-sep{ color:var(--border); }
-.tpc-module{ font-family:'IBM Plex Mono',monospace; color:var(--text); font-size:0.82rem;
-  text-transform:uppercase; letter-spacing:0.12em; }
+  padding:0.5rem 0.2rem 0.6rem; margin:0 0 1rem; background:var(--bg);
+  border-bottom:1px solid var(--border-strong); }
+.tpc-cmd-left{ display:flex; align-items:baseline; gap:0.6rem; }
+.tpc-logo{ font-family:'Fira Sans',sans-serif; font-weight:700; color:var(--text);
+  letter-spacing:-0.01em; font-size:1.02rem; }
+.tpc-sep{ color:var(--border-strong); }
+.tpc-module{ font-family:'Fira Sans',sans-serif; color:var(--muted); font-size:0.82rem; font-weight:600; }
 .tpc-cmd-right{ display:flex; flex-wrap:wrap; align-items:center; gap:0.9rem;
-  font-family:'IBM Plex Mono',monospace; font-size:0.74rem; color:var(--muted); }
+  font-family:'Fira Sans',sans-serif; font-size:0.74rem; color:var(--muted); }
 .tpc-cmd-right b{ color:var(--text); font-weight:600; }
-.tpc-online{ display:inline-flex; align-items:center; gap:0.4rem; color:var(--two); }
-.tpc-online i{ width:8px; height:8px; border-radius:50%; background:var(--two);
-  box-shadow:0 0 0 3px color-mix(in srgb, var(--two) 25%, transparent); }
+.tpc-online{ display:inline-flex; align-items:center; gap:0.4rem; color:var(--two); font-weight:600; }
+.tpc-online i{ width:8px; height:8px; border-radius:50%; background:var(--two); }
 /* Footer status bar */
 .tpc-statusbar{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:0.8rem;
   margin-top:1.8rem; padding:0.55rem 0.2rem; border-top:1px solid var(--border);
-  font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--muted); }
-.tpc-statusbar i{ width:8px; height:8px; border-radius:50%; display:inline-block; margin:0 0.3rem; }
+  font-family:'Fira Sans',sans-serif; font-size:0.74rem; color:var(--muted); }
+.tpc-statusbar i{ width:9px; height:9px; border-radius:2px; display:inline-block; margin:0 0.3rem -1px; }
 .tpc-statusbar .ph-liq{ background:var(--liquid); }
 .tpc-statusbar .ph-two{ background:var(--two); }
 .tpc-statusbar .ph-vap{ background:var(--vapor); }
-.tpc-ok i{ background:var(--two); margin-left:0; }
-/* --- Grouped scientific navigation --- */
-.nav-brand{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.02rem;
-  color:#f1f4f9; letter-spacing:0.06em; padding:0.1rem 0.2rem 0.6rem; }
-.nav-brand small{ display:block; font-family:'IBM Plex Mono',monospace; font-weight:400;
-  font-size:0.62rem; letter-spacing:0.22em; color:var(--muted); margin-top:0.15rem; }
-.nav-group{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
-  letter-spacing:0.2em; font-size:0.66rem; color:var(--muted); margin:0.9rem 0.2rem 0.25rem; }
+.tpc-ok i{ background:var(--two); border-radius:50%; margin-left:0; }
+/* Grouped navigation */
+.nav-brand{ font-family:'Fira Sans',sans-serif; font-weight:700; font-size:1.05rem;
+  color:var(--text); padding:0.1rem 0.2rem 0.5rem; }
+.nav-brand small{ display:block; font-family:'Fira Sans',sans-serif; font-weight:500;
+  font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:0.2rem; }
+.nav-group{ font-family:'Fira Sans',sans-serif; text-transform:uppercase; font-weight:600;
+  letter-spacing:0.08em; font-size:0.68rem; color:var(--muted); margin:0.95rem 0.2rem 0.25rem; }
 [data-testid="stSidebar"] .stButton>button{ justify-content:flex-start; text-align:left;
   border:1px solid transparent; background:transparent; color:var(--muted);
-  font-weight:500; padding:0.34rem 0.6rem; border-radius:7px; box-shadow:none; }
+  font-weight:500; padding:0.34rem 0.6rem; border-radius:6px; box-shadow:none; }
 [data-testid="stSidebar"] .stButton>button:hover{ background:var(--raised); color:var(--text);
-  border-color:transparent; transform:none; }
+  border-color:transparent; }
 [data-testid="stSidebar"] [data-testid="stBaseButton-primary"]{
-  background:color-mix(in srgb, var(--primary) 16%, transparent) !important;
-  color:#eef2f7 !important; border:1px solid color-mix(in srgb, var(--primary) 45%, transparent) !important;
-  border-left:3px solid var(--primary) !important; font-weight:600; }
-/* --- Workstation panels & research metadata --- */
+  background:var(--primary-soft) !important; color:var(--primary) !important;
+  border:1px solid var(--border) !important; border-left:3px solid var(--primary) !important; font-weight:600; }
+/* Workstation panels & metadata */
 .tpc-ptitle{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem;
-  font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.96rem; color:#eef2f7;
-  padding:0.45rem 0.7rem; background:var(--panel-head); border:1px solid var(--border);
-  border-left:3px solid var(--primary); border-radius:8px; margin:0.2rem 0 0.6rem; }
-.tpc-ptitle .tag{ font-family:'IBM Plex Mono',monospace; font-size:0.66rem; font-weight:500;
-  text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); }
-.tpc-note{ font-size:0.82rem; color:var(--muted); line-height:1.5; }
+  font-family:'Fira Sans',sans-serif; font-weight:600; font-size:0.94rem; color:var(--text);
+  padding:0.42rem 0.7rem; background:var(--panel-head); border:1px solid var(--border);
+  border-left:3px solid var(--primary); border-radius:6px; margin:0.2rem 0 0.6rem; }
+.tpc-ptitle .tag{ font-family:'Fira Code',monospace; font-size:0.68rem; font-weight:500;
+  color:var(--muted); }
+.tpc-note{ font-size:0.84rem; color:var(--muted); line-height:1.6; }
 .tpc-note b{ color:var(--text); }
-.tpc-meta{ display:grid; grid-template-columns:auto 1fr; gap:0.3rem 0.9rem; font-size:0.84rem; }
-.tpc-meta .k{ color:var(--muted); font-family:'IBM Plex Mono',monospace; }
-.tpc-meta .v{ color:var(--text); }
-/* KPI strip in the command bar */
-.tpc-kpis{ display:flex; flex-wrap:wrap; gap:1.1rem; font-family:'IBM Plex Mono',monospace;
+.tpc-meta{ display:grid; grid-template-columns:auto 1fr; gap:0.3rem 0.9rem; font-size:0.86rem; }
+.tpc-meta .k{ color:var(--muted); }
+.tpc-meta .v{ color:var(--text); font-family:'Fira Code',monospace; text-align:right; }
+/* KPI strip in the app bar */
+.tpc-kpis{ display:flex; flex-wrap:wrap; gap:1.2rem; font-family:'Fira Sans',sans-serif;
   font-size:0.74rem; color:var(--muted); }
-.tpc-kpis .kpi b{ color:#eef2f7; font-size:0.92rem; font-weight:600; }
-.tpc-kpis .kpi span{ display:block; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; }
+.tpc-kpis .kpi b{ color:var(--text); font-size:0.94rem; font-weight:700; font-family:'Fira Code',monospace; }
+.tpc-kpis .kpi span{ display:block; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.05em; }
 """
 
 # Extra overrides injected only when the user picks the Compact density.
@@ -615,8 +608,8 @@ def _molecular_viewer_mode(registry: dict[str, ChemicalSpecies]) -> None:
                            "library molecule to see Tb / Tc / Pc / ω.")
 
 
-_PUB_FONT = "IBM Plex Sans, system-ui, sans-serif"
-_PUB_MONO = "IBM Plex Mono, monospace"
+_PUB_FONT = "Fira Sans, system-ui, sans-serif"
+_PUB_MONO = "Fira Code, monospace"
 
 
 def _sidebar_nav() -> None:
@@ -642,27 +635,28 @@ def _pub_layout(fig, *, title: str = "", xtitle: str = "", ytitle: str = "",
                 square: bool = False, log_y: bool = False):
     """Apply a consistent publication-quality layout to a Plotly figure."""
     fig.update_layout(
-        template=None, height=height, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#222831",
-        font=dict(family=_PUB_FONT, color="#c7cdd6", size=13),
-        title=dict(text=title, font=dict(family="Space Grotesk, sans-serif", size=15,
-                   color="#eef2f7"), x=0.01, xanchor="left", y=0.98),
+        template=None, height=height, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#ffffff",
+        font=dict(family=_PUB_FONT, color="#334155", size=13),
+        title=dict(text=title, font=dict(family=_PUB_FONT, size=15,
+                   color="#0f172a"), x=0.01, xanchor="left", y=0.98),
         margin=dict(l=74, r=28, t=44 if title else 16,
                     b=86 if legend == "bottom" else 56),
-        hoverlabel=dict(font_family=_PUB_MONO, bgcolor="#1d2229", bordercolor="#363d47"),
+        hoverlabel=dict(font_family=_PUB_MONO, bgcolor="#ffffff", bordercolor="#c4cdda",
+                        font=dict(color="#0f172a")),
     )
     if legend == "bottom":
         fig.update_layout(legend=dict(orientation="h", yanchor="top", y=-0.16, x=0.5,
-            xanchor="center", font=dict(family=_PUB_MONO, size=11), bgcolor="rgba(0,0,0,0)"))
+            xanchor="center", font=dict(family=_PUB_FONT, size=11), bgcolor="rgba(0,0,0,0)"))
     elif legend == "topright":
         fig.update_layout(legend=dict(orientation="v", yanchor="top", y=0.99, x=0.985,
-            xanchor="right", font=dict(family=_PUB_MONO, size=11),
-            bgcolor="rgba(29,34,41,0.88)", bordercolor="#363d47", borderwidth=1))
+            xanchor="right", font=dict(family=_PUB_FONT, size=11),
+            bgcolor="rgba(255,255,255,0.9)", bordercolor="#dbe1ea", borderwidth=1))
     elif legend == "none":
         fig.update_layout(showlegend=False)
-    axis = dict(gridcolor="#333b45", griddash="dot", zeroline=False, showline=True,
-                linecolor="#4a525e", linewidth=1, ticks="outside", tickcolor="#4a525e",
+    axis = dict(gridcolor="#e3e8ef", griddash="dot", zeroline=False, showline=True,
+                linecolor="#94a3b8", linewidth=1, ticks="outside", tickcolor="#94a3b8",
                 ticklen=5, tickfont=dict(family=_PUB_MONO, size=11), mirror=True,
-                minor=dict(showgrid=True, gridcolor="#272d36", griddash="dot"))
+                minor=dict(showgrid=True, gridcolor="#eef2f7", griddash="dot"))
     fig.update_xaxes(title=dict(text=xtitle, font=dict(size=13)), range=x_range, **axis)
     y_axis = dict(axis)
     if log_y:
@@ -680,7 +674,7 @@ def _command_bar(app_mode: str, registry: dict[str, ChemicalSpecies]) -> None:
         f"""
 <div class="tpc-cmdbar">
   <div class="tpc-cmd-left">
-    <span class="tpc-logo">⬡ VLE&nbsp;PLATFORM</span>
+    <span class="tpc-logo">VLE Platform</span>
     <span class="tpc-sep">/</span>
     <span class="tpc-module">{app_mode}</span>
   </div>
@@ -1085,17 +1079,17 @@ def _render_phase_diagram(df, sp1, sp2, model, model_name, img_fmt,
                                  line=dict(color=VAP, width=3.2)))
         fig.add_trace(go.Scatter(
             x=[0.0, 1.0], y=[yv[0], yv[-1]], mode="markers", name="Pure components",
-            marker=dict(color="#cfd6df", size=8, symbol="circle-open", line=dict(width=2)),
+            marker=dict(color="#64748b", size=8, symbol="circle-open", line=dict(width=2)),
             hoverinfo="skip"))
         if az:
             fig.add_trace(go.Scatter(
                 x=[az[0]], y=[az[1]], mode="markers", name="Azeotrope",
                 marker=dict(color=TWO, size=13, symbol="diamond",
-                            line=dict(color="#eef2f7", width=1.4))))
+                            line=dict(color="#ffffff", width=1.4))))
             fig.add_annotation(x=az[0], y=az[1], text=f"azeotrope  x₁={az[0]:.3f}",
                                showarrow=True, arrowhead=2, arrowcolor=TWO, ax=36, ay=-36,
-                               font=dict(family=_PUB_MONO, size=10, color="#eef2f7"),
-                               bgcolor="rgba(29,34,41,0.92)", bordercolor=TWO, borderwidth=1)
+                               font=dict(family=_PUB_MONO, size=10, color="#0f172a"),
+                               bgcolor="rgba(255,255,255,0.96)", bordercolor=TWO, borderwidth=1)
         _pub_layout(fig, xtitle=f"x₁, y₁  —  mole fraction {sp1.name}", ytitle=ylabel,
                     height=640, legend="bottom", x_range=[0, 1])
         st.plotly_chart(fig, width="stretch", theme=None,
@@ -1126,13 +1120,13 @@ def _render_phase_diagram(df, sp1, sp2, model, model_name, img_fmt,
     _panel_title(f"x–y equilibrium — {sp1.name} (1)", tag="McCabe–Thiele basis")
     fig2 = go.Figure()
     fig2.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x (diagonal)",
-                              line=dict(color="#5b6470", dash="dash", width=1.6)))
+                              line=dict(color="#94a3b8", dash="dash", width=1.6)))
     fig2.add_trace(go.Scatter(x=x1, y=y1, mode="lines", name="Equilibrium curve",
                               line=dict(color=TWO, width=3.2)))
     if az:
         fig2.add_trace(go.Scatter(x=[az[0]], y=[az[0]], mode="markers", name="Azeotrope",
                        marker=dict(color=TWO, size=12, symbol="diamond",
-                                   line=dict(color="#eef2f7", width=1.3))))
+                                   line=dict(color="#ffffff", width=1.3))))
     _pub_layout(fig2, xtitle="x₁ (liquid mole fraction)", ytitle="y₁ (vapor mole fraction)",
                 height=470, legend="topright", x_range=[0, 1], y_range=[0, 1], square=True)
     st.plotly_chart(fig2, width="stretch", theme=None,
@@ -1255,7 +1249,7 @@ def _render_validation_system(res: "validation.ValidationResult") -> None:
     with fit_col:
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x",
-                                 line=dict(color="#5b6470", dash="dash", width=1.6)))
+                                 line=dict(color="#94a3b8", dash="dash", width=1.6)))
         fig.add_trace(go.Scatter(x=res.x1, y=res.y1_pred, mode="lines",
                                  name=f"{res.model_name} predicted",
                                  line=dict(color=_TWO_PHASE, width=3.0)))
@@ -1270,10 +1264,10 @@ def _render_validation_system(res: "validation.ValidationResult") -> None:
         residual = res.y1_pred - res.y1_exp
         rfig = go.Figure()
         rfig.add_trace(go.Scatter(x=[0, 1], y=[0, 0], mode="lines", showlegend=False,
-                                  line=dict(color="#5b6470", width=1.4)))
+                                  line=dict(color="#94a3b8", width=1.4)))
         rfig.add_trace(go.Scatter(x=res.x1, y=residual, mode="markers", showlegend=False,
                                   marker=dict(color=_LIQUID, size=8,
-                                              line=dict(color="#0d1117", width=1))))
+                                              line=dict(color="#ffffff", width=1))))
         lim = float(max(0.03, np.nanmax(np.abs(residual)) * 1.25))
         _pub_layout(rfig, title="Residuals  (y₁ pred − exp)", xtitle="x₁ (liquid)",
                     ytitle="Δy₁", height=440, legend="none", x_range=[0, 1], y_range=[-lim, lim])
@@ -1369,7 +1363,7 @@ def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
     with main:
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name="y = x (diagonal)",
-                                 line=dict(color="#5b6470", dash="dash", width=1.6)))
+                                 line=dict(color="#94a3b8", dash="dash", width=1.6)))
         fig.add_trace(go.Scatter(x=res.x_eq, y=res.y_eq, mode="lines", name="Equilibrium",
                                  line=dict(color=_TWO_PHASE, width=3.2)))
         xi, yi = res.intersection
@@ -1378,26 +1372,26 @@ def _render_distillation(res, sp1, sp2, model_name, pressure, punit) -> None:
         fig.add_trace(go.Scatter(x=[xi, res.x_B], y=[yi, res.x_B], mode="lines",
                                  name="Stripping line", line=dict(color=_VAPOR, width=2.8)))
         fig.add_trace(go.Scatter(x=[res.z_F, xi], y=[res.z_F, yi], mode="lines",
-                                 name="q-line", line=dict(color="#C792EA", width=2.0, dash="dot")))
+                                 name="q-line", line=dict(color="#7c3aed", width=2.0, dash="dot")))
         stair = res.steps[: 2 * k + 1]
         fig.add_trace(go.Scatter(x=[p[0] for p in stair], y=[p[1] for p in stair],
                                  mode="lines", name="Equilibrium stages",
-                                 line=dict(color="#e3e8ef", width=1.6)))
+                                 line=dict(color="#334155", width=1.6)))
         fig.add_trace(go.Scatter(
             x=[res.x_B, res.z_F, res.x_D], y=[res.x_B, res.z_F, res.x_D],
             mode="markers+text", text=["x_B", "z_F", "x_D"], textposition="top left",
-            textfont=dict(family=_PUB_MONO, size=11, color="#cfd6df"),
-            marker=dict(color=_LIQUID, size=9, line=dict(color="#0d1117", width=1)),
+            textfont=dict(family=_PUB_MONO, size=11, color="#64748b"),
+            marker=dict(color=_LIQUID, size=9, line=dict(color="#ffffff", width=1)),
             name="Specs", showlegend=False))
         if res.feasible and 1 <= res.feed_stage <= len(res.stage_corners):
             fx, fy = res.stage_corners[res.feed_stage - 1]
             fig.add_trace(go.Scatter(x=[fx], y=[fy], mode="markers", name="Feed stage",
                                      marker=dict(color=_VAPOR, size=14, symbol="diamond",
-                                                 line=dict(color="#eef2f7", width=1.4))))
+                                                 line=dict(color="#ffffff", width=1.4))))
             fig.add_annotation(x=fx, y=fy, text=f"feed · stage {res.feed_stage}",
                                showarrow=True, arrowhead=2, arrowcolor=_VAPOR, ax=40, ay=20,
-                               font=dict(family=_PUB_MONO, size=10, color="#eef2f7"),
-                               bgcolor="rgba(29,34,41,0.92)", bordercolor=_VAPOR, borderwidth=1)
+                               font=dict(family=_PUB_MONO, size=10, color="#0f172a"),
+                               bgcolor="rgba(255,255,255,0.96)", bordercolor=_VAPOR, borderwidth=1)
         _pub_layout(fig, xtitle=f"x — liquid mole fraction {sp1.name}",
                     ytitle=f"y — vapor mole fraction {sp1.name}", height=660,
                     legend="bottom", x_range=[0, 1], y_range=[0, 1], square=True)
@@ -1766,11 +1760,11 @@ def _render_benchmark_dashboard() -> None:
         pad = (hi - lo) * 0.06 or 1.0
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=[lo - pad, hi + pad], y=[lo - pad, hi + pad], mode="lines",
-                                 line=dict(color="#5b6470", dash="dash", width=1.6),
+                                 line=dict(color="#94a3b8", dash="dash", width=1.6),
                                  showlegend=False))
         fig.add_trace(go.Scatter(x=exp, y=pred_v, mode="markers",
                                  marker=dict(color=_TWO_PHASE, size=9,
-                                             line=dict(color="#0d1117", width=1)),
+                                             line=dict(color="#ffffff", width=1)),
                                  showlegend=False, text=[r["Molecule"] for r in rows],
                                  hovertemplate="%{text}<br>exp %{x:.1f}<br>pred %{y:.1f}<extra></extra>"))
         _pub_layout(fig, title=f"{prop} ({unit})", xtitle="experimental", ytitle="predicted",
@@ -1802,8 +1796,8 @@ def render() -> None:
     st.session_state.setdefault("app_mode", APP_MODE_DASHBOARD)
 
     with st.sidebar:
-        st.markdown('<div class="nav-brand">⬡ VLE PLATFORM<small>THERMODYNAMIC '
-                    'MODELING SUITE</small></div>', unsafe_allow_html=True)
+        st.markdown('<div class="nav-brand">VLE Platform<small>Thermodynamic '
+                    'modeling suite</small></div>', unsafe_allow_html=True)
         _sidebar_nav()
         st.divider()
         st.markdown('<div class="nav-group">Active species</div>', unsafe_allow_html=True)

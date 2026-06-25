@@ -76,11 +76,7 @@ def _atom_counts(mol_with_h: Chem.Mol) -> dict[str, int]:
 
 def to_2d_svg(mol: Chem.Mol, size: tuple[int, int] = (380, 260)) -> str:
     drawer = rdMolDraw2D.MolDraw2DSVG(*size)
-    try:
-        rdMolDraw2D.SetDarkMode(drawer)  # light bonds on a dark background
-    except Exception:  # noqa: BLE001 - older RDKit lacks SetDarkMode
-        pass
-    drawer.drawOptions().clearBackground = False
+    drawer.drawOptions().clearBackground = False  # transparent → reads on a light panel
     rdMolDraw2D.PrepareAndDrawMolecule(drawer, mol)
     drawer.FinishDrawing()
     return drawer.GetDrawingText()
@@ -121,17 +117,17 @@ def viewer_html(molblock: str, show_labels: bool = False,
     safe = molblock.replace("\\", "\\\\").replace("`", "\\`")
     style_js = _STYLE_JS.get(style, _STYLE_JS["Ball & stick"])
     labels_js = (
-        "viewer.addPropertyLabels('elem', {}, {fontColor:'white', fontSize:11,"
-        " backgroundColor:'0x242a32', backgroundOpacity:0.65});" if show_labels else ""
+        "viewer.addPropertyLabels('elem', {}, {fontColor:'0x0f172a', fontSize:11,"
+        " backgroundColor:'0xeef2f7', backgroundOpacity:0.85});" if show_labels else ""
     )
     return f"""<div id="mv" style="width:100%;height:{height}px;position:relative;
-border-radius:10px;overflow:hidden;border:1px solid #273656;"></div>
+border-radius:8px;overflow:hidden;border:1px solid #dbe1ea;"></div>
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
 <script>
 (function(){{
   var run=function(){{
     var el=document.getElementById('mv');
-    var viewer=$3Dmol.createViewer(el,{{backgroundColor:'0x171b21'}});
+    var viewer=$3Dmol.createViewer(el,{{backgroundColor:'0xffffff'}});
     viewer.addModel(`{safe}`,'sdf');
     viewer.setStyle({{}}, {style_js});
     {labels_js}

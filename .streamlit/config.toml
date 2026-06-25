@@ -2,13 +2,13 @@
 # Fine-grained styling (fonts, hero, phase cards) is injected as CSS from
 # thermo/interface.py; this file themes Streamlit's native widgets to match.
 [theme]
-base = "dark"
-primaryColor = "#4a9eff"
-backgroundColor = "#171b21"
-secondaryBackgroundColor = "#242a32"
-textColor = "#d7dce3"
-linkColor = "#6fb2ff"
-baseRadius = "0.5rem"
-borderColor = "#363d47"
+base = "light"
+primaryColor = "#1d4ed8"
+backgroundColor = "#f4f6f9"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#0f172a"
+linkColor = "#1d4ed8"
+baseRadius = "0.4rem"
+borderColor = "#dbe1ea"
 showWidgetBorder = true
 showSidebarBorder = true
